@@ -26,6 +26,15 @@
                     <label><![CDATA[Shopify App Bridge Version]]></label>
                     <comment>The version of App Bridge lib. eg: 3</comment>
                 </field>
+                <field id="shopify_api_grant_mode" translate="label comment" type="select" sortOrder="150" showInDefault="1" canRestore="1">
+                    <label><![CDATA[Shopify API Grant Mode]]></label>
+                    <source_model>SimiCart\SimpifyManagement\Model\Source\AuthMode</source_model>
+                    <comment>This option is for the grant mode when authenticating. Note: Install will always be in offline mode.</comment>
+                </field>
+                <field id="shopify_api_scopes" translate="label comment" type="textarea" sortOrder="200" showInDefault="1" canRestore="1">
+                    <label><![CDATA[Shopify API Scopes]]></label>
+                    <comment>This option is for the scopes your application needs in the API.</comment>
+                </field>
             </group>
         </section>
     </system>

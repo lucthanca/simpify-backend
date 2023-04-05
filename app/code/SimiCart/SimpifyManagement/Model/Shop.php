@@ -7,8 +7,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Magento\Framework\Serialize\Serializer\Json;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface;
+use SimiCart\SimpifyManagement\Api\ShopApiInterface as IShopApi;
 
 class Shop extends AbstractModel implements ShopInterface
 {
@@ -16,10 +16,14 @@ class Shop extends AbstractModel implements ShopInterface
 
     protected $_eventObject = 'shop';
 
-    protected Json $jsonSerializer;
+    protected ShopApiFactory $shopApiFactory;
+
+    protected ?IShopApi $api = null;
+    private ConfigProvider $configProvider;
 
     /**
-     * @param Json $jsonSerializer
+     * @param ShopApiFactory $shopApiFactory
+     * @param ConfigProvider $configProvider
      * @param Context $context
      * @param Registry $registry
      * @param AbstractResource|null $resource
@@ -27,13 +31,16 @@ class Shop extends AbstractModel implements ShopInterface
      * @param array $data
      */
     public function __construct(
-        Json $jsonSerializer,
+        ShopApiFactory $shopApiFactory,
+        ConfigProvider $configProvider,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->shopApiFactory = $shopApiFactory;
+        $this->configProvider = $configProvider;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -42,9 +49,61 @@ class Shop extends AbstractModel implements ShopInterface
         $this->_init(\SimiCart\SimpifyManagement\Model\ResourceModel\Shop::class);
     }
 
+    /**
+     * Return api helper for shop
+     *
+     * @return IShopApi
+     */
+    public function getShopApi(): IShopApi
+    {
+        if (!$this->api) {
+            $opts = [
+                'api_key' => $this->configProvider->getApiKey(),
+                'api_secret' => $this->configProvider->getApiSecret(),
+                'access_token' => $this->getAccessToken(),
+                'shop' => $this
+            ];
+            $this->api = $this->shopApiFactory->create([
+                'shopDomain' => $this->getShopDomain(),
+                'options' => $opts,
+            ]);
+        }
+        return $this->api;
+    }
+
+    /**
+     * Check if the shop has uninstalled app
+     *
+     * @return bool
+     */
+    public function hasUninstalled(): bool
+    {
+        return $this->getStatus() === static::STATUS_UNINSTALLED;
+    }
+
+    /**
+     * Change status to installed
+     *
+     * @return ShopInterface
+     */
+    public function restore(): ShopInterface
+    {
+        return $this->setStatus(static::STATUS_INSTALLED);
+    }
+
     public function install(string $shop, ?string $code)
     {
 
+    }
+
+    /**
+     * Check if the access token is filled
+     *
+     * @return bool
+     */
+    public function hasOfflineAccess(): bool
+    {
+        return $this->getAccessToken() !== null && ! empty($this->getAccessToken());
     }
 
     public function getShopDomain(): string
@@ -121,14 +180,14 @@ class Shop extends AbstractModel implements ShopInterface
         return $this->setData(self::CREATED_AT, $time);
     }
 
-    public function getShopStoreFrontApiToken(): ?string
+    public function getAccessToken(): ?string
     {
-        return $this->getData(self::SHOP_STOREFRONT_TOKEN);
+        return $this->getData(self::SHOP_ACCESS_TOKEN);
     }
 
-    public function setShopStoreFrontApiToken(?string $api): ShopInterface
+    public function setAccessToken(?string $api): ShopInterface
     {
-        return $this->setData(self::SHOP_STOREFRONT_TOKEN, $api);
+        return $this->setData(self::SHOP_ACCESS_TOKEN, $api);
     }
 
     public function getSimiAccessToken(): ?string
