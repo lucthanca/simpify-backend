@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface as IUrl;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopApiInterface as IShopAPI;
@@ -92,16 +93,21 @@ class ShopApi implements IShopAPI
         throw new UnhandledShopApiRequestFailed(__($errorMessage));
     }
 
-    public function verifyRequest(RequestInterface $request): bool
+    /**
+     * @inheritDoc
+     */
+    public function verifyRequest(array $params): bool
     {
         $apiSecret = $this->configProvider->getApiSecret();
         if (!$apiSecret) {
-            throw new \Exception('API secret is missing');
+            throw new LocalizedException(__('API secret is missing'));
         }
 
-        if ($request->getParam('shop') && $request->getParam('timestamp') && $request->getParam('hmac')) {
+        if ((isset($params['shop']) && !empty($params['shop'])) &&
+            (isset($params['timestamp']) && !empty($params['timestamp'])) &&
+            (isset($params['hmac']) && !empty($params['hmac']))
+        ) {
             // Grab the HMAC, remove it from the params, then sort the params for hashing
-            $params = $request->getParams();
             $hmac = $params['hmac'];
             unset($params['hmac']);
             if (isset($params['secure'])) {
@@ -110,16 +116,23 @@ class ShopApi implements IShopAPI
             ksort($params);
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
-                    'sha256',
-                    urldecode(http_build_query($params)),
-                    $apiSecret
+                'sha256',
+                urldecode(http_build_query($params)),
+                $apiSecret
             );
         }
         return false;
     }
 
+    /**
+     * Request shop data
+     *
+     * @return array
+     * @throws \SimiCart\SimpifyManagement\Exceptions\ShopifyApiCallException
+     */
     public function getShopInfo(): array
     {
-        return $this->client->getShopInfo();
+        $data = $this->client->request('GET', '/admin/api/{{api_version}}/shop.json');
+        return $data['shop'] ?? [];
     }
 }

@@ -5,45 +5,65 @@ namespace SimiCart\SimpifyManagement\Block\InitApp;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use SimiCart\SimpifyManagement\Exceptions\MissingAuthUrlException;
-use SimiCart\SimpifyManagement\Exceptions\SignatureVerificationException;
 use SimiCart\SimpifyManagement\Model\ConfigProvider;
 use SimiCart\SimpifyManagement\Model\InstallShop;
+use SimiCart\SimpifyManagement\Model\Source\AuthMode;
+use SimiCart\SimpifyManagement\Registry\CurrentShop;
 
 class FullPageRedirect extends Template
 {
     protected ConfigProvider $configProvider;
     protected InstallShop $installShop;
+    protected CurrentShop $currentShop;
 
     /**
      * @param ConfigProvider $configProvider
      * @param Context $context
      * @param InstallShop $installShop
+     * @param CurrentShop $currentShop
      * @param array $data
      */
     public function __construct(
         ConfigProvider $configProvider,
         Template\Context $context,
         InstallShop $installShop,
+        CurrentShop $currentShop,
         array $data = []
-    ){
+    ) {
         parent::__construct($context, $data);
         $this->configProvider = $configProvider;
         $this->installShop = $installShop;
 
         // Cache the block by the shop domain and host
-        $this->setData('cache_key', $this->getRequest()->getParam('shop') . '_' . $this->getRequest()->getParam('host'));
+        $this->setData('cache_key', "{$this->getRequest()->getParam('shop')}_{$this->getRequest()->getParam('host')}");
+        $this->currentShop = $currentShop;
     }
 
+    /**
+     * Get store config Shopify API key
+     *
+     * @return string
+     */
     public function getApiKey(): string
     {
         return $this->configProvider->getApiKey();
     }
+
+    /**
+     * Get request host
+     *
+     * @return string
+     */
     public function getHost(): string
     {
         return $this->getRequest()->getParam('host');
     }
 
+    /**
+     * Get request shop domain
+     *
+     * @return string
+     */
     public function getShop(): string
     {
         return $this->getRequest()->getParam('shop');
@@ -63,46 +83,27 @@ class FullPageRedirect extends Template
      * Authenticate shop and return auth url
      *
      * @return string
-     * @throws SignatureVerificationException|MissingAuthUrlException
      */
     public function getAuthUrl(): string
     {
-        [$result, $status] = $this->authenticateShop($this->getShop(), $this->getCode());
-
-        if ($status === null) {
-            throw new SignatureVerificationException(__('Invalid HMAC verification'));
-        }
-
-        if (!$result['url']) {
-            throw new MissingAuthUrlException(__('Missing auth url'));
-        }
-
-        return $result['url'];
+        $grantMode = $this->currentShop->get()->hasOfflineAccess() ?
+            $this->configProvider->getApiGrantMode() :
+            AuthMode::OFFLINE;
+        return $this->currentShop->get()->getShopApi()->buildAuthUrl($grantMode, $this->configProvider->getApiScopes());
     }
 
+    /**
+     * Get config Shopify App Bridge Version
+     *
+     * @return string
+     */
     public function getAppBridgeVersion(): string
     {
         return "@{$this->configProvider->getAppBridgeVersion()}";
     }
 
     /**
-     * Authenticates a shop. ((not yet) and fires post authentication actions.)
-     *
-     * @param string $shopDomain
-     * @param string|null $code
-     * @return array|void
-     */
-    protected function authenticateShop(string $shopDomain, ?string $code = null)
-    {
-        $result = $this->installShop->execute($shopDomain, $code);
-        if (!$result['completed']) {
-            // No code, redirect to auth URL
-            return [$result, false];
-        }
-    }
-
-    /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function getCacheLifetime()
     {

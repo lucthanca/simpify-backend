@@ -2,14 +2,20 @@
 declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Registry;
+
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Model\ShopFactory as FShop;
 
 class CurrentShop
 {
+
     private IShop $shop;
+
     private FShop $shopFactory;
 
+    /**
+     * @param FShop $shopFactory
+     */
     public function __construct(FShop $shopFactory)
     {
         $this->shopFactory = $shopFactory;

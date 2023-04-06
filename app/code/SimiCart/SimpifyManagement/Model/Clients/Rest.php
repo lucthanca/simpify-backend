@@ -7,6 +7,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Client;
+use SimiCart\SimpifyManagement\Exceptions\ShopifyApiCallException;
 use \SimiCart\SimpifyManagement\Model\Clients\ShopifyClientInterface as IShopifyClient;
 use SimiCart\SimpifyManagement\Model\Clients\Stacks\AuthRequestFactory;
 
@@ -113,26 +114,39 @@ class Rest implements IShopifyClient
             return $this->responseToArray($response->getBody()->getContents());
         } catch (\Exception $e) {
             $body = json_decode($e->getResponse()->getBody()->getContents());
-            throw new \Exception($body->error_description ?? $body->errors);
+            throw new \Exception($body->errors);
         }
     }
 
 
+    /**
+     * Execute request
+     *
+     * @param string $method
+     * @param string $path
+     * @param array $options
+     * @return array
+     * @throws ShopifyApiCallException
+     */
     public function request(string $method, string $path, array $options = [])
     {
-        $finalPath = str_replace("{{api_version}}", $this->getOptions()->getApiVersion(), $path);
-//        $url = $this->getBaseUri()->withPath("/admin/api/{$this->getOptions()->getApiVersion()}/storefront_access_tokens.json");
-        $url = $this->getBaseUri()->withPath($finalPath);
         try {
+            $finalPath = str_replace("{{api_version}}", $this->getOptions()->getApiVersion(), $path);
+            $url = $this->getBaseUri()->withPath($finalPath);
             $response = $this->getClient()->request($method, $url, $options);
             return $this->responseToArray($response->getBody()->getContents());
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+            throw new ShopifyApiCallException($e->getMessage());
         } catch (\Exception $e) {
             $body = json_decode($e->getResponse()->getBody()->getContents(), true);
             $message = $body['errors'];
             if (is_array($body['errors'])) {
-                $message = $body['errors']['storefront_access_token'];
+                $message = '';
+                foreach ($body['errors'] as $key => $msg) {
+                    $message .= "[$key: $msg]";
+                }
             }
-            throw new \Exception($message);
+            throw new ShopifyApiCallException($message);
         }
     }
 

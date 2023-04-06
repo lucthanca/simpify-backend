@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Api;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 interface ShopApiInterface
 {
     /**
      * Build the authentication URL to Shopify.
      *
-     * @param int $authMode   The mode of authentication (offline or per-user).
+     * @param int $authMode The mode of authentication (offline or per-user).
      * @param string $scopes The scopes for the authentication, comma-separated.
      *
      * @return string
@@ -34,5 +35,12 @@ interface ShopApiInterface
      */
     public function requestStorefrontToken(): string;
 
-    public function verifyRequest(RequestInterface $request);
+    /**
+     * Verify request HMAC
+     *
+     * @param array $params
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function verifyRequest(array $params): bool;
 }
