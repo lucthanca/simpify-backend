@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Api;
 
+use Magento\Framework\App\RequestInterface;
+
 interface ShopApiInterface
 {
     /**
@@ -31,4 +33,6 @@ interface ShopApiInterface
      * @return string
      */
     public function requestStorefrontToken(): string;
+
+    public function verifyRequest(RequestInterface $request);
 }

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Model;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface as IUrl;
+use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopApiInterface as IShopAPI;
 use SimiCart\SimpifyManagement\Exceptions\UnhandledShopApiRequestFailed;
 use SimiCart\SimpifyManagement\Model\Clients\RestFactory as FRest;
@@ -16,6 +18,8 @@ class ShopApi implements IShopAPI
     protected IUrl $IUrl;
 
     protected \Magento\Framework\Stdlib\DateTime\DateTime $date;
+    protected IShop $shop;
+    private ConfigProvider $configProvider;
 
     /**
      * @param FRest $clientFactory
@@ -27,12 +31,18 @@ class ShopApi implements IShopAPI
         FRest $clientFactory,
         IUrl $IUrl,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        ConfigProvider $configProvider,
         ?string $shopDomain = null,
         array $options = []
     ) {
         $this->date = $date;
         $this->client = $clientFactory->create(['shopDomain' => $shopDomain, 'options' => $options]);
+        if (!isset($options['shop'])) {
+            throw new \Exception("Shop instance is required when init ShopAPI.");
+        }
+        $this->shop = $options['shop'];
         $this->IUrl = $IUrl;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -80,6 +90,32 @@ class ShopApi implements IShopAPI
             $errorMessage = $e->getMessage();
         }
         throw new UnhandledShopApiRequestFailed(__($errorMessage));
+    }
+
+    public function verifyRequest(RequestInterface $request): bool
+    {
+        $apiSecret = $this->configProvider->getApiSecret();
+        if (!$apiSecret) {
+            throw new \Exception('API secret is missing');
+        }
+
+        if ($request->getParam('shop') && $request->getParam('timestamp') && $request->getParam('hmac')) {
+            // Grab the HMAC, remove it from the params, then sort the params for hashing
+            $params = $request->getParams();
+            $hmac = $params['hmac'];
+            unset($params['hmac']);
+            if (isset($params['secure'])) {
+                unset($params['secure']);
+            }
+            ksort($params);
+            // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
+            return $hmac === hash_hmac(
+                    'sha256',
+                    urldecode(http_build_query($params)),
+                    $apiSecret
+            );
+        }
+        return false;
     }
 
     public function getShopInfo(): array
