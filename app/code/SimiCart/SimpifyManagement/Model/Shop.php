@@ -61,6 +61,7 @@ class Shop extends AbstractModel implements ShopInterface
                 'api_key' => $this->configProvider->getApiKey(),
                 'api_secret' => $this->configProvider->getApiSecret(),
                 'access_token' => $this->getAccessToken(),
+                'api_version' => $this->configProvider->getApiVersion(),
                 'shop' => $this
             ];
             $this->api = $this->shopApiFactory->create([

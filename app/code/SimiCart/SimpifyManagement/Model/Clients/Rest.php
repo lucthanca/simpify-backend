@@ -4,42 +4,40 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model\Clients;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Client;
-use Psr\Http\Message\StreamInterface;
+use \SimiCart\SimpifyManagement\Model\Clients\ShopifyClientInterface as IShopifyClient;
+use SimiCart\SimpifyManagement\Model\Clients\Stacks\AuthRequestFactory;
 
-class Rest
+class Rest implements IShopifyClient
 {
-    /**
-     * Additional Guzzle options.
-     *
-     * @var array
-     */
-    protected $guzzleOptions = [
-        'headers' => [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ],
-        'timeout' => 10.0,
-        'max_retry_attempts' => 2,
-        'default_retry_multiplier' => 2.0,
-        'retry_on_status' => [429, 503, 500],
-    ];
-
     private ?Uri $baseUri = null;
     private ?string $shopDomain;
     private ClientOptions $options;
     private Client $client;
 
     /**
+     * @param ClientOptionsFactory $clientOptionsF
+     * @param AuthRequestFactory $authRequestF
      * @param string|null $shopDomain
      * @param array|null $options
      */
-    public function __construct(?string $shopDomain = null, array $options = [])
-    {
+    public function __construct(
+        ClientOptionsFactory $clientOptionsF,
+        Stacks\AuthRequestFactory $authRequestF,
+        ?string $shopDomain = null,
+        array $options = []
+    ) {
         $this->shopDomain = $shopDomain;
-        $this->options = new ClientOptions($options);
-        $this->client = new Client($this->guzzleOptions);
+        $this->options = $clientOptionsF->create(['data' => $options]);
+
+        $stack = HandlerStack::create($this->getOptions()->getGuzzleHandler());
+        $stack->push($authRequestF->create(['api' => $this]), 'request:auth');
+        $this->client = new Client(array_merge(
+            ['handler' => $stack],
+            $this->getOptions()->getGuzzleOptions()
+        ));
     }
 
     /**
@@ -109,9 +107,9 @@ class Rest
             throw new \Exception('API key or secret is missing');
         }
         // Do a JSON POST request to grab the access token
-        $url = $this->getBaseUri()->withPath('/admin/api/2023-01/shop.json');
+        $url = $this->getBaseUri()->withPath("/admin/api/{$this->getOptions()->getApiVersion()}/shop.json");
         try {
-            $response = $this->getClient()->get($url, ["headers" => ["X-Shopify-Access-Token" => $this->getOptions()->getShop()->getAccessToken()]]);
+            $response = $this->getClient()->get($url);
             return $this->responseToArray($response->getBody()->getContents());
         } catch (\Exception $e) {
             $body = json_decode($e->getResponse()->getBody()->getContents());

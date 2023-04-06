@@ -13,6 +13,7 @@ class ConfigProvider
     const APP_BRIDGE_VERSION_CONFIG_XML_PATH = 'simpify_management/general/app_bridge_version';
     const API_GRANT_MODE_CONFIG_XML_PATH = 'simpify_management/general/shopify_api_grant_mode';
     const API_SCOPES_CONFIG_XML_PATH = 'simpify_management/general/shopify_api_scopes';
+    const API_VERSION_CONFIG_XML_PATH = 'simpify_management/general/api_version';
 
     private ScopeConfigInterface $scopeConfig;
 
@@ -91,6 +92,20 @@ class ConfigProvider
             return 'read_products,write_products';
         }
         return $scopes;
+    }
+
+    /**
+     * Return Shopify API Version
+     *
+     * @return string
+     */
+    public function getApiVersion(): string
+    {
+        $version = $this->scopeConfig->getValue(self::API_VERSION_CONFIG_XML_PATH);
+        if (empty($version)) {
+            return '2023-01';
+        }
+        return $version;
     }
 
     /**

@@ -79,6 +79,7 @@ class InstallShop
                 'completed' => false,
                 'url' => null,
                 'shop_id' => null,
+                'errorMessage' => $e->getMessage()
             ];
         }
     }
