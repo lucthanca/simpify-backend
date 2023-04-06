@@ -30,6 +30,9 @@ class FullPageRedirect extends Template
         parent::__construct($context, $data);
         $this->configProvider = $configProvider;
         $this->installShop = $installShop;
+
+        // Cache the block by the shop domain and host
+        $this->setData('cache_key', $this->getRequest()->getParam('shop') . '_' . $this->getRequest()->getParam('host'));
     }
 
     public function getApiKey(): string

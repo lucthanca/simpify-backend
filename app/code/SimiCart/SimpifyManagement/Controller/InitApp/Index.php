@@ -49,6 +49,11 @@ class Index implements HttpGetActionInterface
         return $page;
     }
 
+    protected function initShop()
+    {
+
+    }
+
     public function getRequest(): RequestInterface
     {
         return $this->request;
