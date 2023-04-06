@@ -97,4 +97,12 @@ class FullPageRedirect extends Template
             return [$result, false];
         }
     }
+
+    /**
+     * @inheirtDoc
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::getCacheLifetime() ?: 7200;
+    }
 }
