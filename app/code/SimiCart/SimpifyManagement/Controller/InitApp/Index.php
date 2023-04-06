@@ -31,6 +31,8 @@ class Index implements HttpGetActionInterface
 
     public function execute()
     {
+        vadu_html('run init');
+        vadu_html($this->getRequest()->getParams());
         $page = $this->getPageFactory()->create(false, [
             'template' => 'SimiCart_SimpifyManagement::initApp/fullpageRedirect.phtml',
         ]);

@@ -13,6 +13,7 @@ interface ShopInterface
     const PLAN_ID = 'plan_id';
     const CREATED_AT = 'created_at';
     const SHOP_ACCESS_TOKEN = 'shop_access_token';
+    const SHOP_STOREFRONT_TOKEN = 'shop_storefront_token';
     const SIMI_ACCESS_TOKEN = 'simi_access_token';
 
     const STATUS_UNINSTALLED = 0;
@@ -131,12 +132,27 @@ interface ShopInterface
     public function getAccessToken(): ?string;
 
     /**
-     * Set shop api
+     * Set shop api token
      *
      * @param string|null $api
      * @return string|null
      */
     public function setAccessToken(?string $api): self;
+
+    /**
+     * Get shop storefront api token
+     *
+     * @return string|null
+     */
+    public function getShopStorefrontToken(): ?string;
+
+    /**
+     * Set shop storefront api token
+     *
+     * @param string|null $token
+     * @return string|null
+     */
+    public function setShopStorefrontToken(?string $token): self;
 
     /**
      * Retrieve simi system token

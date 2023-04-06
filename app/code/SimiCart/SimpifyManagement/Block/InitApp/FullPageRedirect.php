@@ -79,7 +79,7 @@ class FullPageRedirect extends Template
 
     public function getAppBridgeVersion(): string
     {
-        return $this->configProvider->getAppBridgeVersion();
+        return "@{$this->configProvider->getAppBridgeVersion()}";
     }
 
     /**

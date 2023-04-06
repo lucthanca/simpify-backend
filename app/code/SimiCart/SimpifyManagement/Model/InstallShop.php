@@ -62,6 +62,10 @@ class InstallShop
                 $data = $shop->getShopApi()->getAccessData($code);
                 $shop->setAccessToken($data['access_token']);
             }
+            if (!$shop->hasStorefrontToken()) {
+                $token = $shop->getShopApi()->requestStorefrontToken();
+                $shop->setShopStorefrontToken($token);
+            }
             $storeData = $shop->getShopApi()->getShopInfo();
             if (isset($storeData['shop'])) {
                 $shop->setShopName($storeData['shop']['name'] ?? $shop->getShopName());
@@ -71,7 +75,8 @@ class InstallShop
             return [
                 'completed' => true,
                 'url' => null,
-                'shop_id' => $shop->getId(),
+                'shop' => $shop,
+                'shop_url' => "https://{$shop->getShopDomain()}/admin/apps",
             ];
         } catch (\Exception $e) {
             // Just return the default setting

@@ -6,6 +6,7 @@
             "shop_name": true,
             "shop_email": true,
             "shop_access_token": true,
+            "shop_storefront_token": true,
             "simi_access_token": true,
             "status": true,
             "app_info": true,
@@ -15,6 +16,7 @@
         "index": {
             "SIMICART_SIMPIFY_USERS_ENTITY_ID": true,
             "SIMICART_SIMPIFY_USERS_SHOP_ACCESS_TOKEN": true,
+            "SIMICART_SIMPIFY_USERS_SHOP_STOREFRONT_TOKEN": true,
             "SIMICART_SIMPIFY_USERS_SIMI_ACCESS_TOKEN": true
         },
         "constraint": {

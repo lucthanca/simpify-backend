@@ -38,6 +38,24 @@
         </arguments>
     </type>
 
+<!--  GRID COLLECTION DECLARE  -->
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="simpify_management_shops_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="SimiCart\SimpifyManagement\Model\ResourceModel\Shop\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">simicart_simpify_users</argument>
+            <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop</argument>
+        </arguments>
+    </virtualType>
+
+
+
     <preference for="SimiCart\SimpifyManagement\Api\ShopRepositoryInterface" type="SimiCart\SimpifyManagement\Model\ShopRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\ShopApiInterface" type="SimiCart\SimpifyManagement\Model\ShopApi"/>
 </config>

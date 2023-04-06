@@ -31,14 +31,15 @@ class Shop extends AbstractModel implements ShopInterface
      * @param array $data
      */
     public function __construct(
-        ShopApiFactory $shopApiFactory,
-        ConfigProvider $configProvider,
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
+        ShopApiFactory                                          $shopApiFactory,
+        ConfigProvider                                          $configProvider,
+        \Magento\Framework\Model\Context                        $context,
+        \Magento\Framework\Registry                             $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    ) {
+        \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection = null,
+        array                                                   $data = []
+    )
+    {
         $this->shopApiFactory = $shopApiFactory;
         $this->configProvider = $configProvider;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -104,7 +105,17 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function hasOfflineAccess(): bool
     {
-        return $this->getAccessToken() !== null && ! empty($this->getAccessToken());
+        return $this->getAccessToken() !== null && !empty($this->getAccessToken());
+    }
+
+    /**
+     * Check if the storefront token is filled
+     *
+     * @return bool
+     */
+    public function hasStorefrontToken(): bool
+    {
+        return $this->getShopStorefrontToken() !== null && !empty($this->getShopStorefrontToken());
     }
 
     public function getShopDomain(): string
@@ -139,7 +150,7 @@ class Shop extends AbstractModel implements ShopInterface
 
     public function getStatus(): int
     {
-        return (int) $this->getData(self::STATUS);
+        return (int)$this->getData(self::STATUS);
     }
 
     public function setStatus(int $status = 0): ShopInterface
@@ -163,7 +174,7 @@ class Shop extends AbstractModel implements ShopInterface
 
     public function getPlanId(): int
     {
-        return (int) $this->getData(self::PLAN_ID);
+        return (int)$this->getData(self::PLAN_ID);
     }
 
     public function setPlanId(int $id): ShopInterface
@@ -191,6 +202,25 @@ class Shop extends AbstractModel implements ShopInterface
         return $this->setData(self::SHOP_ACCESS_TOKEN, $api);
     }
 
+    /**
+     * @inheirtDoc
+     */
+    public function getShopStorefrontToken(): ?string
+    {
+        return $this->getData(self::SHOP_STOREFRONT_TOKEN);
+    }
+
+    /**
+     * @inheirtDoc
+     */
+    public function setShopStorefrontToken(?string $token): self
+    {
+        return $this->setData(self::SHOP_STOREFRONT_TOKEN, $token);
+    }
+
+    /**
+     * @inheirtDoc
+     */
     public function getSimiAccessToken(): ?string
     {
         return $this->getData(self::SIMI_ACCESS_TOKEN);

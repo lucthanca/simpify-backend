@@ -24,4 +24,11 @@ interface ShopApiInterface
      */
     public function getAccessData(string $code): array;
     public function getShopInfo(): array;
+
+    /**
+     * Request storefront access token
+     *
+     * @return string
+     */
+    public function requestStorefrontToken(): string;
 }

@@ -96,7 +96,7 @@ class Rest implements IShopifyClient
             return $this->responseToArray($response->getBody()->getContents());
         } catch (\Exception $e) {
             $body = json_decode($e->getResponse()->getBody()->getContents());
-            throw new \Exception($body->error_description);
+            throw new \Exception($body->error_description ?? $body->errors);
         }
     }
 
@@ -113,7 +113,26 @@ class Rest implements IShopifyClient
             return $this->responseToArray($response->getBody()->getContents());
         } catch (\Exception $e) {
             $body = json_decode($e->getResponse()->getBody()->getContents());
-            throw new \Exception($body->error_description);
+            throw new \Exception($body->error_description ?? $body->errors);
+        }
+    }
+
+
+    public function request(string $method, string $path, array $options = [])
+    {
+        $finalPath = str_replace("{{api_version}}", $this->getOptions()->getApiVersion(), $path);
+//        $url = $this->getBaseUri()->withPath("/admin/api/{$this->getOptions()->getApiVersion()}/storefront_access_tokens.json");
+        $url = $this->getBaseUri()->withPath($finalPath);
+        try {
+            $response = $this->getClient()->request($method, $url, $options);
+            return $this->responseToArray($response->getBody()->getContents());
+        } catch (\Exception $e) {
+            $body = json_decode($e->getResponse()->getBody()->getContents(), true);
+            $message = $body['errors'];
+            if (is_array($body['errors'])) {
+                $message = $body['errors']['storefront_access_token'];
+            }
+            throw new \Exception($message);
         }
     }
 
