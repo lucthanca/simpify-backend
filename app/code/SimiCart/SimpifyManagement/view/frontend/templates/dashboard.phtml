@@ -1,0 +1,9 @@
+<?php
+$currentShop = \Magento\Framework\App\ObjectManager::getInstance()->get(\SimiCart\SimpifyManagement\Model\Session::class);
+$shop = $currentShop->getShop();
+dd($shop->getShopName())
+?>
+
+<div>
+    <h1>Hello: <?= $shop->getShopName() ?></h1>
+</div>

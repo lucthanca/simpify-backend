@@ -5,23 +5,31 @@ namespace SimiCart\SimpifyManagement\Controller\InitApp;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\PageFactory;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
+use SimiCart\SimpifyManagement\Helper\PageLayoutTrait;
+use SimiCart\SimpifyManagement\Model\VerifyShopify;
 use SimiCart\SimpifyManagement\Registry\CurrentShop as RCurrentShop;
 use \Psr\Log\LoggerInterface as ILogger;
 use Magento\Framework\View\Element\Template;
 
 class Index implements HttpGetActionInterface
 {
+    use PageLayoutTrait;
+
     private RequestInterface $request;
     private UrlInterface $url;
     private PageFactory $pageFactory;
     private RCurrentShop $currentShopRegistry;
     private IShopRepository $shopRepository;
     private ILogger $logger;
+    private VerifyShopify $verifyShopify;
+    private RedirectFactory $redirectFactory;
 
     /**
      * Constructor
@@ -32,6 +40,8 @@ class Index implements HttpGetActionInterface
      * @param RCurrentShop $currentShopReg
      * @param IShopRepository $shopRepository
      * @param ILogger $logger
+     * @param VerifyShopify $verifyShopify
+     * @param RedirectFactory $redirectFactory
      */
     public function __construct(
         RequestInterface $request,
@@ -39,7 +49,9 @@ class Index implements HttpGetActionInterface
         PageFactory $pageFactory,
         RCurrentShop $currentShopReg,
         IShopRepository $shopRepository,
-        ILogger $logger
+        ILogger $logger,
+        VerifyShopify $verifyShopify,
+        RedirectFactory $redirectFactory
     ) {
         $this->request = $request;
         $this->url = $url;
@@ -47,20 +59,19 @@ class Index implements HttpGetActionInterface
         $this->currentShopRegistry = $currentShopReg;
         $this->shopRepository = $shopRepository;
         $this->logger = $logger;
+        $this->verifyShopify = $verifyShopify;
+        $this->redirectFactory = $redirectFactory;
     }
 
     /**
      * Init shop and return to full page redirect or dashboard
      *
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
-//        vadu_html([
-//            "INIT INSTALL APP" => $this->getRequest()->getParams()
-//        ]);
         try {
-            $this->initShop();
+            [$statusCode, $data] = $this->verifyShopify->execute($this->getRequest());
         } catch (\Exception $e) {
             $this->logger->critical('INIT SHOP FAILED: ' . $e);
             return $this->getPageFactory()->create(false, [
@@ -68,48 +79,44 @@ class Index implements HttpGetActionInterface
             ]);
         }
 
-        $page = $this->getPageFactory()->create(false, [
-            'template' => 'SimiCart_SimpifyManagement::initApp/fullpageRedirect.phtml',
-        ]);
-        $unnecessaryHeadBlocks = $page->getLayout()->getChildBlocks('head.additional');
-        $unnecessaryHeadBlocksFiltered = array_filter($unnecessaryHeadBlocks, function ($block) {
-            return $block->getNameInLayout() !== 'head_fullpage_redirect_script' ;
-        });
-        /* @var Template $block */
-        foreach ($unnecessaryHeadBlocksFiltered as $block) {
-            $page->getLayout()->unsetChild('head.additional', $block->getNameInLayout());
-        }
-        // Remove require js block
-        $page->getLayout()->unsetElement('require.js');
-        return $page;
-    }
+        switch ($statusCode) {
+            case 'logged_in':
+//                dd($data);
+                return $this->redirectFactory->create()->setPath('simpify/dashboard', $data ?? []);
+                $page = $this->getPageFactory()->create(false, [
+                    'template' => 'SimiCart_SimpifyManagement::authenticate/token_root.phtml',
+                ]);
 
-    /**
-     * Get shop or create new shop instance by provided request param
-     *
-     * @return void
-     * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function initShop()
-    {
-        if (!$this->getRequest()->getParam('shop')) {
-            throw new LocalizedException(__('Missing shop parameter.'));
-        }
+                $page->getLayout()->getUpdate()->addHandle('handler_simpify_dashboard');
+                $page->getLayout()->unsetElement('require.js');
+                $page->getLayout()->unsetElement('after.body.start');
+                $this->removeMagentoBlocks($page, 'page.wrapper', ['main.content', 'before.body.end']);
+                $this->removeMagentoBlocks($page, 'main.content', ['columns']);
+                $this->removeMagentoBlocks($page, 'columns', ['main']);
+                $this->removeMagentoBlocks($page, 'main', ['token_shimmer', 'simpify_page_wrapper']);
+                $this->removeMagentoBlocks($page, 'before.body.end', []);
+                return $page;
+            case 'token_missing':
+                return $this->redirectFactory->create()->setPath('simpify/authenticate/token', $data);
+            default :
+                // status === new_shop
+                $page = $this->getPageFactory()->create(false, [
+                    'template' => 'SimiCart_SimpifyManagement::initApp/fullpageRedirect.phtml',
+                ]);
+                $page->getLayout()->getUpdate()->addHandle('handler_simpify_fullpage_redirect');
+                $unnecessaryHeadBlocks = $page->getLayout()->getChildBlocks('head.additional');
+                $unnecessaryHeadBlocksFiltered = array_filter($unnecessaryHeadBlocks, function ($block) {
+                    return $block->getNameInLayout() !== 'head_fullpage_redirect_script' ;
+                });
+                /* @var Template $block */
+                foreach ($unnecessaryHeadBlocksFiltered as $block) {
+                    $page->getLayout()->unsetChild('head.additional', $block->getNameInLayout());
+                }
+                // Remove require js block
+                $page->getLayout()->unsetElement('require.js');
 
-        $shopDomain = $this->getRequest()->getParam('shop');
-        $shop = $this->shopRepository->getByDomain($shopDomain);
-        if (!$shop->getId()) {
-            $shopData = [
-                IShop::SHOP_NAME => $shopDomain,
-                IShop::SHOP_DOMAIN => $shopDomain,
-                IShop::SHOP_EMAIL => "shop@$shopDomain",
-            ];
-
-            $this->shopRepository->createShop($shopData);
-            $shop = $this->shopRepository->getByDomain($shopDomain);
+                return $page;
         }
-        $this->currentShopRegistry->set($shop);
     }
 
     /**

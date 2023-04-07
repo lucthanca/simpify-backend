@@ -66,6 +66,7 @@ class FullPageRedirect extends Template
      */
     public function getShop(): string
     {
+        vadu_html($this->getRequest()->getParams());
         return $this->getRequest()->getParam('shop');
     }
 

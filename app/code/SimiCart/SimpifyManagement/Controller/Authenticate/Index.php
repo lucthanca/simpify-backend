@@ -62,7 +62,7 @@ class Index implements ActionInterface
         } catch (\Exception $e) {
             return $this->jsonFactory->create()->setData(['success' => false]);
         }
-        return $this->jsonFactory->create()->setData(['success' => true]);
+        return $this->redirectFactory->create()->setPath('simpify/initapp', ['shop' => $shop->getShopDomain(), 'host' => $this->getRequest()->getParam('host')]);
     }
 
     /**
