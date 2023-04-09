@@ -6,7 +6,7 @@ $target = $block->getTarget();
     utils.getSessionToken(app).then((token) => {
         const hrr = `<?= $target ?><?= str_contains($target, '?') ? '&' : '?' ?>token=${token}<?= str_contains($target, 'host')? '' : '&host=${host}'?>`;
         console.log(hrr);
-        debugger;
+        // debugger;
         window.location.href = hrr;
     });
 </script>

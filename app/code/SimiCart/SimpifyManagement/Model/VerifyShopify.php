@@ -18,6 +18,7 @@ class VerifyShopify
     private ConfigProvider $configProvider;
     private IShopRepository $shopRepository;
     private CurrentShop $currentShop;
+    private \Magento\Customer\Model\Session $customerSession;
 
     /**
      * @param SessionTokenFactory $sessionTokenFactory
@@ -31,13 +32,15 @@ class VerifyShopify
         ShopSession $shopSession,
         ConfigProvider $configProvider,
         IShopRepository $shopRepository,
-        CurrentShop $currentShop
+        CurrentShop $currentShop,
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->sessionTokenFactory = $sessionTokenFactory;
         $this->shopSession = $shopSession;
         $this->configProvider = $configProvider;
         $this->shopRepository = $shopRepository;
         $this->currentShop = $currentShop;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -65,7 +68,9 @@ class VerifyShopify
         if (!$tokenSource) {
             $shop = $this->loadShop($request->getParam('shop'));
             $shopHasInstalledPrevious = $shop->getId() && $shop->hasOfflineAccess() && !$shop->hasUninstalled();
-            return $shopHasInstalledPrevious ? $this->handleMissingToken($request, $shop) : $this->handleInvalidShop($request->getParam('shop'));
+            return $shopHasInstalledPrevious ?
+                $this->handleMissingToken($request, $shop) :
+                $this->handleInvalidShop($request->getParam('shop'));
         }
 
         $token = $this->sessionTokenFactory->create(['token' => $tokenSource]);
@@ -73,8 +78,9 @@ class VerifyShopify
         if (!$shop->getId()) {
             throw new NoSuchEntityException(__('No shop provided!'));
         }
-        $this->shopSession->loginById((int) $shop->getId());
-        return ['logged_in', ['shop' => $shop->getShopDomain(), 'host' => $request->getParam('host')]];
+//        $this->shopSession->loginById((int) $shop->getId());
+//        vadu_html($token->getSessionId());
+        return ['logged_in', ['shop' => $shop->getShopDomain(), 'host' => $request->getParam('host'), 'session' => $token->getSessionId()]];
     }
 
     /**
@@ -126,7 +132,6 @@ class VerifyShopify
 
             return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
         };
-
 
         $path = $getUrlPath();
         $target = $strStart($path, '/');

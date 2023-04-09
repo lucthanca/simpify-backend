@@ -1,7 +1,6 @@
 <?php
-$currentShop = \Magento\Framework\App\ObjectManager::getInstance()->get(\SimiCart\SimpifyManagement\Model\Session::class);
-$shop = $currentShop->getShop();
-dd($shop->getShopName())
+/** @var \SimiCart\SimpifyManagement\Block\Dashboard $block */
+$shop = $block->getShop();
 ?>
 
 <div>

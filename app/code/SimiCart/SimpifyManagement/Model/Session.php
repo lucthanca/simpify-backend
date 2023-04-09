@@ -20,7 +20,7 @@ use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
 
 class Session extends \Magento\Framework\Session\SessionManager
 {
-    protected ?IShop $shopModel;
+    protected ?IShop $shopModel = null;
 
     protected ?int $isShopIdChecked;
     protected IShopRepository $shopRepository;
@@ -113,6 +113,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getShop(): ?IShop
     {
         if ($this->shopModel === null) {
+            dd($this->getShopId());
             if ($this->getShopId()) {
                 $this->shopModel = $this->shopRepository->getById((int) $this->getShopId());
             }

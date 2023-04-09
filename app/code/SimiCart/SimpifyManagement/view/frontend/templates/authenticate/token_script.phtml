@@ -105,6 +105,9 @@ $host = $block->getHost();
         toastNotice.dispatch(Toast.Action.SHOW);
     <?php endif; ?>
     });
+
+    // <?= $block->getRequest()->getFullActionName() ?>
+
 </script>
 
 <?= $block->getChildHtml('additional') ?>

@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Block\Authenticate;
 
 class Token extends \SimiCart\SimpifyManagement\Block\InitApp\FullPageRedirect
 {
+
     /**
      * Get target
      *
@@ -33,5 +34,14 @@ class Token extends \SimiCart\SimpifyManagement\Block\InitApp\FullPageRedirect
     public function getError(): ?string
     {
         return $this->getRequest()->getParam('error');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getCacheLifetime()
+    {
+        // No Cache for fix redirect error
+        return null;
     }
 }

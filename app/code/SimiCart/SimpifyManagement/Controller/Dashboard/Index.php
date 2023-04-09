@@ -24,13 +24,13 @@ class Index implements HttpGetActionInterface
             'template' => 'SimiCart_SimpifyManagement::authenticate/token_root.phtml',
         ]);
         $page->getLayout()->getUpdate()->addHandle('handler_simpify_dashboard');
-        $page->getLayout()->unsetElement('require.js');
-        $page->getLayout()->unsetElement('after.body.start');
-        $this->removeMagentoBlocks($page, 'page.wrapper', ['main.content', 'before.body.end']);
-        $this->removeMagentoBlocks($page, 'main.content', ['columns']);
-        $this->removeMagentoBlocks($page, 'columns', ['main']);
-        $this->removeMagentoBlocks($page, 'main');
-        $this->removeMagentoBlocks($page, 'before.body.end', ['token_script_base']);
+//        $page->getLayout()->unsetElement('require.js');
+//        $page->getLayout()->unsetElement('after.body.start');
+//        $this->removeMagentoBlocks($page, 'page.wrapper', ['main.content', 'before.body.end']);
+//        $this->removeMagentoBlocks($page, 'main.content', ['columns']);
+//        $this->removeMagentoBlocks($page, 'columns', ['main']);
+//        $this->removeMagentoBlocks($page, 'main');
+//        $this->removeMagentoBlocks($page, 'before.body.end', ['token_script_base']);
 
         return $page;
     }
