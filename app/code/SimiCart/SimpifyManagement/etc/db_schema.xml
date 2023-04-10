@@ -40,4 +40,42 @@
             <column name="simi_access_token"/>
         </index>
     </table>
+
+    <table name="simicart_simpify_apps" resource="default" engine="innodb" comment="Simicart Simpify Apps">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="shop_id" unsigned="true" nullable="false" comment="Shop ID"/>
+        <column xsi:type="smallint" name="industry" unsigned="true" nullable="true" comment="Industry value"/>
+        <column xsi:type="varchar" name="app_logo" nullable="true" length="255" comment="App Logo url path"/>
+        <column xsi:type="varchar" name="app_icon" nullable="true" length="255" comment="App ico url path"/>
+        <column xsi:type="varchar" name="splash_image" nullable="true" length="255" comment="App splash url path"/>
+        <column xsi:type="varchar" name="splash_bg_color" nullable="true" length="16" comment="App splash color string"/>
+        <column xsi:type="smallint" name="splash_is_full" nullable="true" padding="2" comment="App splash is full?"/>
+
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APPS_SHOP_ID_SIMICART_SIMPIFY_USERS_ENTITY_ID"
+                    table="simicart_simpify_apps" column="shop_id" referenceTable="simicart_simpify_users"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="simicart_simpify_app_layouts" resource="default" engine="innodb" comment="Simicart Simpify App Layout">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="app_id" unsigned="true" nullable="false" comment="Shop ID" />
+        <column xsi:type="varchar" name="font" nullable="true" length="255" comment="Font name" />
+        <column xsi:type="text" name="colors" nullable="true" comment="Color data" />
+        <column xsi:type="text" name="menu" nullable="true" comment="Menu data" />
+        <column xsi:type="mediumtext" name="homepage" nullable="true" comment="Home Page design data" />
+        <column xsi:type="text" name="collection_page" nullable="true" comment="Product Collection page/Category Page design data" />
+        <column xsi:type="text" name="product_page" nullable="true" comment="Product Page design data" />
+        <column xsi:type="mediumtext" name="landing_page" nullable="true" comment="Landing Page design data" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APP_LAYOUT_APP_ID_SIMICART_SIMPIFY_APPS_ENTITY_ID"
+                    table="simicart_simpify_app_layouts" column="app_id" referenceTable="simicart_simpify_apps"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
 </schema>
