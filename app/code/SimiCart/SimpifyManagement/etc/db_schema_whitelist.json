@@ -24,5 +24,76 @@
             "SIMICART_SIMPIFY_USERS_SHOP_DOMAIN_SHOP_EMAIL": true,
             "SIMICART_SIMPIFY_USERS_SHOP_DOMAIN": true
         }
+    },
+    "simicart_simpify_apps": {
+        "column": {
+            "entity_id": true,
+            "shop_id": true,
+            "industry": true,
+            "app_logo": true,
+            "app_icon": true,
+            "splash_image": true,
+            "splash_bg_color": true,
+            "splash_is_full": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SIMICART_SIMPIFY_APPS_SHOP_ID_SIMICART_SIMPIFY_USERS_ENTITY_ID": true
+        }
+    },
+    "simicart_simpify_app_layouts": {
+        "column": {
+            "entity_id": true,
+            "app_id": true,
+            "font": true,
+            "colors": true,
+            "menu": true,
+            "homepage": true,
+            "collection_page": true,
+            "product_page": true,
+            "landing_page": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SIMICART_SIMPIFY_APP_LYTS_APP_ID_SIMICART_SIMPIFY_APPS_ENTT_ID": true
+        }
+    },
+    "simicart_features": {
+        "column": {
+            "entity_id": true,
+            "name": true,
+            "status": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "simicart_feature_fields": {
+        "column": {
+            "entity_id": true,
+            "name": true,
+            "input_type": true,
+            "feature_id": true
+        },
+        "index": {
+            "SIMICART_FEATURE_FIELDS_FEATURE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SIMICART_FEATURE_FIELDS_FEATURE_ID_SIMICART_FEATURES_ENTITY_ID": true
+        }
+    },
+    "simicart_feature_field_options": {
+        "column": {
+            "entity_id": true,
+            "is_default": true,
+            "label": true,
+            "value": true,
+            "field_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_D46A22E886CAA75661BBB2D9A47ABDDB": true
+        }
     }
 }

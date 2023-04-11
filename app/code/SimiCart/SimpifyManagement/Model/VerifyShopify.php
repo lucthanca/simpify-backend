@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\RequestInterface as IRequest;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -26,6 +27,7 @@ class VerifyShopify
      * @param ConfigProvider $configProvider
      * @param IShopRepository $shopRepository
      * @param CurrentShop $currentShop
+     * @param Session $customerSession
      */
     public function __construct(
         SessionTokenFactory $sessionTokenFactory,
@@ -46,7 +48,6 @@ class VerifyShopify
     /**
      * Verify the shopify request
      *
-     * @param IShop $shop
      * @param IRequest $request
      * @return array
      * @throws SignatureVerificationException|LocalizedException
@@ -157,11 +158,12 @@ class VerifyShopify
     /**
      * Get shop or create new shop instance by provided request param
      *
+     * @param string $shopDomain
      * @return void
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function initShop($shopDomain)
+    protected function initShop(string $shopDomain)
     {
         $shop = $this->shopRepository->getByDomain($shopDomain);
         if (!$shop->getId()) {
@@ -169,6 +171,7 @@ class VerifyShopify
                 IShop::SHOP_NAME => $shopDomain,
                 IShop::SHOP_DOMAIN => $shopDomain,
                 IShop::SHOP_EMAIL => "shop@$shopDomain",
+                IShop::STATUS => \SimiCart\SimpifyManagement\Model\Source\ShopStatus::NOT_COMPLETED,
             ];
 
             $this->shopRepository->createShop($shopData);
@@ -180,7 +183,6 @@ class VerifyShopify
     /**
      * Verify HMAC data, if present.
      *
-     * @param IShop $shop
      * @param IRequest $request The request object.
      *
      * @return bool
@@ -237,7 +239,7 @@ class VerifyShopify
      * Grab the request data.
      *
      * @param IRequest $request The request object.
-     * @param string  $source  The source of the data.
+     * @param string $source The source of the data.
      *
      * @return array
      */

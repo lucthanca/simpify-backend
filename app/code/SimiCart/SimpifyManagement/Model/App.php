@@ -1,12 +1,52 @@
 <?php
-
+declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model;
 
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use SimiCart\SimpifyManagement\Api\AppLayoutRepositoryInterface as IAppLayoutRepository;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
 use Magento\Framework\Model\AbstractModel;
+use SimiCart\SimpifyManagement\Api\Data\AppLayoutInterface as IAppLayout;
+use SimiCart\SimpifyManagement\Model\ResourceModel\AbstractResource;
 
 class App extends AbstractModel implements IApp
 {
+    protected ?IAppLayout $appLayout = null;
+    protected IAppLayoutRepository $appLayoutRepository;
+
+    /**
+     * App constructor
+     *
+     * @param IAppLayoutRepository $appLayoutRepository
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        IAppLayoutRepository $appLayoutRepository,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->appLayoutRepository = $appLayoutRepository;
+    }
+
+    /**
+     * Init App model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init(ResourceModel\App::class);
+    }
 
     /**
      * @inheritDoc
@@ -119,5 +159,17 @@ class App extends AbstractModel implements IApp
     public function setIndustry(int $value): IApp
     {
         return $this->setData(self::INDUSTRY, $value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAppLayout(): IAppLayout
+    {
+        if (!$this->appLayout) {
+            $this->appLayout = $this->appLayoutRepository->getByAppId((int) $this->getId());
+        }
+
+        return $this->appLayout;
     }
 }

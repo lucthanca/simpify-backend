@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SimiCart\SimpifyManagement\Controller\Adminhtml\Shops;
+namespace SimiCart\SimpifyManagement\Controller\Adminhtml\Features;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -29,7 +29,7 @@ class Index extends \Magento\Backend\App\Action implements HttpGetActionInterfac
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend((__('Shops')));
+        $resultPage->getConfig()->getTitle()->prepend((__('Features')));
         $resultPage->setActiveMenu('SimiCart_SimpifyManagement::simicart_simpify_management');
 
         return $resultPage;

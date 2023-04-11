@@ -78,4 +78,50 @@
                     table="simicart_simpify_app_layouts" column="app_id" referenceTable="simicart_simpify_apps"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
+
+    <table name="simicart_features" resource="default" engine="innodb" comment="Simicart Features">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Feature Name" />
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Feature Status"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
+    <table name="simicart_feature_fields" engine="innodb" resource="default" comment="Simicart Feature config field">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Feature Config Name" />
+        <column xsi:type="varchar" name="input_type" nullable="false" length="64" comment="Feature Config Name" default="text" />
+        <column xsi:type="int" name="feature_id" unsigned="true" nullable="false" comment="Feature ID"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="SIMICART_FEATURE_FIELDS_FEATURE_ID" indexType="btree">
+            <column name="feature_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="SIMICART_FEATURE_FIELDS_FEATURE_ID_SIMICART_FEATURES_ENTITY_ID"
+                    table="simicart_feature_fields" column="feature_id" referenceTable="simicart_features"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="simicart_feature_field_options" resource="default" engine="innodb" comment="Simicart Feature Config Options">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="smallint" name="is_default" unsigned="true" nullable="false" identity="false" default="0" comment="Is default value for related field"/>
+        <column xsi:type="varchar" name="label" nullable="false" length="255" comment="Config Option Label" />
+        <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Config Option Value" />
+
+        <column xsi:type="int" name="field_id" unsigned="true" nullable="false" comment="Field ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SIMICART_FEATURE_FIELD_OPTION_FIELD_ID_SIMICART_FEATURE_FIELDS_ENTITY_ID"
+                    table="simicart_feature_field_options" column="field_id" referenceTable="simicart_feature_fields"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
 </schema>

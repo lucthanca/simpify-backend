@@ -117,4 +117,11 @@ interface AppInterface
      * @return $this
      */
     public function setIndustry(int $value): self;
+
+    /**
+     * Get app layout
+     *
+     * @return AppLayoutInterface
+     */
+    public function getAppLayout(): AppLayoutInterface;
 }

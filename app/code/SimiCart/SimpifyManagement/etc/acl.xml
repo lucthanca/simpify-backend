@@ -3,9 +3,15 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Customer::customer">
+                <resource id="SimiCart_SimpifyManagement::simicart_simpify" translate="title" title="Simicart Simpify Management" sortOrder="10">
                     <resource id="SimiCart_SimpifyManagement::simicart_shopify" title="SimiCart Shopify Shops Management" translate="title" sortOrder="500">
                         <resource id="SimiCart_SimpifyManagement::shop_management" sortOrder="10" translate="title" title="Manage Shopify Shops" />
+                        <resource id="SimiCart_SimpifyManagement::feature_management" sortOrder="40" translate="title" title="Manage Feature Management">
+                            <resource id="SimiCart_SimpifyManagement::feature_view" sortOrder="10" translate="title" title="Can New Feature" />
+                            <resource id="SimiCart_SimpifyManagement::feature_new" sortOrder="40" translate="title" title="Can Add New Feature" />
+                            <resource id="SimiCart_SimpifyManagement::feature_update" sortOrder="60" translate="title" title="Can Update Feature" />
+                            <resource id="SimiCart_SimpifyManagement::feature_delete" sortOrder="80" translate="title" title="Can Remove Feature" />
+                        </resource>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">

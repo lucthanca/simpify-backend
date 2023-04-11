@@ -44,6 +44,7 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="simpify_management_shops_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop\Grid\Collection</item>
+                <item name="simpify_management_features_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Feature\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -53,6 +54,16 @@
             <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop</argument>
         </arguments>
     </virtualType>
+
+    <virtualType name="SimiCart\SimpifyManagement\Model\ResourceModel\Feature\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">simicart_features</argument>
+            <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Feature</argument>
+        </arguments>
+    </virtualType>
+
+<!--    END COLLECTION DATA SOURCE -->
+
 
     <type name="SimiCart\SimpifyManagement\Model\Session">
         <arguments>
@@ -69,4 +80,6 @@
 
     <preference for="SimiCart\SimpifyManagement\Api\ShopRepositoryInterface" type="SimiCart\SimpifyManagement\Model\ShopRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\ShopApiInterface" type="SimiCart\SimpifyManagement\Model\ShopApi"/>
+    <preference for="SimiCart\SimpifyManagement\Api\AppLayoutRepositoryInterface" type="SimiCart\SimpifyManagement\Model\AppLayoutRepository"/>
+    <preference for="SimiCart\SimpifyManagement\Api\AppRepositoryInterface" type="SimiCart\SimpifyManagement\Model\AppRepository"/>
 </config>

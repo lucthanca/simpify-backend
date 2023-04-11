@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
-
 namespace SimiCart\SimpifyManagement\Model\ResourceModel;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class Shop extends AbstractDb
+class App extends AbstractDb
 {
-    const MAIN_TABLE = 'simicart_simpify_users';
+    const MAIN_TABLE = 'simicart_simpify_apps';
 
     /**
-     * Init shop resource
+     * Init resource model
      *
      * @return void
      */
