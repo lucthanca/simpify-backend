@@ -7,10 +7,16 @@
                     <resource id="SimiCart_SimpifyManagement::simicart_shopify" title="SimiCart Shopify Shops Management" translate="title" sortOrder="500">
                         <resource id="SimiCart_SimpifyManagement::shop_management" sortOrder="10" translate="title" title="Manage Shopify Shops" />
                         <resource id="SimiCart_SimpifyManagement::feature_management" sortOrder="40" translate="title" title="Manage Feature Management">
-                            <resource id="SimiCart_SimpifyManagement::feature_view" sortOrder="10" translate="title" title="Can New Feature" />
+                            <resource id="SimiCart_SimpifyManagement::feature_view" sortOrder="10" translate="title" title="Can Vew Feature" />
                             <resource id="SimiCart_SimpifyManagement::feature_new" sortOrder="40" translate="title" title="Can Add New Feature" />
                             <resource id="SimiCart_SimpifyManagement::feature_update" sortOrder="60" translate="title" title="Can Update Feature" />
                             <resource id="SimiCart_SimpifyManagement::feature_delete" sortOrder="80" translate="title" title="Can Remove Feature" />
+                            <resource id="SimiCart_SimpifyManagement::feature_field_magenement" sortOrder="100" translate="title" title="Feature Config Field Management">
+                                <resource id="SimiCart_SimpifyManagement::feature_field_view" sortOrder="10" translate="title" title="Can Vew Config Field" />
+                                <resource id="SimiCart_SimpifyManagement::feature_field_new" sortOrder="50" translate="title" title="Can Add New Config Field" />
+                                <resource id="SimiCart_SimpifyManagement::feature_field_update" sortOrder="110" translate="title" title="Can Update Config Field" />
+                                <resource id="SimiCart_SimpifyManagement::feature_field_delete" sortOrder="160" translate="title" title="Can Destroy Config Field" />
+                            </resource>
                         </resource>
                     </resource>
                 </resource>

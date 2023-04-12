@@ -85,6 +85,7 @@
         <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Feature Name" />
         <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Feature Status"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="true" comment="Sort Order"/>
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -97,6 +98,9 @@
         <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Feature Config Name" />
         <column xsi:type="varchar" name="input_type" nullable="false" length="64" comment="Feature Config Name" default="text" />
         <column xsi:type="int" name="feature_id" unsigned="true" nullable="false" comment="Feature ID"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Feature Config Field Enabled"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="true" comment="Sort Order"/>
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>

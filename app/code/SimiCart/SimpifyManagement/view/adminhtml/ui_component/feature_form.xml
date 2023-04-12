@@ -41,7 +41,7 @@
         </dataProvider>
     </dataSource>
 
-    <fieldset name="customer">
+    <fieldset name="feature">
         <settings>
             <label translate="true">Feature Information</label>
         </settings>
@@ -79,5 +79,98 @@
             </select>
         </formElements>
     </field>
+    </fieldset>
+    <fieldset name="fields" class="SimiCart\SimpifyManagement\Ui\Component\Feature\Form\FeatureConfigFieldset">
+        <settings>
+            <label translate="true">List Config Fields</label>
+            <collapsible>false</collapsible>
+            <componentType>fieldset</componentType>
+        </settings>
+
+        <button name="add_feature_field"
+                component="SimiCart_SimpifyManagement/js/feature-field/form/components/add-feature-field">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="buttonClasses" xsi:type="string">add-feature-field-button</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="targetName" xsi:type="string">${ $.parentName}.simpify_management_feature_fields_update_modal.update_simpify_management_feature_fields_form_loader</item>
+                            <item name="actionName" xsi:type="string">destroyInserted</item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="targetName" xsi:type="string">${ $.parentName}.simpify_management_feature_fields_update_modal</item>
+                            <item name="actionName" xsi:type="string">openModal</item>
+                        </item>
+                        <item name="2" xsi:type="array">
+                            <item name="targetName" xsi:type="string">${ $.parentName}.simpify_management_feature_fields_update_modal.update_simpify_management_feature_fields_form_loader</item>
+                            <item name="actionName" xsi:type="string">render</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <title translate="true">Add New Config Field</title>
+                <imports>
+                    <link name="featureId">${ $.provider }:data.feature.entity_id</link>
+                </imports>
+            </settings>
+        </button>
+
+        <modal name="simpify_management_feature_fields_update_modal">
+            <settings>
+                <options>
+                    <option name="title" xsi:type="string" translate="true">Add/Update Config Field</option>
+                </options>
+            </settings>
+            <insertForm name="update_simpify_management_feature_fields_form_loader" component="SimiCart_SimpifyManagement/js/feature-field/form/components/insert-form">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="configFieldListingProvider" xsi:type="string">ns = simpify_management_feature_fields_listing, index = simpify_management_feature_fields_listing</item>
+                        <item name="configFieldModalProvider" xsi:type="string">${ $.parentName }</item>
+                    </item>
+                </argument>
+                <settings>
+                    <formSubmitType>ajax</formSubmitType>
+                    <renderUrl path="mui/index/render_handle">
+                        <param name="handle">simpify_feature_field_edit</param>
+                        <param name="buttons">1</param>
+                    </renderUrl>
+                    <loading>true</loading>
+                    <toolbarContainer>${ $.parentName }</toolbarContainer>
+                    <externalProvider>${ $.ns }.simpify_management_feature_field_form_data_source</externalProvider>
+                    <ns>simpify_management_feature_field_form</ns>
+                    <exports>
+                        <link name="parentId">${ $.externalProvider }:data.parent_id</link>
+                    </exports>
+                    <imports>
+                        <link name="parentId">${ $.provider}:data.feature.entity_id</link>
+                        <link name="onSubUserDelete">${ $.ns }.${ $.ns }:deleteSubUserAction</link>
+                    </imports>
+                </settings>
+            </insertForm>
+        </modal>
+
+        <insertListing name="simpify_management_feature_fields_listing">
+            <settings>
+                <dataLinks>
+                    <exports>false</exports>
+                    <imports>true</imports>
+                </dataLinks>
+                <externalProvider>simpify_management_feature_fields_listing.simpify_management_feature_fields_listing_data_source</externalProvider>
+                <selectionsProvider>simpify_management_feature_fields_listing.simpify_management_feature_fields_listing.simpify_management_feature_fields_listing_columns.ids</selectionsProvider>
+                <autoRender>true</autoRender>
+                <dataScope>simpify_management_feature_fields_listing</dataScope>
+                <ns>simpify_management_feature_fields_listing</ns>
+                <exports>
+                    <link name="parent_id">${ $.externalProvider }:params.parent_id</link>
+                </exports>
+                <imports>
+                    <link name="parent_id">${ $.provider }:data.feature.entity_id</link>
+                    <link name="onAction">ns = ${ $.ns }, index = actions:action</link>
+                    <link name="onMassAction">ns = ${ $.ns }, index = listing_massaction:massaction</link>
+                </imports>
+            </settings>
+        </insertListing>
     </fieldset>
 </form>

@@ -62,7 +62,8 @@
         "column": {
             "entity_id": true,
             "name": true,
-            "status": true
+            "status": true,
+            "sort_order": true
         },
         "constraint": {
             "PRIMARY": true
@@ -73,7 +74,9 @@
             "entity_id": true,
             "name": true,
             "input_type": true,
-            "feature_id": true
+            "feature_id": true,
+            "status": true,
+            "sort_order": true
         },
         "index": {
             "SIMICART_FEATURE_FIELDS_FEATURE_ID": true
