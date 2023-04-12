@@ -61,6 +61,15 @@
                 <label translate="true">Config Name</label>
             </settings>
         </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
+            <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <options class="SimiCart\SimpifyManagement\Model\Source\FeatureStatus" />
+                <dataType>select</dataType>
+                <filter>select</filter>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
         <column name="input_type" sortOrder="50" component="Magento_Ui/js/grid/columns/select">
             <settings>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
@@ -77,7 +86,7 @@
                 <label translate="true">Sort Order</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="SimiCart\SimpifyManagement\Ui\Component\FeatureField\Listing\Column\Actions">
+        <actionsColumn name="actions" class="SimiCart\SimpifyManagement\Ui\Component\FeatureField\Listing\Column\Actions" component="SimiCart_SimpifyManagement/js/ui_component/listing/actions">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>

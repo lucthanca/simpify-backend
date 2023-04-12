@@ -32,10 +32,10 @@ define([
         },
 
         /**
-         * Event method that closes "Edit" modal and refreshes grid after sub-user
+         * Event method that closes "Edit" modal and refreshes grid after feature field
          * was removed through "Delete" button on the "Edit" modal
          */
-        onSubUserDelete: function (responseData) {
+        onFeatureFieldDelete: function (responseData) {
             this.fieldModal().closeModal();
             this.fieldListing().reload({
                 refresh: true

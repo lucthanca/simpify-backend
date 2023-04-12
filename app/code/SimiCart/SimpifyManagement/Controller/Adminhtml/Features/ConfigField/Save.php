@@ -52,6 +52,13 @@ class Save extends Action implements HttpPostActionInterface
                 $message = __("You update the Feature Config.");
             }
 
+            if (empty($post['entity_id'])) {
+                $post['entity_id'] = null;
+            }
+
+            if (isset($post['form_key'])) {
+                unset($post['form_key']);
+            }
             $ff->setData($post);
             $this->fieldRepository->save($ff);
             $result = [

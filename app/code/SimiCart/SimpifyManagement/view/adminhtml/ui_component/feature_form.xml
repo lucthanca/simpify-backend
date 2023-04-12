@@ -9,6 +9,7 @@
     <settings>
         <buttons>
             <button name="save" class="SimiCart\SimpifyManagement\Block\Adminhtml\Feature\Edit\SaveButton" />
+            <button name="save_and_continue" class="SimiCart\SimpifyManagement\Block\Adminhtml\Feature\Edit\SaveAndContinue"/>
             <button name="back" class="Magento\Customer\Block\Adminhtml\Edit\BackButton"/>
         </buttons>
         <layout>
@@ -79,6 +80,22 @@
             </select>
         </formElements>
     </field>
+        <field name="sort_order" formElement="input" sortOrder="100">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">sort_order</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-number" xsi:type="boolean">true</rule>
+                    <rule name="not-negative-amount" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <label translate="true">Sort Order</label>
+                <dataScope>sort_order</dataScope>
+            </settings>
+        </field>
     </fieldset>
     <fieldset name="fields" class="SimiCart\SimpifyManagement\Ui\Component\Feature\Form\FeatureConfigFieldset">
         <settings>
@@ -145,7 +162,7 @@
                     </exports>
                     <imports>
                         <link name="parentId">${ $.provider}:data.feature.entity_id</link>
-                        <link name="onSubUserDelete">${ $.ns }.${ $.ns }:deleteSubUserAction</link>
+                        <link name="onFeatureFieldDelete">${ $.ns }.${ $.ns }:deleteFeatureFieldAction</link>
                     </imports>
                 </settings>
             </insertForm>

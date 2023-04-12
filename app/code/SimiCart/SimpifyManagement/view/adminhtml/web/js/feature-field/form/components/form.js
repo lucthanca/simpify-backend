@@ -28,7 +28,6 @@ define([
     return Form.extend({
         defaults: {
             deleteConfirmationMessage: '',
-            resetPasswordConfirmationMessage: '',
             ajaxSettings: {
                 method: 'POST',
                 dataType: 'json'
@@ -41,7 +40,7 @@ define([
          *
          * @param {String} url - ajax url
          */
-        deleteSubUser: function (url) {
+        deleteFeatureField: function (url) {
             var that = this;
 
             uiConfirm({
@@ -53,48 +52,6 @@ define([
                     }
                 }
             });
-        },
-
-        /**
-         * Send reset password mail by provided url.
-         *
-         * @param {String} url - ajax url
-         */
-        resetPasswordSubUser: function (url) {
-            var self = this;
-
-            uiConfirm({
-                content: this.resetPasswordConfirmationMessage,
-                actions: {
-                    confirm: function () {
-                        self._sendResetPasswordMail(url);
-                    }
-                }
-            });
-        },
-
-        /**
-         * Perform asynchronous POST request to server
-         *
-         * @param {String} url - ajax url
-         */
-        _sendResetPasswordMail: function (url) {
-            var settings = _.extend({}, this.ajaxSettings, {
-                url: url,
-                data: {
-                    'form_key': window.FORM_KEY
-                }
-                });
-
-            $('body').trigger('processStart');
-
-            return $.ajax(settings)
-                .done(function (responseData) {
-                    bssNotification.bssNotification(responseData);
-                })
-                .always(function () {
-                    $('body').trigger('processStop');
-                });
         },
 
         /**
@@ -121,7 +78,7 @@ define([
                             content: response.message
                         });
                     } else {
-                        that.trigger('deleteSubUserAction', [response]);
+                        that.trigger('deleteFeatureFieldAction', [response]);
                     }
                 })
                 .fail(function () {

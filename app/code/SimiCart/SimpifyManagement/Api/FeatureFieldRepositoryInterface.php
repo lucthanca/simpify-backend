@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Api;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -25,4 +26,13 @@ interface FeatureFieldRepositoryInterface
      * @throws CouldNotSaveException
      */
     public function save(Data\FeatureFieldInterface $featureField): Data\FeatureFieldInterface;
+
+    /**
+     * Delete feature field by provided id
+     *
+     * @param int $id
+     * @return void
+     * @throws CouldNotDeleteException
+     */
+    public function deleteById(int $id): void;
 }
