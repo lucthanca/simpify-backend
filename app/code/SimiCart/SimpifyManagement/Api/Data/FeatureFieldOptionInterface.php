@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Api\Data;
 
 interface FeatureFieldOptionInterface
 {
+    const ID = 'entity_id';
     const IS_DEFAULT = 'is_default';
     const LABEL = 'label';
     const VALUE = 'value';

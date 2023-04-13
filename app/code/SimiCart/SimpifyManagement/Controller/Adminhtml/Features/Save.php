@@ -66,6 +66,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $this->featureRepository->save($feature);
             $this->messageManager->addSuccessMessage($message);
             if ($this->getRequest()->getParam('back', false)) {
+                $returnParams['id'] = $feature->getId();
                 return $this->resultRedirectFactory->create()->setPath('*/*/edit', $returnParams);
             }
         } catch (CouldNotSaveException|NoSuchEntityException $e) {

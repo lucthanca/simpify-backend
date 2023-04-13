@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Model;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
@@ -70,5 +71,27 @@ class FeatureRepository implements FeatureRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(IFeature $feature): void
+    {
+        try {
+            $this->featureResource->delete($feature);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new CouldNotDeleteException(__("Could not delete Feature."));
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteById(int $id): void
+    {
+        $feature = $this->getById($id);
+        $this->delete($feature);
     }
 }

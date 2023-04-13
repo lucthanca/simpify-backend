@@ -7,6 +7,8 @@ use SimiCart\SimpifyManagement\Ui\Component\Listing\Column\Actions as Column;
 
 class Actions extends Column
 {
+    const FEATURE_PATH_DELETE = 'simpify/features/delete';
+
     /**
      * Prepare Data Source
      *
@@ -24,6 +26,18 @@ class Actions extends Column
                     ),
                     'label' => __('Edit'),
                     'hidden' => false,
+                ];
+                $item[$this->getData('name')]['delete'] = [
+                    'href' => $this->urlBuilder->getUrl(
+                        self::FEATURE_PATH_DELETE,
+                        ['id' => $item['entity_id']]
+                    ),
+                    'label' => __('Delete'),
+                    'isAjax' => true,
+                    'confirm' => [
+                        'title' => __('Delete Feature'),
+                        'message' => __('Are you sure you want to delete the select Feature?')
+                    ]
                 ];
             }
         }

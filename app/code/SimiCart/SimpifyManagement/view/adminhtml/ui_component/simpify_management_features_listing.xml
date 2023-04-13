@@ -82,7 +82,7 @@
                 <label translate="true">Sort Order</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="SimiCart\SimpifyManagement\Ui\Component\Feature\Listing\Column\Actions">
+        <actionsColumn name="actions" class="SimiCart\SimpifyManagement\Ui\Component\Feature\Listing\Column\Actions" component="SimiCart_SimpifyManagement/js/ui_component/listing/actions">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>

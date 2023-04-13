@@ -6,6 +6,8 @@ namespace SimiCart\SimpifyManagement\Model;
 use Exception;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
@@ -119,6 +121,52 @@ class FeatureFieldOptionRepository implements FeatureFieldOptionRepositoryInterf
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new NoSuchEntityException(__("Can not get field option."));
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(IFeatureFieldOption $fieldOption): IFeatureFieldOption
+    {
+        try {
+             $this->featureFieldOptionResource->save($fieldOption);
+             return $fieldOption;
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new CouldNotSaveException(__("Unable to save feature field"));
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(IFeatureFieldOption $fieldOption): void
+    {
+        try {
+            $this->featureFieldOptionResource->delete($fieldOption);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new CouldNotDeleteException(__("Unable to delete feature field!"));
+        }
+    }
+
+    /**
+     * Quick delete
+     *
+     * @param int $fieldId
+     * @param array $ids
+     * @param string $mode
+     * @return void
+     * @throws CouldNotDeleteException
+     */
+    public function quickDeleteByFieldAndIds(int $fieldId, array $ids, string $mode = 'nin')
+    {
+        try {
+            $this->featureFieldOptionResource->quickDeleteByFieldAndIds($fieldId, $ids, $mode);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new CouldNotDeleteException(__("Unable to delete feature field!"));
         }
     }
 }

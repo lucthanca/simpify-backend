@@ -6,8 +6,10 @@ namespace SimiCart\SimpifyManagement\Controller\Adminhtml\Features\ConfigField;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Psr\Log\LoggerInterface;
 use SimiCart\SimpifyManagement\Api\FeatureFieldOptionRepositoryInterface as IFeatureFieldOptionRepository;
 use SimiCart\SimpifyManagement\Api\FeatureFieldRepositoryInterface as IFieldRepository;
@@ -17,7 +19,9 @@ class Save extends Action implements HttpPostActionInterface
     protected LoggerInterface $logger;
     protected IFieldRepository $fieldRepository;
     protected JsonFactory $jsonFactory;
-    private IFeatureFieldOptionRepository $featureFieldOptionRepository;
+    protected IFeatureFieldOptionRepository $featureFieldOptionRepository;
+    private ResourceConnection $resourceConnection;
+    private \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager;
 
     /**
      * COnstreuctor
@@ -27,19 +31,25 @@ class Save extends Action implements HttpPostActionInterface
      * @param IFieldRepository $fieldRepository
      * @param JsonFactory $jsonFactory
      * @param IFeatureFieldOptionRepository $featureFieldOptionRepository
+     * @param ResourceConnection $resourceConnection
+     * @param TransactionManagerInterface $transactionManager
      */
     public function __construct(
         Context $context,
         \Psr\Log\LoggerInterface $logger,
         IFieldRepository $fieldRepository,
         JsonFactory $jsonFactory,
-        IFeatureFieldOptionRepository $featureFieldOptionRepository
+        IFeatureFieldOptionRepository $featureFieldOptionRepository,
+        ResourceConnection $resourceConnection,
+        \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager
     ) {
         parent::__construct($context);
         $this->logger = $logger;
         $this->fieldRepository = $fieldRepository;
         $this->jsonFactory = $jsonFactory;
         $this->featureFieldOptionRepository = $featureFieldOptionRepository;
+        $this->resourceConnection = $resourceConnection;
+        $this->transactionManager = $transactionManager;
     }
 
     /**
@@ -49,6 +59,7 @@ class Save extends Action implements HttpPostActionInterface
     {
         $post = $this->getRequest()->getPost()->toArray();
         try {
+            $this->transactionManager->start($this->resourceConnection->getConnection());
             $this->validate($post);
             $ff = $this->fieldRepository->getById((int) $post['entity_id']);
             if (!$ff->getId()) {
@@ -74,13 +85,17 @@ class Save extends Action implements HttpPostActionInterface
                 'message' => $message
             ];
         } catch (InputException $e) {
+            $this->transactionManager->rollBack();
             $result = [
+                'error' => true,
                 'success' => false,
                 'message' => $e->getMessage()
             ];
         } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
             $this->logger->critical($e);
             $result = [
+                'error' => true,
                 'success' => false,
                 'message' => __("Can not save the Feature Config")
             ];
@@ -89,7 +104,10 @@ class Save extends Action implements HttpPostActionInterface
     }
 
     /**
+     * Process saving option field
+     *
      * @param array $data
+     * @param int $fieldId
      * @return void
      * @throws InputException
      */
@@ -99,9 +117,18 @@ class Save extends Action implements HttpPostActionInterface
             return;
         }
         $this->validateOptions($data['options']);
+        $savedIds = [];
         foreach ($data['options'] as $option) {
             $fo = $this->featureFieldOptionRepository->getByFieldValue($fieldId, $option['value']);
+            $fo->setValue($option['value']);
+            $fo->setLabel($option['label']);
+            $fo->setIsDefault($option['is_default'] === 'true' ? 1 : $option['is_default']);
+            $fo->setFieldId($fieldId);
+            $this->featureFieldOptionRepository->save($fo);
+            $savedIds[] = $fo->getId();
         }
+
+        $this->featureFieldOptionRepository->quickDeleteByFieldAndIds($fieldId, $savedIds);
     }
 
     /**

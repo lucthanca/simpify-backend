@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model\ResourceModel;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use SimiCart\SimpifyManagement\Api\Data\FeatureFieldOptionInterface;
+use SimiCart\SimpifyManagement\Api\Data\FeatureFieldOptionInterface as IFeatureFieldOption;
 
 class FeatureFieldOption extends AbstractDb
 {
@@ -35,8 +36,8 @@ class FeatureFieldOption extends AbstractDb
         }
         $connection = $this->getConnection();
         if ($connection) {
-            $select = $this->_getLoadSelect(FeatureFieldOptionInterface::VALUE, $value, $object);
-            $select->where(FeatureFieldOptionInterface::FIELD_ID, $fieldId);
+            $select = $this->_getLoadSelect(IFeatureFieldOption::VALUE, $value, $object);
+            $select->where(IFeatureFieldOption::FIELD_ID, $fieldId);
             $data = $connection->fetchRow($select);
 
             if ($data) {
@@ -48,5 +49,38 @@ class FeatureFieldOption extends AbstractDb
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
+    }
+
+    /**
+     * Quick delete
+     *
+     * @param int $fieldId
+     * @param array $ids
+     * @param string $mode - nin and in
+     * @return void
+     * @throws LocalizedException
+     */
+    public function quickDeleteByFieldAndIds(int $fieldId, array $ids, string $mode = 'nin')
+    {
+        $connection = $this->transactionManager->start($this->getConnection());
+        try {
+            $condition = $mode === 'nin' ? 'NOT IN' : 'IN';
+            $conditionStr = sprintf(
+                '%s=%s AND %s %s (%s)',
+                IFeatureFieldOption::FIELD_ID,
+                $fieldId,
+                IFeatureFieldOption::ID,
+                $condition,
+                implode(",", $ids)
+            );
+            $connection->delete(
+                $this->getMainTable(),
+                $conditionStr
+            );
+            $this->transactionManager->commit();
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
+            throw $e;
+        }
     }
 }
