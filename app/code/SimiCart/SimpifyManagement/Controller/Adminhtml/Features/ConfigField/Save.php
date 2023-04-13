@@ -9,6 +9,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface;
+use SimiCart\SimpifyManagement\Api\FeatureFieldOptionRepositoryInterface as IFeatureFieldOptionRepository;
 use SimiCart\SimpifyManagement\Api\FeatureFieldRepositoryInterface as IFieldRepository;
 
 class Save extends Action implements HttpPostActionInterface
@@ -16,6 +17,7 @@ class Save extends Action implements HttpPostActionInterface
     protected LoggerInterface $logger;
     protected IFieldRepository $fieldRepository;
     protected JsonFactory $jsonFactory;
+    private IFeatureFieldOptionRepository $featureFieldOptionRepository;
 
     /**
      * COnstreuctor
@@ -24,17 +26,20 @@ class Save extends Action implements HttpPostActionInterface
      * @param LoggerInterface $logger
      * @param IFieldRepository $fieldRepository
      * @param JsonFactory $jsonFactory
+     * @param IFeatureFieldOptionRepository $featureFieldOptionRepository
      */
     public function __construct(
         Context $context,
         \Psr\Log\LoggerInterface $logger,
         IFieldRepository $fieldRepository,
-        JsonFactory $jsonFactory
+        JsonFactory $jsonFactory,
+        IFeatureFieldOptionRepository $featureFieldOptionRepository
     ) {
         parent::__construct($context);
         $this->logger = $logger;
         $this->fieldRepository = $fieldRepository;
         $this->jsonFactory = $jsonFactory;
+        $this->featureFieldOptionRepository = $featureFieldOptionRepository;
     }
 
     /**
@@ -61,6 +66,9 @@ class Save extends Action implements HttpPostActionInterface
             }
             $ff->setData($post);
             $this->fieldRepository->save($ff);
+
+            $this->processSaveFieldOptions($post, (int) $ff->getId());
+
             $result = [
                 'success' => true,
                 'message' => $message
@@ -78,6 +86,49 @@ class Save extends Action implements HttpPostActionInterface
             ];
         }
         return $this->jsonFactory->create()->setData($result);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws InputException
+     */
+    public function processSaveFieldOptions(array $data, int $fieldId)
+    {
+        if (!isset($data['options'])) {
+            return;
+        }
+        $this->validateOptions($data['options']);
+        foreach ($data['options'] as $option) {
+            $fo = $this->featureFieldOptionRepository->getByFieldValue($fieldId, $option['value']);
+        }
+    }
+
+    /**
+     * Validate options
+     *
+     * @param array $data
+     * @return void
+     * @throws InputException
+     */
+    protected function validateOptions(array $data): void
+    {
+        $firstValue = null;
+        foreach ($data as $item) {
+            if (empty($item['value'])) {
+                throw new InputException(__("Value is required"));
+            }
+            if (empty($item['label'])) {
+                throw new InputException(__("Label is required"));
+            }
+            if (!$firstValue) {
+                $firstValue = $item['value'];
+                continue;
+            }
+            if ($firstValue === $item['value']) {
+                throw new InputException(__('Value must be unique.'));
+            }
+        }
     }
 
     /**

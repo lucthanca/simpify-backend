@@ -93,4 +93,9 @@
     <preference for="SimiCart\SimpifyManagement\Api\AppRepositoryInterface" type="SimiCart\SimpifyManagement\Model\AppRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\FeatureRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\FeatureFieldRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureFieldRepository"/>
+    <preference for="SimiCart\SimpifyManagement\Api\FeatureFieldOptionRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureFieldOptionRepository"/>
+
+
+    <preference for="SimiCart\SimpifyManagement\Api\Data\FieldOptionSearchResultsInterface"
+                type="SimiCart\SimpifyManagement\Model\FeatureFieldOptionSearchResults"/>
 </config>

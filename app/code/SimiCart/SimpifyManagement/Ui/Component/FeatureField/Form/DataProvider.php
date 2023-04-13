@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Ui\Component\FeatureField\Form;
 
 use Magento\Ui\DataProvider\AbstractDataProvider;
+use SimiCart\SimpifyManagement\Api\FeatureFieldOptionRepositoryInterface;
 use SimiCart\SimpifyManagement\Model\ResourceModel\FeatureField\CollectionFactory;
 use SimiCart\SimpifyManagement\Api\Data\FeatureFieldInterface as IFeatureField;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -12,12 +13,14 @@ class DataProvider extends AbstractDataProvider
 {
     protected ?array $loadedData = null;
     protected ContextInterface $context;
+    protected FeatureFieldOptionRepositoryInterface $fieldOptionRepository;
 
     /**
      * DataProvider constructor
      *
      * @param CollectionFactory $collectionFactory
      * @param ContextInterface $context
+     * @param FeatureFieldOptionRepositoryInterface $fieldOptionRepository
      * @param $name
      * @param $primaryFieldName
      * @param $requestFieldName
@@ -27,6 +30,7 @@ class DataProvider extends AbstractDataProvider
     public function __construct(
         CollectionFactory $collectionFactory,
         ContextInterface $context,
+        FeatureFieldOptionRepositoryInterface $fieldOptionRepository,
         $name,
         $primaryFieldName,
         $requestFieldName,
@@ -35,6 +39,7 @@ class DataProvider extends AbstractDataProvider
     ) {
         $this->collection = $collectionFactory->create();
         $this->context = $context;
+        $this->fieldOptionRepository = $fieldOptionRepository;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -55,6 +60,12 @@ class DataProvider extends AbstractDataProvider
             $id = $item->getId();
             $this->loadedData[$id] = $item->getData();
             $this->loadedData[$id]['is_disabled'] = true;
+            $this->loadedData[$id]['options'] = [];
+
+            $optionSearchResults = $this->fieldOptionRepository->getByFieldId((int) $id);
+            foreach ($optionSearchResults->getItems() as $fieldOption) {
+                $this->loadedData[$id]['options'][] = $fieldOption->getData();
+            }
         }
         $this->loadedData[''] = $this->getDefaultData();
         return $this->loadedData;

@@ -124,6 +124,13 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
+        <index referenceId="SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID" indexType="btree">
+            <column name="field_id"/>
+        </index>
+        <index referenceId="SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID_VALUE" indexType="btree">
+            <column name="field_id"/>
+            <column name="value"/>
+        </index>
         <constraint xsi:type="foreign" referenceId="SIMICART_FEATURE_FIELD_OPTION_FIELD_ID_SIMICART_FEATURE_FIELDS_ENTITY_ID"
                     table="simicart_feature_field_options" column="field_id" referenceTable="simicart_feature_fields"
                     referenceColumn="entity_id" onDelete="CASCADE"/>

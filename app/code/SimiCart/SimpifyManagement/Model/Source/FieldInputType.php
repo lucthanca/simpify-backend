@@ -11,6 +11,8 @@ class FieldInputType implements OptionSourceInterface
     const TYPE_TEXTAREA = 'textarea';
     const TYPE_DROPDOWN = 'dropdown';
     const TYPE_TOGGLE = 'toggle';
+    const TYPE_CHECKBOX = 'checkbox';
+    const TYPE_RADIO = 'radio';
 
     /**
      * @inheritDoc
@@ -33,6 +35,14 @@ class FieldInputType implements OptionSourceInterface
             [
                 'label' => __('Toggle'),
                 'value' => self::TYPE_TOGGLE,
+            ],
+            [
+                'label' => __('Checkbox'),
+                'value' => self::TYPE_CHECKBOX,
+            ],
+            [
+                'label' => __('Radio'),
+                'value' => self::TYPE_RADIO,
             ]
         ];
     }

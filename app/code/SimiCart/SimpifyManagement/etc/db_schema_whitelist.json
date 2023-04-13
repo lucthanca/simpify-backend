@@ -97,6 +97,10 @@
         "constraint": {
             "PRIMARY": true,
             "FK_D46A22E886CAA75661BBB2D9A47ABDDB": true
+        },
+        "index": {
+            "SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID_VALUE": true,
+            "SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID": true
         }
     }
 }
