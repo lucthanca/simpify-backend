@@ -47,12 +47,11 @@ class Index implements ActionInterface
         $this->authenticateShop = $authenticateShop;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute()
     {
-//        vadu_html([
-//            "AUTHENTICATE SHOP" => $this->getRequest()->getParams()
-//        ]);
-
         try {
             $shop = $this->shopRepository->getByDomain($this->getRequest()->getParam('shop'));
             $result = $this->authenticateShop->execute($shop, $this->getRequest()->getParam('code'));
@@ -62,10 +61,17 @@ class Index implements ActionInterface
         } catch (\Exception $e) {
             return $this->jsonFactory->create()->setData(['success' => false]);
         }
-        return $this->redirectFactory->create()->setPath('simpify/initapp', ['shop' => $shop->getShopDomain(), 'host' => $this->getRequest()->getParam('host')]);
+        return $this->redirectFactory
+            ->create()
+            ->setPath(
+                'simpify/initapp',
+                ['shop' => $shop->getShopDomain(), 'host' => $this->getRequest()->getParam('host')]
+            );
     }
 
     /**
+     * Get request object
+     *
      * @return RequestInterface
      */
     public function getRequest(): RequestInterface

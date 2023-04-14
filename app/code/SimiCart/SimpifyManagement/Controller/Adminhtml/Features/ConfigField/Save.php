@@ -84,6 +84,7 @@ class Save extends Action implements HttpPostActionInterface
                 'success' => true,
                 'message' => $message
             ];
+            $this->transactionManager->commit();
         } catch (InputException $e) {
             $this->transactionManager->rollBack();
             $result = [
@@ -122,7 +123,7 @@ class Save extends Action implements HttpPostActionInterface
             $fo = $this->featureFieldOptionRepository->getByFieldValue($fieldId, $option['value']);
             $fo->setValue($option['value']);
             $fo->setLabel($option['label']);
-            $fo->setIsDefault($option['is_default'] === 'true' ? 1 : $option['is_default']);
+            $fo->setIsDefault($option['is_default'] === 'true' ? 1 : 0);
             $fo->setFieldId($fieldId);
             $this->featureFieldOptionRepository->save($fo);
             $savedIds[] = $fo->getId();

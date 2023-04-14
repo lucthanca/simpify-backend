@@ -52,9 +52,9 @@ class FullPageRedirect extends Template
     /**
      * Get request host
      *
-     * @return string
+     * @return string|null
      */
-    public function getHost(): string
+    public function getHost(): ?string
     {
         return $this->getRequest()->getParam('host');
     }
@@ -66,7 +66,6 @@ class FullPageRedirect extends Template
      */
     public function getShop(): string
     {
-        vadu_html($this->getRequest()->getParams());
         return $this->getRequest()->getParam('shop');
     }
 
@@ -109,5 +108,13 @@ class FullPageRedirect extends Template
     protected function getCacheLifetime()
     {
         return parent::getCacheLifetime() ?: 7200;
+    }
+
+    public function toHtml()
+    {
+        if (!$this->getHost()) {
+            return '';
+        }
+        return parent::toHtml();
     }
 }

@@ -73,7 +73,6 @@ class Index implements HttpGetActionInterface
         try {
             [$statusCode, $data] = $this->verifyShopify->execute($this->getRequest());
         } catch (\Exception $e) {
-            dd($e);
             $this->logger->critical('INIT SHOP FAILED: ' . $e);
             return $this->getPageFactory()->create(false, [
                 'template' => 'SimiCart_SimpifyManagement::initApp/404.phtml',
@@ -83,23 +82,9 @@ class Index implements HttpGetActionInterface
         switch ($statusCode) {
             case 'logged_in':
                 return $this->redirectFactory->create()->setPath('simpify/dashboard', $data);
-                $page = $this->getPageFactory()->create(false, [
-                    'template' => 'SimiCart_SimpifyManagement::authenticate/token_root.phtml',
-                ]);
-
-                $page->getLayout()->getUpdate()->addHandle('handler_simpify_dashboard');
-                $page->getLayout()->unsetElement('require.js');
-                $page->getLayout()->unsetElement('after.body.start');
-                $this->removeMagentoBlocks($page, 'page.wrapper', ['main.content', 'before.body.end']);
-                $this->removeMagentoBlocks($page, 'main.content', ['columns']);
-                $this->removeMagentoBlocks($page, 'columns', ['main']);
-                $this->removeMagentoBlocks($page, 'main', ['token_shimmer', 'simpify_page_wrapper']);
-                $this->removeMagentoBlocks($page, 'before.body.end', []);
-                return $page;
             case 'token_missing':
-//                vadu_html(['init_app_sessid' => $this->getRequest()->getParam('session')]);
                 return $this->redirectFactory->create()->setPath('simpify/authenticate/token', $data);
-            default :
+            default:
                 // status === new_shop
                 $page = $this->getPageFactory()->create(false, [
                     'template' => 'SimiCart_SimpifyManagement::initApp/fullpageRedirect.phtml',

@@ -4,29 +4,41 @@ namespace SimiCart\SimpifyManagement\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Model\Session;
+use SimiCart\SimpifyManagement\Registry\CurrentShop;
 
 class Dashboard extends \Magento\Framework\View\Element\Template
 {
     private Session $shopSession;
-    private \Magento\Customer\Model\Session $customerSession;
+    protected CurrentShop $currentShop;
 
     /**
+     * Dashboard constructor
+     *
      * @param Context $context
      * @param Session $shopSession
+     * @param CurrentShop $currentShop
      * @param array $data
      */
-    public function __construct(Template\Context $context, Session $shopSession, \Magento\Customer\Model\Session $customerSession,array $data = [])
-    {
+    public function __construct(
+        Template\Context $context,
+        Session $shopSession,
+        CurrentShop $currentShop,
+        array $data = []
+    ) {
         parent::__construct($context, $data);
         $this->shopSession = $shopSession;
-        $this->customerSession = $customerSession;
+        $this->currentShop = $currentShop;
     }
 
-    public function getShop()
+    /**
+     * Get logged in shop
+     *
+     * @return IShop
+     */
+    public function getShop(): IShop
     {
-        dd($this->getRequest()->getParams());
-
-        $this->shopSession->getShop();
+        return $this->currentShop->get();
     }
 }

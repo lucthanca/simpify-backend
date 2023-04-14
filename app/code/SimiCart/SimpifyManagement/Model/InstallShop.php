@@ -36,7 +36,7 @@ class InstallShop
     public function execute(IShop $shop, ?string $code = null)
     {
         // if the store has been deleted, restore the store to set the access token
-        if ($shop->hasUninstalled()) {
+        if ($shop->hasUninstalled() || $shop->hasNotCompletedInstallation()) {
             $shop->restore();
         }
         if (!$shop->hasOfflineAccess()) {

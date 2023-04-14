@@ -18,6 +18,7 @@ interface ShopInterface
 
     const STATUS_UNINSTALLED = 0;
     const STATUS_INSTALLED = 1;
+    const STATUS_NOT_COMPLETED_INSTALLATION = 9;
 
     /**
      * Retrieve Shop Domain

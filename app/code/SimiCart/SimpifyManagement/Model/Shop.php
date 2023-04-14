@@ -90,6 +90,16 @@ class Shop extends AbstractModel implements ShopInterface
     }
 
     /**
+     * Check if the shop has not completed install app
+     *
+     * @return bool
+     */
+    public function hasNotCompletedInstallation(): bool
+    {
+        return $this->getStatus() === static::STATUS_NOT_COMPLETED_INSTALLATION;
+    }
+
+    /**
      * Change status to installed
      *
      * @return ShopInterface

@@ -11,15 +11,17 @@ use \SimiCart\SimpifyManagement\Exceptions\SignatureVerificationException;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Model\Session as ShopSession;
 use SimiCart\SimpifyManagement\Registry\CurrentShop;
+use SimiCart\SimpifyManagement\Helper\UtilTrait;
 
 class VerifyShopify
 {
+    use UtilTrait;
+
     private SessionTokenFactory $sessionTokenFactory;
     private ShopSession $shopSession;
     private ConfigProvider $configProvider;
     private IShopRepository $shopRepository;
     private CurrentShop $currentShop;
-    private \Magento\Customer\Model\Session $customerSession;
 
     /**
      * @param SessionTokenFactory $sessionTokenFactory
@@ -34,15 +36,13 @@ class VerifyShopify
         ShopSession $shopSession,
         ConfigProvider $configProvider,
         IShopRepository $shopRepository,
-        CurrentShop $currentShop,
-        \Magento\Customer\Model\Session $customerSession
+        CurrentShop $currentShop
     ) {
         $this->sessionTokenFactory = $sessionTokenFactory;
         $this->shopSession = $shopSession;
         $this->configProvider = $configProvider;
         $this->shopRepository = $shopRepository;
         $this->currentShop = $currentShop;
-        $this->customerSession = $customerSession;
     }
 
     /**
@@ -79,9 +79,26 @@ class VerifyShopify
         if (!$shop->getId()) {
             throw new NoSuchEntityException(__('No shop provided!'));
         }
-//        $this->shopSession->loginById((int) $shop->getId());
-//        vadu_html($token->getSessionId());
-        return ['logged_in', ['shop' => $shop->getShopDomain(), 'host' => $request->getParam('host'), 'session' => $token->getSessionId()]];
+        $hmac = $this->createHmac([
+            "data" => implode(
+                ".",
+                [
+                    $shop->getShopDomain(),
+                    $request->getParam('host'),
+                    $token->getSessionId()
+                ],
+            ),
+            "raw" => true
+        ], $this->configProvider->getApiSecret());
+        return [
+            'logged_in',
+            [
+                'shop' => $shop->getShopDomain(),
+                'host' => $request->getParam('host'),
+                'session' => $token->getSessionId(),
+                'hmac' => $this->base64UrlEncode($hmac),
+            ]
+        ];
     }
 
     /**
@@ -140,7 +157,14 @@ class VerifyShopify
             $target .= '?'.http_build_query($filteredParams);
         }
 
-        return ['token_missing', ['shop' => $shop->getShopDomain(), 'target' => $target, 'host' => $request->getParam('host')]];
+        return [
+            'token_missing',
+            [
+                'shop' => $shop->getShopDomain(),
+                'target' => $target,
+                'host' => $request->getParam('host')
+            ]
+        ];
     }
 
     /**
@@ -354,13 +378,13 @@ class VerifyShopify
             'input' => $request->getParam('hmac'),
             'header' => $request->getHeader('X-Shop-Signature'),
             'referer' => function () use ($request): ?string {
-                $url = parse_url($request->getHeader('referer', ''), PHP_URL_QUERY);
-                parse_str($url ?? '', $refererQueryParams);
-                if (! $refererQueryParams || ! isset($refererQueryParams['hmac'])) {
+                if (! is_string($request->getHeader('referer'))) {
                     return null;
                 }
+                $referer = \Laminas\Uri\UriFactory::factory($request->getHeader('referer'));
+                $refererQueryParams = $referer->getQueryAsArray();
 
-                return $refererQueryParams['hmac'];
+                return $refererQueryParams['hmac'] ?? null;
             },
         ];
         // Loop through each until we find the HMAC
