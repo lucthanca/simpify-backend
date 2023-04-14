@@ -26,6 +26,20 @@ interface ShopApiInterface
      * @return array
      */
     public function getAccessData(string $code): array;
+
+    /**
+     * Create a new webhook for app/uninstalled webhook event topic
+     *
+     * @return mixed
+     * @throws \SimiCart\SimpifyManagement\Exceptions\ShopifyApiCallException
+     */
+    public function createUninstallationWebhook();
+
+    /**
+     * Retrieve shop information
+     *
+     * @return array
+     */
     public function getShopInfo(): array;
 
     /**

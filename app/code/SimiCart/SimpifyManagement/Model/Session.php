@@ -113,7 +113,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getShop(): ?IShop
     {
         if ($this->shopModel === null) {
-            dd($this->getShopId());
             if ($this->getShopId()) {
                 $this->shopModel = $this->shopRepository->getById((int) $this->getShopId());
             }

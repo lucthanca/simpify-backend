@@ -9,6 +9,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface;
 use SimiCart\SimpifyManagement\Api\ShopApiInterface as IShopApi;
+use SimiCart\SimpifyManagement\Model\Source\ShopStatus;
 
 class Shop extends AbstractModel implements ShopInterface
 {
@@ -115,6 +116,17 @@ class Shop extends AbstractModel implements ShopInterface
     }
 
     /**
+     * Clear all token, set status to uninstalled
+     */
+    public function uninstallShop()
+    {
+        $this->setStatus();
+        $this->setAccessToken(null);
+        $this->setSimiAccessToken(null);
+        $this->setShopStorefrontToken(null);
+    }
+
+    /**
      * Check if the access token is filled
      *
      * @return bool
@@ -193,7 +205,7 @@ class Shop extends AbstractModel implements ShopInterface
     /**
      * @inheritDoc
      */
-    public function setStatus(int $status = 0): ShopInterface
+    public function setStatus(int $status = ShopStatus::UNINSTALLED): ShopInterface
     {
         return $this->setData(self::STATUS, $status);
     }

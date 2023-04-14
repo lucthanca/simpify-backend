@@ -43,6 +43,7 @@ class InstallShop
             // Get the data and set the access token
             $data = $shop->getShopApi()->getAccessData($code);
             $shop->setAccessToken($data['access_token']);
+            $shop->getShopApi()->createUninstallationWebhook();
         }
         if (!$shop->hasStorefrontToken()) {
             $token = $shop->getShopApi()->requestStorefrontToken();

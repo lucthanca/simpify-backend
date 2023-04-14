@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 use SimiCart\SimpifyManagement\Helper\UtilTrait;
 use SimiCart\SimpifyManagement\Model\ConfigProvider;
+use SimiCart\SimpifyManagement\Model\Source\ShopStatus;
 
 class Actions extends Column
 {
@@ -51,6 +52,9 @@ class Actions extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
+                if (!isset($item['status']) || (int) $item['status'] !== ShopStatus::INSTALLED) {
+                    continue;
+                }
                 $hmac = $this->createHmac(
                     ['data' => ['id' => $item['entity_id']], 'buildQuery' => true],
                     $this->configProvider->getApiSecret()

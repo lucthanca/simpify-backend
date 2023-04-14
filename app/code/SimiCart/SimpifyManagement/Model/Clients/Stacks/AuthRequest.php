@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagement\Model\Clients\Stacks;
 
-use Exception;
+use Magento\Framework\Exception\LocalizedException;
 use SimiCart\SimpifyManagement\Model\Clients\ClientOptions;
 use SimiCart\SimpifyManagement\Model\Clients\ShopifyClientInterface as IShopifyClient;
 use Psr\Http\Message\RequestInterface;
@@ -12,6 +12,11 @@ class AuthRequest
 {
     protected IShopifyClient $api;
 
+    /**
+     * Auth Request Constructor
+     *
+     * @param IShopifyClient|null $api
+     */
     public function __construct(?IShopifyClient $api = null)
     {
         $this->api = $api;
@@ -22,10 +27,11 @@ class AuthRequest
      *
      * @param callable $handler
      *
-     * @throws Exception For missing API key or password for private apps.
-     * @throws Exception For missing access token on GraphQL calls.
+     * @throws LocalizedException
+     * For missing API key or password for private apps.|For missing access token on GraphQL calls.
      *
      * @return callable
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __invoke(callable $handler): callable
     {
@@ -44,7 +50,9 @@ class AuthRequest
                     // Checks for REST
                     if ($isPrivate && ($apiKey === null || $apiPassword === null)) {
                         // Key and password are required for private API calls
-                        throw new Exception('API key and password required for private Shopify REST calls');
+                        throw new LocalizedException(
+                            __('API key and password required for private Shopify REST calls')
+                        );
                     }
 
                     if ($isPrivate) {
@@ -61,10 +69,12 @@ class AuthRequest
                     // Checks for Graph
                     if ($isPrivate && ($apiPassword === null && $accessToken === null)) {
                         // Private apps need password for use as access token
-                        throw new Exception('API password/access token required for private Shopify GraphQL calls');
+                        throw new LocalizedException(
+                            __('API password/access token required for private Shopify GraphQL calls')
+                        );
                     } elseif (!$isPrivate && $accessToken === null) {
                         // Need access token for public calls
-                        throw new Exception('Access token required for public Shopify GraphQL calls');
+                        throw new LocalizedException(__('Access token required for public Shopify GraphQL calls'));
                     }
 
                     // Public/Private: Add the token header

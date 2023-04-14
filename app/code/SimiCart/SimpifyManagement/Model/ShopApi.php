@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Model;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\UrlInterface as IUrl;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopApiInterface as IShopAPI;
@@ -16,17 +17,22 @@ use SimiCart\SimpifyManagement\Model\Source\AuthMode;
 class ShopApi implements IShopAPI
 {
     protected Rest $client;
-    protected IUrl $IUrl;
+    protected IUrl $urlBuilder;
 
     protected \Magento\Framework\Stdlib\DateTime\DateTime $date;
     protected IShop $shop;
     private ConfigProvider $configProvider;
 
     /**
+     * ShopApi constrcutor
+     *
      * @param FRest $clientFactory
      * @param IUrl $IUrl
+     * @param DateTime $date
+     * @param ConfigProvider $configProvider
      * @param string|null $shopDomain
      * @param array $options
+     * @throws LocalizedException
      */
     public function __construct(
         FRest $clientFactory,
@@ -39,10 +45,10 @@ class ShopApi implements IShopAPI
         $this->date = $date;
         $this->client = $clientFactory->create(['shopDomain' => $shopDomain, 'options' => $options]);
         if (!isset($options['shop'])) {
-            throw new \Exception("Shop instance is required when init ShopAPI.");
+            throw new LocalizedException(__("Shop instance is required when init ShopAPI."));
         }
         $this->shop = $options['shop'];
-        $this->IUrl = $IUrl;
+        $this->urlBuilder = $IUrl;
         $this->configProvider = $configProvider;
     }
 
@@ -55,13 +61,13 @@ class ShopApi implements IShopAPI
         $mode = AuthMode::toNative($authMode);
         return $this->client->getAuthUrl(
             $scopes,
-            $this->IUrl->getUrl('simpify/authenticate', ['secure' => true]),
+            $this->urlBuilder->getUrl('simpify/authenticate', ['secure' => true]),
             strtolower($mode)
         );
     }
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     public function getAccessData(string $code): array
     {
@@ -69,6 +75,29 @@ class ShopApi implements IShopAPI
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createUninstallationWebhook()
+    {
+        $payload = [
+            "json" => [
+                "webhook" => [
+                    "address" => $this->urlBuilder->getUrl('simpify/webhook/uninstall'),
+                    "topic" => "app/uninstalled",
+                    "format" => "json",
+                    "fields" => [
+                        "domain",
+                        "id"
+                    ],
+                ]
+            ]
+        ];
+        $this->client->request('POST', '/admin/api/{{api_version}}/webhooks.json', $payload);
+    }
+
+    /**
+     * Request store front api access token
+     *
      * @throws UnhandledShopApiRequestFailed
      */
     public function requestStorefrontToken(): string

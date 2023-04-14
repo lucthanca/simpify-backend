@@ -7,6 +7,7 @@ use Assert\AssertionFailedException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface as IRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 use SimiCart\SimpifyManagement\Model\View\SimpifyPageFactory as PageFactory;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
 use SimiCart\SimpifyManagement\Exceptions\SignatureVerificationException;
@@ -23,6 +24,7 @@ class Index implements HttpGetActionInterface
     protected ConfigProvider $configProvider;
     protected CurrentShop $currentShop;
     protected IShopRepository $shopRepository;
+    protected \Psr\Log\LoggerInterface $logger;
 
     /**
      * Dashboard Index constructor
@@ -32,19 +34,22 @@ class Index implements HttpGetActionInterface
      * @param ConfigProvider $configProvider
      * @param CurrentShop $currentShop
      * @param IShopRepository $shopRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PageFactory $pageFactory,
         IRequest $request,
         ConfigProvider $configProvider,
         CurrentShop $currentShop,
-        IShopRepository $shopRepository
+        IShopRepository $shopRepository,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageFactory = $pageFactory;
         $this->request = $request;
         $this->configProvider = $configProvider;
         $this->currentShop = $currentShop;
         $this->shopRepository = $shopRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -65,6 +70,7 @@ class Index implements HttpGetActionInterface
             }
             $this->currentShop->set($shop);
         } catch (\Exception|\Throwable $e) {
+            $this->logger->critical($e);
             $page->getLayout()->getUpdate()->addHandle('handler_simpify_404');
         }
 

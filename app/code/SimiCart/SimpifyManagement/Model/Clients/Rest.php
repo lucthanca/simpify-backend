@@ -186,7 +186,7 @@ class Rest implements IShopifyClient
             throw new \Exception('Shopify domain missing for API calls');
         }
 
-        if (is_null($this->baseUri)) {
+        if ($this->baseUri === null) {
             $this->baseUri = new Uri("https://{$this->shopDomain}");
         }
         return $this->baseUri;

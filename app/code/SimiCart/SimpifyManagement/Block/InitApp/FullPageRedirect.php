@@ -110,6 +110,11 @@ class FullPageRedirect extends Template
         return parent::getCacheLifetime() ?: 7200;
     }
 
+    /**
+     * If login from admin (host is empty) => do not render
+     *
+     * @return string
+     */
     public function toHtml()
     {
         if (!$this->getHost()) {
