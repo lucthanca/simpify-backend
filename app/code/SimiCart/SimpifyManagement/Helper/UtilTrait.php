@@ -72,4 +72,16 @@ trait UtilTrait
     {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
+
+    /**
+     * Quick logger
+     *
+     * @param mixed $message
+     * @return void
+     */
+    public function criticalLog($message)
+    {
+        $logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        $logger->critical($message);
+    }
 }

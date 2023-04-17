@@ -7,7 +7,7 @@ type SimpifyShop {
 #    shop_owner_email: String @doc(description: "Shop Owner Email")
 #    shop_owner_name: String @doc(description: "Shop Owner Name")
     status: String @doc(description: "Shop status, 1: installed. 0: uninstalled, 9: installation not completed.")
-    more_info: String @doc(description: "More Info About shop in JSON format")
+    more_info: ShopMoreInfo @doc(description: "More Info About shop in JSON format")
     app_info: String @doc(description: "App Info in json")
     plan_id: String @doc(description: "Subscription Plan ID")
     plan: SimpifyPlan @doc(description: "Subscription Plan")
@@ -31,7 +31,7 @@ type Query {
     lastUpdatedApp: SimpifyApp @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetLastUpdatedApp") @doc(description: "The query returns information about last updated app from a shop.")
 }
 type Mutation {
-    updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.")
+    updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\UpdateShopInformation")
 }
 input SimpifyShopInput {
     more_info: ShopMoreInfoInput

@@ -221,7 +221,8 @@ class Shop extends AbstractModel implements ShopInterface
     public function setAppInfo($info): ShopInterface
     {
         if (is_array($info)) {
-            $info = $this->convertToJson($info);
+            $serializer = new \Magento\Framework\Serialize\Serializer\Json();
+            $info = $serializer->serialize($info);
         }
 
         return $this->setData(self::APP_INFO, $info);
@@ -354,7 +355,8 @@ class Shop extends AbstractModel implements ShopInterface
             $data[$key] = $value;
         }
 
-        return $this->setData(self::MORE_INFO, $this->convertToJson($data));
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json();
+        return $this->setData(self::MORE_INFO, $serializer->serialize($data));
     }
 
     /**

@@ -63,6 +63,12 @@ class GetLastUpdatedApp implements \Magento\Framework\GraphQl\Query\ResolverInte
         return null;
     }
 
+    /**
+     * Format app output
+     *
+     * @param AppInterface $app
+     * @return array|mixed|null
+     */
     protected function formatAppOutput(AppInterface $app)
     {
         return $app->getData() +[

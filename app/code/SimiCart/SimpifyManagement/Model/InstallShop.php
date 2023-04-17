@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
+use SimiCart\SimpifyManagement\Exceptions\ShopifyApiCallException;
 
 /**
  * Authenticate and install shop
@@ -43,7 +44,13 @@ class InstallShop
             // Get the data and set the access token
             $data = $shop->getShopApi()->getAccessData($code);
             $shop->setAccessToken($data['access_token']);
-            $shop->getShopApi()->createUninstallationWebhook();
+            try {
+                $shop->getShopApi()->createUninstallationWebhook();
+            } catch (ShopifyApiCallException $e) {
+                if (strpos($e->getMessage(), 'for this topic has already been taken') === false) {
+                    throw $e;
+                }
+            }
         }
         if (!$shop->hasStorefrontToken()) {
             $token = $shop->getShopApi()->requestStorefrontToken();

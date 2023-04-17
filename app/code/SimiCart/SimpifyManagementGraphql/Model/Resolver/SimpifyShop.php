@@ -8,23 +8,29 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
 use SimiCart\SimpifyManagement\Helper\UtilTrait;
+use SimiCart\SimpifyManagementGraphql\Model\Formatter\SimpifyShopFormatter;
 
 class SimpifyShop implements ResolverInterface
 {
     use UtilTrait;
 
     private IShopRepository $shopRepository;
+    private SimpifyShopFormatter $shopFormatter;
 
     /**
+     * SimpifyShop constructor
+     *
      * @param IShopRepository $shopRepository
+     * @param SimpifyShopFormatter $shopFormatter
      */
     public function __construct(
-        IShopRepository $shopRepository
+        IShopRepository $shopRepository,
+        SimpifyShopFormatter $shopFormatter
     ) {
         $this->shopRepository = $shopRepository;
+        $this->shopFormatter = $shopFormatter;
     }
 
     /**
@@ -35,27 +41,11 @@ class SimpifyShop implements ResolverInterface
         try {
             if ($context->getExtensionAttributes()->getIsSimpifyShop()) {
                 $shopId = $context->getExtensionAttributes()->getSimpifyShopId();
-                return $this->formatShopOuput($this->shopRepository->getById($shopId));
+                return $this->shopFormatter->formatToOutput($this->shopRepository->getById($shopId));
             }
         } catch (\Exception $e) {
             throw new GraphQlNoSuchEntityException(__("Failed to fetch Shop Info."));
         }
         throw new GraphQlAuthorizationException(__("Unauthorized Shop!"));
-    }
-
-    /**
-     * Format shop output for graphql type
-     *
-     * @param IShop $shop
-     * @return array
-     */
-    protected function formatShopOuput(IShop $shop)
-    {
-        return $shop->getData() +
-//            $shop->getArrayMoreInfo() +
-            [
-                "model" => $shop,
-                "uid" => $this->base64UrlEncode($shop->getShopDomain()),
-            ];
     }
 }
