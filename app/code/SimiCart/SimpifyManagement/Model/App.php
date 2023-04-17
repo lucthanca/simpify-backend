@@ -9,7 +9,7 @@ use SimiCart\SimpifyManagement\Api\AppLayoutRepositoryInterface as IAppLayoutRep
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
 use Magento\Framework\Model\AbstractModel;
 use SimiCart\SimpifyManagement\Api\Data\AppLayoutInterface as IAppLayout;
-use SimiCart\SimpifyManagement\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 class App extends AbstractModel implements IApp
 {
@@ -30,7 +30,7 @@ class App extends AbstractModel implements IApp
         IAppLayoutRepository $appLayoutRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        ResourceModel\AbstractResource $resource = null,
+        AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

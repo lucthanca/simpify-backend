@@ -67,21 +67,30 @@ class VerifyShopify
 
         $tokenSource = $request->getParam('token');
         if (!$tokenSource) {
+            // -> Missing token on request params
+            // -> check shop has previous installed and has access key
+            // -> return flag for redirect to request token controller
+            // -> if shop has not installed previous, return flag for redirect to install app
             $shop = $this->loadShop($request->getParam('shop'));
             $shopHasInstalledPrevious = $shop->getId() && $shop->hasOfflineAccess() && !$shop->hasUninstalled();
-            try {
-                // Preflight check for access token valid or data error between simi and shopify
-                $shop->getShopApi()->getShopInfo();
-            } catch (\Exception $e) {
-                $shop->uninstallShop();
-                $this->shopRepository->save($shop);
-                return $this->handleInvalidShop($request->getParam('shop'));
+
+            if ($shopHasInstalledPrevious) {
+                try {
+                    // Preflight check for access token valid or data error between simi and shopify
+                    $shop->getShopApi()->getShopInfo();
+                } catch (\Exception $e) {
+                    $shop->uninstallShop();
+                    $this->shopRepository->save($shop);
+                    return $this->handleInvalidShop($request->getParam('shop'));
+                }
+                return $this->handleMissingToken($request, $shop);
             }
-            return $shopHasInstalledPrevious ?
-                $this->handleMissingToken($request, $shop) :
-                $this->handleInvalidShop($request->getParam('shop'));
+            return $this->handleInvalidShop($request->getParam('shop'));
         }
 
+        // Has token:
+        // -> Verify token
+        // -> Return to dashboard
         $token = $this->sessionTokenFactory->create(['token' => $tokenSource]);
         $shop = $this->loadShop($token->getShopDomain());
         if (!$shop->getId()) {

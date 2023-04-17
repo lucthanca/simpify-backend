@@ -11,7 +11,8 @@
             "status": true,
             "app_info": true,
             "plan_id": true,
-            "created_at": true
+            "created_at": true,
+            "more_info": true
         },
         "index": {
             "SIMICART_SIMPIFY_USERS_ENTITY_ID": true,
@@ -34,7 +35,9 @@
             "app_icon": true,
             "splash_image": true,
             "splash_bg_color": true,
-            "splash_is_full": true
+            "splash_is_full": true,
+            "created_at": true,
+            "updated_at": true
         },
         "constraint": {
             "PRIMARY": true,

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="SimiCart\SimpifyManagementGraphql\Model\ShopContextInterface" type="SimiCart\SimpifyManagementGraphql\Model\CompositeUserContext"/>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="tokenSimpifyShopContext" xsi:type="array">
+                    <item name="type" xsi:type="object">SimiCart\SimpifyManagementGraphql\Model\Authorization\TokenSimpifyShopContext</item>
+                    <item name="sortOrder" xsi:type="string">15</item>
+                    <!-- Sort Order 15 because stand before Customer Session User Context -->
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Query\ContextFactory">
+        <arguments>
+            <argument name="contextParametersProcessors" xsi:type="array">
+                <item name="add_simpify_shop_info_to_context" xsi:type="object">SimiCart\SimpifyManagementGraphql\Model\Context\AddShopToContext</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="SimiCart\SimpifyManagementGraphql\Model\Authorization\TokenSimpifyShopContext">
+        <arguments>
+            <argument name="dateTime" xsi:type="object">Magento\Framework\Stdlib\DateTime</argument>
+            <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime</argument>
+            <argument name="oauthHelper" xsi:type="object">Magento\Integration\Helper\Oauth\Data</argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,13 @@
+{
+    "oauth_token": {
+        "column": {
+            "simpify_shop_id": true
+        },
+        "index": {
+            "OAUTH_TOKEN_SIMPIFY_SHOP_ID": true
+        },
+        "constraint": {
+            "OAUTH_TOKEN_SIMPIFY_SHOP_ID_SIMICART_SIMPIFY_USERS_ENTITY_ID": true
+        }
+    }
+}

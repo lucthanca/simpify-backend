@@ -12,6 +12,8 @@ interface AppInterface
     const SPLASH_IMAGE = 'splash_image';
     const SPLASH_BG_COLOR = 'splash_bg_color';
     const SPLASH_IS_FULL = 'splash_is_full';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
     /**
      * Get splash is full

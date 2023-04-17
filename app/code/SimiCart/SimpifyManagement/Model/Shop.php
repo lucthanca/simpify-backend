@@ -17,6 +17,8 @@ class Shop extends AbstractModel implements ShopInterface
 
     protected $_eventObject = 'shop';
 
+    protected ?array $preCachedMoreInfo = [];
+
     protected ShopApiFactory $shopApiFactory;
 
     protected ?IShopApi $api = null;
@@ -87,7 +89,7 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function hasUninstalled(): bool
     {
-        return $this->getStatus() === static::STATUS_UNINSTALLED;
+        return $this->getStatus() === \SimiCart\SimpifyManagement\Model\Source\ShopStatus::UNINSTALLED;
     }
 
     /**
@@ -97,7 +99,7 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function hasNotCompletedInstallation(): bool
     {
-        return $this->getStatus() === static::STATUS_NOT_COMPLETED_INSTALLATION;
+        return $this->getStatus() === \SimiCart\SimpifyManagement\Model\Source\ShopStatus::NOT_COMPLETED;
     }
 
     /**
@@ -107,12 +109,7 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function restore(): ShopInterface
     {
-        return $this->setStatus(static::STATUS_INSTALLED);
-    }
-
-    public function install(string $shop, ?string $code)
-    {
-
+        return $this->setStatus(\SimiCart\SimpifyManagement\Model\Source\ShopStatus::INSTALLED);
     }
 
     /**
@@ -305,8 +302,114 @@ class Shop extends AbstractModel implements ShopInterface
     /**
      * @inheritDoc
      */
+    public function getMoreInfo(): ?string
+    {
+        return $this->getData(self::MORE_INFO);
+    }
+
+    /**
+     * Get more information about shop in array format
+     *
+     * @param mixed $key
+     * @param bool $usePreCached
+     * @return mixed
+     */
+    public function getArrayMoreInfo(string $key = null, bool $usePreCached = false)
+    {
+        try {
+            $unserialize = function () {
+                $rawMoreInfo = $this->getMoreInfo();
+                $serializer = new \Magento\Framework\Serialize\Serializer\Json();
+                return $serializer->unserialize($rawMoreInfo);
+            };
+
+            if ($usePreCached === true) {
+                if ($key) {
+                    if (!isset($this->preCachedMoreInfo[$key])) {
+                        $this->preCachedMoreInfo = $unserialize();
+                    }
+                    return $this->preCachedMoreInfo[$key];
+                }
+            } else {
+                $result = $unserialize();
+                $this->preCachedMoreInfo = $result;
+                if ($key) {
+                    return $this->preCachedMoreInfo[$key] ?? null;
+                }
+            }
+            return $this->preCachedMoreInfo;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setMoreInfo($data, $value = null): ShopInterface
+    {
+        if (is_string($data)) {
+            $key = $data;
+            $data = $this->getArrayMoreInfo();
+            $data[$key] = $value;
+        }
+
+        return $this->setData(self::MORE_INFO, $this->convertToJson($data));
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function setSimiAccessToken(?string $api): ShopInterface
     {
         return $this->setData(self::SIMI_ACCESS_TOKEN, $api);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShopOwnerName(): ?string
+    {
+        return $this->getArrayMoreInfo(self::SHOP_OWNER_NAME);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setShopOwnerName(string $name): ShopInterface
+    {
+        return $this->setMoreInfo(self::SHOP_OWNER_NAME, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShopOwnerEmail(): ?string
+    {
+        return $this->getArrayMoreInfo(self::SHOP_OWNER_EMAIL);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setShopOwnerEmail(string $email): ShopInterface
+    {
+        return $this->setMoreInfo(self::SHOP_OWNER_EMAIL, $email);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShopIndustry(): ?string
+    {
+        return $this->getArrayMoreInfo(self::SHOP_INDUSTRY);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setShopIndustry(string $industry)
+    {
+        return $this->setMoreInfo(self::SHOP_INDUSTRY, $industry);
     }
 }

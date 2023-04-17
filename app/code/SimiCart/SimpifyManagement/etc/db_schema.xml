@@ -13,6 +13,7 @@
         <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Shop Status"/>
         <column xsi:type="mediumtext" name="app_info" nullable="true" comment="App Information"/>
+        <column xsi:type="text" name="more_info" nullable="true" comment="More Shop Information" />
         <column xsi:type="int" name="plan_id" unsigned="true" nullable="true" identity="false"
                 comment="Subscription Plan ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -50,7 +51,8 @@
         <column xsi:type="varchar" name="splash_image" nullable="true" length="255" comment="App splash url path"/>
         <column xsi:type="varchar" name="splash_bg_color" nullable="true" length="16" comment="App splash color string"/>
         <column xsi:type="smallint" name="splash_is_full" nullable="true" padding="2" comment="App splash is full?"/>
-
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="App first installation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Latest update Time"/>
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>

@@ -98,4 +98,6 @@
 
     <preference for="SimiCart\SimpifyManagement\Api\Data\FieldOptionSearchResultsInterface"
                 type="SimiCart\SimpifyManagement\Model\FeatureFieldOptionSearchResults"/>
+    <preference for="SimiCart\SimpifyManagement\Api\Data\AppSearchResultsInterface"
+                type="SimiCart\SimpifyManagement\Model\AppSearchResults"/>
 </config>

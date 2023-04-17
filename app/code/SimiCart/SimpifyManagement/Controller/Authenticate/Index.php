@@ -11,12 +11,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface;
 use SimiCart\SimpifyManagement\Model\AuthenticateShop;
-use SimiCart\SimpifyManagement\Model\InstallShop;
 
 class Index implements ActionInterface
 {
     protected RequestInterface $request;
-    protected InstallShop $installShop;
     protected FJson $jsonFactory;
     protected RedirectFactory $redirectFactory;
     protected ShopRepositoryInterface $shopRepository;
@@ -28,7 +26,6 @@ class Index implements ActionInterface
      *
      * @param LoggerInterface $logger
      * @param RequestInterface $request
-     * @param InstallShop $installShop
      * @param FJson $jsonFactory
      * @param RedirectFactory $redirectFactory
      * @param ShopRepositoryInterface $shopRepository
@@ -37,14 +34,12 @@ class Index implements ActionInterface
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         RequestInterface $request,
-        InstallShop $installShop,
         FJson $jsonFactory,
         RedirectFactory $redirectFactory,
         ShopRepositoryInterface $shopRepository,
         AuthenticateShop $authenticateShop
     ) {
         $this->request = $request;
-        $this->installShop = $installShop;
         $this->jsonFactory = $jsonFactory;
         $this->redirectFactory = $redirectFactory;
         $this->shopRepository = $shopRepository;
@@ -67,6 +62,8 @@ class Index implements ActionInterface
             $this->logger->critical($e);
             return $this->jsonFactory->create()->setData(['success' => $e->getMessage()]);
         }
+
+        // Authentication done => redirect to main app
         return $this->redirectFactory
             ->create()
             ->setPath(

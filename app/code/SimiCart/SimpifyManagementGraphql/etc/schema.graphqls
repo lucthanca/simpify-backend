@@ -1,0 +1,66 @@
+type SimpifyShop {
+    uid: ID! @doc(description: "The unique ID for a `SimpifyShop` object.")
+    shop_domain: String @doc(description: "The shop domain.")
+    shop_name: String @doc(description: "The shop name")
+    shop_email: String @doc(description: "Shop email")
+#    shop_industry: String @doc(description: "Shop industry")
+#    shop_owner_email: String @doc(description: "Shop Owner Email")
+#    shop_owner_name: String @doc(description: "Shop Owner Name")
+    status: String @doc(description: "Shop status, 1: installed. 0: uninstalled, 9: installation not completed.")
+    more_info: String @doc(description: "More Info About shop in JSON format")
+    app_info: String @doc(description: "App Info in json")
+    plan_id: String @doc(description: "Subscription Plan ID")
+    plan: SimpifyPlan @doc(description: "Subscription Plan")
+    created_at: String @doc(description: "App first installation Time")
+}
+
+type SimpifyApp {
+    uid: ID! @doc(description: "The unique ID for a `SimpifyApp` object.")
+    app_logo: String @doc(description: "App Logo url")
+    app_icon: String @doc(description: "App Logo icon url")
+    splash_image: String @doc(description: "App splash url")
+    splash_image: String @doc(description: "App splash color string")
+    splash_is_full: Boolean @doc(description: "App splash is full?")
+    completed_progress: [String] @doc(description: "Completed step keys")
+    updated_at: String @doc(description: "Updated time")
+    created_at: String @doc(description: "Creation time")
+}
+
+type Query {
+    simpifyShop: SimpifyShop @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\SimpifyShop") @doc(description: "The shimpifyShop query returns information about a shopify shop.")
+    lastUpdatedApp: SimpifyApp @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetLastUpdatedApp") @doc(description: "The query returns information about last updated app from a shop.")
+}
+type Mutation {
+    updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.")
+}
+input SimpifyShopInput {
+    more_info: ShopMoreInfoInput
+}
+
+input ShopMoreInfoInput {
+    industry: String!
+    shop_owner_name: String!
+    shop_owner_email: String!
+    how_you_know_us: [PairedKeyValueInput]
+}
+input PairedKeyValueInput {
+    value: String
+    label: String
+}
+
+type SimpifyPlan {
+    plan_id: Int
+    plan_name: String
+}
+
+type ShopMoreInfo {
+    industry: String @doc(description: "Shop/App industry.")
+    shop_owner_name: String @doc(description: "Shop owner name.")
+    shop_owner_email: String @doc(description: "Shop owner email.")
+    how_you_know_us: [PairedKeyValue] @doc(description: "How you know Simpify.")
+}
+
+type PairedKeyValue {
+    value: String
+    label: String
+}

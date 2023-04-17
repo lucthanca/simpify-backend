@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="oauth">
+            <group id="access_token_lifetime">
+                <field id="simpify_shop_user" translate="label comment" type="text" sortOrder="900" showInDefault="1" canRestore="1">
+                    <label>Shopify Shop Token Lifetime (hours)</label>
+                    <comment>Left empty to disable lifetime. For currently concept, this configuration will be temporarily unavailable.</comment>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

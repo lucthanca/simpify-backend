@@ -8,6 +8,10 @@ interface ShopInterface
     const SHOP_DOMAIN = 'shop_domain';
     const SHOP_NAME = 'shop_name';
     const SHOP_EMAIL = 'shop_email';
+    const SHOP_OWNER_NAME = 'shop_owner_name';
+    const SHOP_OWNER_EMAIL = 'shop_owner_email';
+    const MORE_INFO = 'more_info';
+    const SHOP_INDUSTRY = 'shop_industry';
     const STATUS = 'status';
     const APP_INFO = 'app_info';
     const PLAN_ID = 'plan_id';
@@ -15,10 +19,6 @@ interface ShopInterface
     const SHOP_ACCESS_TOKEN = 'shop_access_token';
     const SHOP_STOREFRONT_TOKEN = 'shop_storefront_token';
     const SIMI_ACCESS_TOKEN = 'simi_access_token';
-
-    const STATUS_UNINSTALLED = 0;
-    const STATUS_INSTALLED = 1;
-    const STATUS_NOT_COMPLETED_INSTALLATION = 9;
 
     /**
      * Retrieve Shop Domain
@@ -171,11 +171,63 @@ interface ShopInterface
     public function setSimiAccessToken(?string $api): self;
 
     /**
-     * Authorization Shop when install app.
+     * Get shop owner name
      *
-     * @param string $shop
-     * @param string|null $code
+     * @return string
+     */
+    public function getShopOwnerName(): ?string;
+
+    /**
+     * Set shop owner name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setShopOwnerName(string $name): self;
+
+    /**
+     * Get shop owner email
+     *
+     * @return string
+     */
+    public function getShopOwnerEmail(): ?string;
+
+    /**
+     * Set shop owner email
+     *
+     * @param string $email
+     * @return $this
+     */
+    public function setShopOwnerEmail(string $email): self;
+
+    /**
+     * Get more information about shop
+     *
+     * @return string|null
+     */
+    public function getMoreInfo(): ?string;
+
+    /**
+     * Set more information for shop
+     *
+     * @param mixed $data
+     * @param mixed $value
+     * @return $this
+     */
+    public function setMoreInfo($data, $value = null): self;
+
+    /**
+     * Get shop industry
+     *
+     * @return string|null
+     */
+    public function getShopIndustry(): ?string;
+
+    /**
+     * Set shop industry
+     *
+     * @param string $industry
      * @return mixed
      */
-    public function install(string $shop, ?string $code);
+    public function setShopIndustry(string $industry);
 }

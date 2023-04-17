@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
+
 namespace SimiCart\SimpifyManagement\Model;
 
 use Magento\Framework\App\RequestInterface as IRequest;
+use Magento\Framework\Event\ManagerInterface;
 use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Exceptions\SignatureVerificationException;
 
@@ -13,19 +15,23 @@ class AuthenticateShop
 {
     private InstallShop $installShop;
     private IRequest $request;
+    private ManagerInterface $eventManager;
 
     /**
      * Authenticate Shop Constructor
      *
      * @param InstallShop $installShop
      * @param IRequest $request
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         InstallShop $installShop,
-        IRequest $request
+        IRequest $request,
+        ManagerInterface $eventManager
     ) {
         $this->installShop = $installShop;
         $this->request = $request;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -51,6 +57,7 @@ class AuthenticateShop
         } catch (\Exception $e) {
             return false;
         }
+        $this->eventManager->dispatch('shop_authenticated_success', ['shop' => $shop]);
         return true;
     }
 

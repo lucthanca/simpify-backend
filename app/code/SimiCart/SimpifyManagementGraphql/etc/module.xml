@@ -3,8 +3,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="SimiCart_SimpifyManagementGraphql">
         <sequence>
-            <module name="SimiCart_SimpifyManagement" />
+            <module name="Magento_Authorization"/>
+            <module name="Magento_Webapi"/>
             <module name="Magento_GraphQl" />
+            <module name="Magento_Integration" />
+            <module name="SimiCart_SimpifyManagement" />
         </sequence>
     </module>
 </config>

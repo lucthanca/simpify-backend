@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <oauth>
+            <access_token_lifetime>
+                <simpify_shop_user>4</simpify_shop_user>
+            </access_token_lifetime>
+        </oauth>
+    </default>
+</config>

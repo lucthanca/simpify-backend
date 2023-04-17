@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="shop_authenticated_success">
+        <observer name="create_oauth_token_for_shop_when_authentication" instance="SimiCart\SimpifyManagementGraphql\Observer\GenerateShopToken" />
+    </event>
+</config>
