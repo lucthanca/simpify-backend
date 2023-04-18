@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@simpify/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
