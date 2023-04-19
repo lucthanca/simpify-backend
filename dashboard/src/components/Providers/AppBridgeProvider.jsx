@@ -41,7 +41,7 @@ export function AppBridgeProvider({ children }) {
     return {
       host,
       apiKey: import.meta.env.VITE_SHOPIFY_API_KEY,
-      forceRedirect: true,
+      forceRedirect: false,
     };
   });
 
