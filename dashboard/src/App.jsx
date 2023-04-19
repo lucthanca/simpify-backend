@@ -1,5 +1,7 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { NavigationMenu } from '@shopify/app-bridge-react';
+import Routes from '@simpify/components/Routes/index.jsx';
 
 const storeConfig = gql`
   query getStoreConfig {
@@ -30,10 +32,23 @@ const App = () => {
 
   console.log(data, error, loading);
 
+  // Any .tsx or .jsx files in /pages will become a route
+  // See documentation for <Routes /> for more info
+  const pages = import.meta.globEager('./pages/**/!(*.test.[jt]sx)*.([jt]sx)');
+
   return (
-    <div className='w-full overflow-hidden'>
-      <h1>Hello world!!!</h1>
-    </div>
+    <>
+      <NavigationMenu
+        navigationLinks={[
+          {
+            label: 'Dashboard',
+            destination: '/dashboard',
+          },
+        ]}
+      />
+      <Routes pages={pages} />
+      <div>Hello World heh!!!</div>
+    </>
   );
 };
 

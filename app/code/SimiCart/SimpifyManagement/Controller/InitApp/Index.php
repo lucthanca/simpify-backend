@@ -81,7 +81,7 @@ class Index implements HttpGetActionInterface
 
         switch ($statusCode) {
             case 'logged_in':
-                return $this->redirectFactory->create()->setPath('simpify/dashboard', $data);
+                return $this->redirectFactory->create()->setPath('dashboard', ['_query' => $data, '_nosid' => true]);
             case 'token_missing':
                 return $this->redirectFactory->create()->setPath('simpify/authenticate/token', $data);
             default:

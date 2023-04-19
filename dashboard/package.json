@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port=6969",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -15,11 +15,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "homepage": "/dashboard",
+  "homepage": "./dashboard",
   "devDependencies": {
     "@adobe/apollo-link-mutation-queue": "^1.1.0",
     "@apollo/client": "^3.7.12",
     "@reduxjs/toolkit": "^1.9.5",
+    "@shopify/app-bridge": "^3.7.6",
+    "@shopify/app-bridge-react": "^3.7.6",
+    "@shopify/app-bridge-utils": "^3.5.1",
     "@shopify/polaris": "^10.45.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
