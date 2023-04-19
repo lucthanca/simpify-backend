@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TitleBar } from '@shopify/app-bridge-react';
 import { Card, Heading, Layout, Link, Page, Stack, TextContainer } from '@shopify/polaris';
+import {useAppContext} from "@simpify/context/app.jsx";
 
 const Dashboard = props => {
+  const [{ xSimiAccessKey }] = useAppContext();
+
   return (
     <Page narrowWidth>
-      <TitleBar title='App name' primaryAction={null} />
+      { !xSimiAccessKey && <TitleBar title='App name' primaryAction={null} /> }
       <Layout>
         <Layout.Section>
           <Card sectioned>

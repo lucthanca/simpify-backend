@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from '@shopify/app-bridge-react';
 import { Banner, Layout, Page } from '@shopify/polaris';
+import {useAppContext} from "@simpify/context/app.jsx";
 
 /**
  * A component to configure App Bridge.
@@ -15,6 +16,7 @@ import { Banner, Layout, Page } from '@shopify/polaris';
 export function AppBridgeProvider({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [{ apiKey }] = useAppContext();
   const history = useMemo(
     () => ({
       replace: path => {
@@ -33,18 +35,17 @@ export function AppBridgeProvider({ children }) {
   // See: https://stackoverflow.com/questions/60482318/version-of-usememo-for-caching-a-value-that-will-never-change
   const [appBridgeConfig] = useState(() => {
     const host = new URLSearchParams(location.search).get('host') || window.__SHOPIFY_DEV_HOST;
-    console.log({ host, api: import.meta.env.VITE_SHOPIFY_API_KEY, search: location.search });
     window.__SHOPIFY_DEV_HOST = host;
 
     return {
       host,
-      apiKey: import.meta.env.VITE_SHOPIFY_API_KEY,
+      apiKey,
       forceRedirect: false,
     };
   });
 
-  if (!import.meta.env.VITE_SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !import.meta.env.VITE_SHOPIFY_API_KEY
+  if (!apiKey || !appBridgeConfig.host) {
+    const bannerProps = !apiKey
       ? {
           title: 'Missing Shopify API Key',
           children: (

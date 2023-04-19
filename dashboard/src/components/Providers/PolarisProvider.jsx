@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { AppProvider } from "@shopify/polaris";
 import { useNavigate } from "@shopify/app-bridge-react";
 import translations from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
+import {useAppContext} from "@simpify/context/app.jsx";
 
 function AppBridgeLink({ url, children, external, ...rest }) {
   const navigate = useNavigate();
@@ -48,8 +49,15 @@ function AppBridgeLink({ url, children, external, ...rest }) {
  *
  */
 export function PolarisProvider({ children }) {
+  const [{ xSimiAccessKey }] = useAppContext();
+  const linkComponent = useMemo(() => {
+    if (xSimiAccessKey) {
+      return undefined;
+    }
+    return AppBridgeLink;
+  }, [xSimiAccessKey, AppBridgeLink]);
   return (
-    <AppProvider i18n={translations} linkComponent={AppBridgeLink}>
+    <AppProvider i18n={translations} linkComponent={linkComponent}>
       {children}
     </AppProvider>
   );
