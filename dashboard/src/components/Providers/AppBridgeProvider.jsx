@@ -33,15 +33,13 @@ export function AppBridgeProvider({ children }) {
   // See: https://stackoverflow.com/questions/60482318/version-of-usememo-for-caching-a-value-that-will-never-change
   const [appBridgeConfig] = useState(() => {
     const host = new URLSearchParams(location.search).get('host') || window.__SHOPIFY_DEV_HOST;
-
-    console.log({ host, api: import.meta.env.VITE_SHOPIFY_API_KEY });
-
+    console.log({ host, api: import.meta.env.VITE_SHOPIFY_API_KEY, search: location.search });
     window.__SHOPIFY_DEV_HOST = host;
 
     return {
       host,
       apiKey: import.meta.env.VITE_SHOPIFY_API_KEY,
-      forceRedirect: true,
+      forceRedirect: false,
     };
   });
 

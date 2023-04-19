@@ -1,7 +1,7 @@
 import React, { useMemo, createContext, useContext } from 'react';
 import { connect } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '@simpify/store/example';
-import bindActionCreators from '@simpify/utils/bindActionCreators.js';
+import bindActionCreators from '@simpify/utils/bindActionCreators';
 
 const AppContext = createContext(undefined);
 

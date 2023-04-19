@@ -7,7 +7,7 @@ import { useAdapter } from '@simpify/talons/Adapter/useAdapter';
 import { store } from '@simpify/store';
 import AppContextProvider from '@simpify/context/app.jsx';
 import { string } from 'prop-types';
-import { PolarisProvider, AppBridgeProvider } from '@simpify/components/Providers';
+import { PolarisProvider } from '@simpify/components/Providers';
 
 function Adapter(props) {
   const talonProps = useAdapter(props);
@@ -23,11 +23,7 @@ function Adapter(props) {
     <PolarisProvider>
       <ApolloProvider {...apolloProps}>
         <ReduxProvider store={store}>
-          <BrowserRouter {...routerProps}>
-            <AppBridgeProvider>
-              <AppContextProvider>{children}</AppContextProvider>
-            </AppBridgeProvider>
-          </BrowserRouter>
+          <BrowserRouter {...routerProps}>{children}</BrowserRouter>
         </ReduxProvider>
       </ApolloProvider>
     </PolarisProvider>

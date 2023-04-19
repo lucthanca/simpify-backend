@@ -29,7 +29,7 @@ export default function Routes({ pages }) {
 }
 
 function useRoutes(pages) {
-  const routes = Object.keys(pages)
+  return Object.keys(pages)
     .map(key => {
       let path = key
         .replace('./pages', '')
@@ -62,6 +62,4 @@ function useRoutes(pages) {
       };
     })
     .filter(route => route.component);
-
-  return routes;
 }
