@@ -91,7 +91,7 @@ class VerifyShopify
         // Has token:
         // -> Verify token
         // -> Return to dashboard
-        $token = $this->sessionTokenFactory->create(['token' => $tokenSource]);
+        $token = $this->sessionTokenFactory->create(['token' => $tokenSource, 'verifyToken' => false]);
         $shop = $this->loadShop($token->getShopDomain());
         if (!$shop->getId()) {
             throw new NoSuchEntityException(__('No shop provided!'));

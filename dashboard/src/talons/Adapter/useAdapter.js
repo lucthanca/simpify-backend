@@ -1,8 +1,7 @@
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { ApolloLink } from '@apollo/client';
 import { InMemoryCache } from '@apollo/client/cache';
 import { ApolloClient } from '@apollo/client/core';
-import { useMemo, useCallback, useState, useEffect } from 'react';
-// import BrowserPersistence from '@simpify/utils/simplePersistence';
 import { CACHE_PERSIST_PREFIX } from '@simpify/Apollo/constants';
 import { CachePersistor } from 'apollo-cache-persist';
 import getLinks from '@simpify/Apollo/links';
@@ -88,7 +87,9 @@ export const useAdapter = props => {
   }, [initialized, apolloClient]);
   return {
     apolloProps,
-    routerProps: {},
+    routerProps: {
+      baseName: 'dashboard',
+    },
     initialized,
   };
 };

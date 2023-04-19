@@ -181,6 +181,13 @@ location /media/ {
     add_header X-Frame-Options "SAMEORIGIN";
 }
 
+location /dashboard {
+    # rewrite ^/dashboard/(.*)$ /dashboard/$1 last;
+    index index.html;
+    subs_filter href="/ href="/dashboard/;
+    subs_filter src="/ src="/dashboard/;
+}
+
 location /media/customer/ {
     deny all;
 }

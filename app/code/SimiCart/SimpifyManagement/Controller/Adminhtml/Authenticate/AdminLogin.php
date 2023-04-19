@@ -89,7 +89,7 @@ class AdminLogin extends Action implements HttpGetActionInterface
             $targetStore = $this->storeManager->getStore((int) $this->storeManager->getDefaultStoreView()->getId());
             $redirectUrl = $this->urlBuilder
                 ->setScope($targetStore)
-                ->getUrl('simpify/dashboard/index', ['_query' => $params, '_nosid' => true]);
+                ->getUrl('dashboard', ['_query' => $params, '_nosid' => true]);
 
             return $this->redirectFactory->create()->setUrl($redirectUrl);
         } catch (\Exception $e) {

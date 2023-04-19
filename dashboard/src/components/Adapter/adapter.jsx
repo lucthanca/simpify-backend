@@ -7,6 +7,7 @@ import { useAdapter } from '@simpify/talons/Adapter/useAdapter';
 import { store } from '@simpify/store';
 import AppContextProvider from '@simpify/context/app.jsx';
 import { string } from 'prop-types';
+import { PolarisProvider, AppBridgeProvider } from '@simpify/components/Providers';
 
 function Adapter(props) {
   const talonProps = useAdapter(props);
@@ -17,14 +18,19 @@ function Adapter(props) {
   }
   // eslint-disable-next-line react/prop-types
   const children = props.children || <App />;
+
   return (
-    <ApolloProvider {...apolloProps}>
-      <ReduxProvider store={store}>
-        <BrowserRouter {...routerProps}>
-          <AppContextProvider>{children}</AppContextProvider>
-        </BrowserRouter>
-      </ReduxProvider>
-    </ApolloProvider>
+    <PolarisProvider>
+      <ApolloProvider {...apolloProps}>
+        <ReduxProvider store={store}>
+          <BrowserRouter {...routerProps}>
+            <AppBridgeProvider>
+              <AppContextProvider>{children}</AppContextProvider>
+            </AppBridgeProvider>
+          </BrowserRouter>
+        </ReduxProvider>
+      </ApolloProvider>
+    </PolarisProvider>
   );
 }
 
