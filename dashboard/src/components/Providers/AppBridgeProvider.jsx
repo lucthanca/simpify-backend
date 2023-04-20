@@ -47,7 +47,7 @@ export function AppBridgeProvider({ children }) {
     return {
       host,
       apiKey: fiApiK,
-      forceRedirect: false,
+      forceRedirect: true,
     };
   });
 

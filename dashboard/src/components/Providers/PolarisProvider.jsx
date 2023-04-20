@@ -58,6 +58,7 @@ export function PolarisProvider({ children }) {
     }
     return AppBridgeLink;
   }, [xSimiAccessKey, AppBridgeLink]);
+
   const getTranslateDic = useCallback(locale => {
     if (locale === 'en') {
       return { ...en, ...localEn };
