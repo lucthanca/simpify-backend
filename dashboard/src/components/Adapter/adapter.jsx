@@ -5,9 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import PlatformProvider from '../../App.jsx';
 import { useAdapter } from '@simpify/talons/Adapter/useAdapter';
 import { store } from '@simpify/store';
-import AppContextProvider from '@simpify/context/app.jsx';
 import { string } from 'prop-types';
-import { PolarisProvider } from '@simpify/components/Providers';
 
 function Adapter(props) {
   const talonProps = useAdapter(props);

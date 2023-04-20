@@ -1,9 +1,11 @@
-import { useCallback, useMemo } from "react";
-import { AppProvider } from "@shopify/polaris";
-import { useNavigate } from "@shopify/app-bridge-react";
-import translations from "@shopify/polaris/locales/en.json";
-import "@shopify/polaris/build/esm/styles.css";
-import {useAppContext} from "@simpify/context/app.jsx";
+import { useCallback, useMemo } from 'react';
+import { AppProvider } from '@shopify/polaris';
+import { useNavigate } from '@shopify/app-bridge-react';
+import en from '@shopify/polaris/locales/en.json';
+import localEn from '@simpify/locales/en.json';
+import '@shopify/polaris/build/esm/styles.css';
+import { useAppContext } from '@simpify/context/app.jsx';
+import { useI18n } from '@shopify/react-i18n';
 
 function AppBridgeLink({ url, children, external, ...rest }) {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ function AppBridgeLink({ url, children, external, ...rest }) {
 
   if (external || IS_EXTERNAL_LINK_REGEX.test(url)) {
     return (
-      <a {...rest} href={url} target="_blank" rel="noopener noreferrer">
+      <a {...rest} href={url} target='_blank' rel='noopener noreferrer'>
         {children}
       </a>
     );
@@ -56,9 +58,24 @@ export function PolarisProvider({ children }) {
     }
     return AppBridgeLink;
   }, [xSimiAccessKey, AppBridgeLink]);
+  const getTranslateDic = useCallback(locale => {
+    if (locale === 'en') {
+      return { ...en, ...localEn };
+    }
+
+    // const dic = await import(`../../../node_modules/@shopify/polaris/locales/${locale}.json`);
+    // return dic && dic.default;
+  }, []);
+
+  const [i18n, ShareTranslations] = useI18n({
+    id: 'Polaris',
+    fallback: en,
+    translations: getTranslateDic,
+  });
+
   return (
-    <AppProvider i18n={translations} linkComponent={linkComponent}>
-      {children}
+    <AppProvider i18n={i18n.translations} linkComponent={linkComponent}>
+      <ShareTranslations>{children}</ShareTranslations>
     </AppProvider>
   );
 }

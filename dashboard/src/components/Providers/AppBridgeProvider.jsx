@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from '@shopify/app-bridge-react';
 import { Banner, Layout, Page } from '@shopify/polaris';
-import {useAppContext} from "@simpify/context/app.jsx";
+import { useAppContext } from '@simpify/context/app.jsx';
 
 /**
  * A component to configure App Bridge.
@@ -28,6 +28,13 @@ export function AppBridgeProvider({ children }) {
 
   const routerConfig = useMemo(() => ({ history, location }), [history, location]);
 
+  const fiApiK = useMemo(() => {
+    if (!apiKey) {
+      return import.meta.env.VITE_SHOPIFY_API_KEY;
+    }
+    return apiKey;
+  }, [apiKey]);
+
   // The host may be present initially, but later removed by navigation.
   // By caching this in state, we ensure that the host is never lost.
   // During the lifecycle of an app, these values should never be updated anyway.
@@ -39,13 +46,13 @@ export function AppBridgeProvider({ children }) {
 
     return {
       host,
-      apiKey,
+      apiKey: fiApiK,
       forceRedirect: false,
     };
   });
 
-  if (!apiKey || !appBridgeConfig.host) {
-    const bannerProps = !apiKey
+  if (!fiApiK || !appBridgeConfig.host) {
+    const bannerProps = !fiApiK
       ? {
           title: 'Missing Shopify API Key',
           children: (

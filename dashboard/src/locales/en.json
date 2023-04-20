@@ -1,0 +1,16 @@
+{
+  "SimiCart": {
+    "Page": {
+      "Dashboard": {
+        "Title": "Simpify Dashboard"
+      }
+    },
+    "Navigations": {
+      "Dashboard": "Dashboard",
+      "ManageApp": "Manage App",
+      "Integrations": "Integrations",
+      "Plan": "Plan",
+      "ContactUs": "Contact Us"
+    }
+  }
+}
