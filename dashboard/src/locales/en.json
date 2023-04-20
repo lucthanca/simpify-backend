@@ -1,5 +1,11 @@
 {
   "SimiCart": {
+    "GetStarted": {
+      "Title": "Let's get to know you and your store before we start!",
+      "Form": {
+        "Industry": "Industry"
+      }
+    },
     "Page": {
       "Dashboard": {
         "Title": "Simpify Dashboard"

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '@simpify/store/example';
 import bindActionCreators from '@simpify/utils/bindActionCreators';
 import { useLocation } from 'react-router-dom';
+import BrowserPersistence from "@simpify/utils/simplePersistence";
+const storage = new BrowserPersistence();
 
 const AppContext = createContext(undefined);
 
@@ -31,8 +33,8 @@ const AppContextProvider = props => {
   const accessKey = search.get('x-simi-access');
   const apiKey = search.get('app-api-key'); // using url param for flexible change app
   const requestHost = search.get('host');
+  storage.setItem('x-simpify-token', accessKey);
 
-  console.log({ requestHost });
   const [xSimiAccessKey, setSimiKey] = useState(accessKey);
   const [host] = useState(requestHost);
 
@@ -46,7 +48,17 @@ const AppContextProvider = props => {
     return data?.simpifyShop || null;
   }, [data]);
 
-  console.log({ isLoginFromShopify });
+  const appError = useMemo(() => {
+    if (error) {
+      return error.message;
+    }
+    if (data?.errors?.length > 0) {
+      const errs = data.errors.map(error => error.message);
+
+      return errs.join('<br />');
+    }
+  }, [error]);
+
   const appApi = useMemo(
     () => ({
       ...actions,
@@ -61,8 +73,11 @@ const AppContextProvider = props => {
       apiKey,
       isLoginFromShopify,
       shopInfo,
+      isLoadingWithData: !!data && loading,
+      isLoadingWithoutData: !data && loading,
+      appError,
     };
-  }, [reduxAppState]);
+  }, [reduxAppState, loading, appError, shopInfo, isLoginFromShopify, apiKey, xSimiAccessKey]);
   const contextValue = useMemo(() => [appState, appApi], [appApi, appState]);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

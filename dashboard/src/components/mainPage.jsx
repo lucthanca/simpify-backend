@@ -1,5 +1,6 @@
+import React from 'react';
 import '@shopify/polaris/build/esm/styles.css';
-import { Text, Box, Grid, ProgressBar, Page, Thumbnail, Icon} from '@shopify/polaris';
+import { Text, Box, Grid, ProgressBar, Page, Thumbnail, Icon, Frame, Loading} from '@shopify/polaris';
 import {TickMinor} from '@shopify/polaris-icons';
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip} from 'chart.js';
 import { Line } from 'react-chartjs-2';
@@ -59,7 +60,7 @@ const MainPage = props => {
             </Text>
             <Box paddingBlockStart='4' paddingBlockEnd='4'>
               <Text variant="headingXs" as="h6">
-                Let's get ready to rock your business with Mobile App! 
+                Let's get ready to rock your business with Mobile App!
               </Text>
             </Box>
             <Grid gap={{xs: '5px', sm: '5px', md: '5px', lg: '5px', xl: '5px'}}>
@@ -139,7 +140,7 @@ const MainPage = props => {
       </Grid>
     </Box>
   );
-  
+
   const listApp = [
     {id: '1', label: 'Installed', value: '90', src:'https://burst.shopifycdn.com/photos/black-leather-choker-necklace_373x@2x.jpg'},
     {id: '2', label: 'Active', value: '80', src:'https://burst.shopifycdn.com/photos/black-leather-choker-necklace_373x@2x.jpg'},
@@ -231,5 +232,4 @@ export function Chart() {
 }
 
 export default MainPage
-  
-  
+

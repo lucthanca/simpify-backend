@@ -13,8 +13,6 @@ const isServer = !globalThis.document;
 export const useAdapter = props => {
   const { shopDomain, apiUrl, origin } = props;
   const [initialized, setInitialized] = useState(false);
-
-  console.log({ useMemo });
   const apiBase = useMemo(() => apiUrl || new URL('/graphql', origin).toString(), [apiUrl, origin]);
   const configureLinks = useCallback(links => {
     return [...links.values()];
