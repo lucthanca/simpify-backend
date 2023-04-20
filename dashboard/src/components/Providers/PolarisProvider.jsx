@@ -4,6 +4,7 @@ import { useNavigate } from "@shopify/app-bridge-react";
 import translations from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
 import {useAppContext} from "@simpify/context/app.jsx";
+import { I18nContext, I18nManager } from "@shopify/react-i18n";
 
 function AppBridgeLink({ url, children, external, ...rest }) {
   const navigate = useNavigate();
@@ -56,9 +57,19 @@ export function PolarisProvider({ children }) {
     }
     return AppBridgeLink;
   }, [xSimiAccessKey, AppBridgeLink]);
+  const locale = "en";
+  const i18nManager = new I18nManager({
+    locale,
+    onError(error) {
+      console.error(error);
+    }
+  });
+  
   return (
-    <AppProvider i18n={translations} linkComponent={linkComponent}>
-      {children}
+    <AppProvider linkComponent={linkComponent}>
+      <I18nContext.Provider value={i18nManager}>
+        {children}
+      </I18nContext.Provider>
     </AppProvider>
   );
 }
