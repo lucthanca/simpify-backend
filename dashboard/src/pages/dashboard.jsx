@@ -1,110 +1,55 @@
-import MenuNavigation from '@simpify/components/navigation';
-import '@shopify/polaris/build/esm/styles.css';
-import { Text, Box, Grid, ProgressBar, Page, VideoThumbnail} from '@shopify/polaris';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { TitleBar } from '@shopify/app-bridge-react';
+import { Card, Heading, Layout, Link, Page, Stack, TextContainer } from '@shopify/polaris';
+import {useAppContext} from "@simpify/context/app.jsx";
 
 const Dashboard = props => {
-  const title = (
-    <Box background="bg" padding="6" shadow='md'>
-      <Text variant="heading2xl" as="h1">
-        Dashboard
-      </Text>
-    </Box>
-  );
-  const userGuide = (
-    <div className='my-10'>
-      <Box background="bg" padding="6" shadow='md' borderRadius='6'>
-        <Grid>
-          <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 8, xl: 8}}>
-            <Text variant="heading2xl" as="h1">
-              Welcome, Name
-            </Text>
-            <Box paddingBlockStart='4' paddingBlockEnd='4'>
-              <Text variant="headingXs" as="h6">
-                Let's get ready to rock your business with Mobile App! 
-              </Text>
-            </Box>
-            <Grid gap={{xs: '5px', lg: '10px'}}>
-              <Grid.Cell columnSpan={{xs: 6, lg: 3}}>
-                <Text variant="headingSm" as="h5">
-                  Current plan
-                </Text>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 8}}>
-                <Text variant="headingSm" as="h5">
-                  Current plan
-                </Text>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 3}}>
-                <Text variant="headingSm" as="h5">
-                  Current editing app
-                </Text>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 8}}>
-                <Text variant="headingSm" as="h5">
-                  Current plan
-                </Text>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 3}}>
-                <Text variant="headingSm" as="h5">
-                  Current progress
-                </Text>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 8}}>
-                <div className='flex items-center w-24'>
-                  <ProgressBar progress={40} size="small" />
-                </div>
-              </Grid.Cell>
-            </Grid>
-  
-          </Grid.Cell>
-          <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 4, xl: 4}}>
-            <VideoThumbnail
-              videoLength={80}
-              thumbnailUrl="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg?width=1850"
-              onClick={() => console.log('clicked')}
-            />
-          </Grid.Cell>
-        </Grid>
-      </Box>
-    </div>
-  );
-  const options = [
-    {label: 'Installed', value: '90'},
-    {label: 'Active', value: '80'},
-    {label: 'Uninstalled', value: '10'},
-  ];
-  const liveApp = (
-    <Box background="bg" padding="6" shadow='md' borderRadius='6'>
-      <Box paddingBlockEnd='6'>
-        <Text variant="heading2xl" as="h1">
-          Live app
-        </Text>
-      </Box>
-      <Grid gap={{xs: '10px', lg: '20px'}}>
-        {options.map((item) =>
-          <Grid.Cell key={item.label} columnSpan={{xs: 4, lg: 4}}>
-            <Box padding="6" shadow='md' borderRadius='4'>
-              <Text variant="heading2xl" as="h1" alignment="center">
-                {item.label}
-              </Text>
-              <Text variant="heading2xl" as="h1" alignment="center">
-                {item.value}
-              </Text>
-            </Box>
-          </Grid.Cell>
-        )}
-      </Grid>
-    </Box>
-  );
-  return (
-    <Page>
-      {title}
-      {userGuide}
-      {liveApp}
-    </Page>
-  )
-}
+  const [{ xSimiAccessKey }] = useAppContext();
 
-export default Dashboard
-  
-  
+  return (
+    <Page narrowWidth>
+      { !xSimiAccessKey && <TitleBar title='App name' primaryAction={null} /> }
+      <Layout>
+        <Layout.Section>
+          <Card sectioned>
+            <Stack wrap={false} spacing='extraTight' distribution='trailing' alignment='center'>
+              <Stack.Item fill>
+                <TextContainer spacing='loose'>
+                  <Heading>Hello from Dashboard 🎉</Heading>
+                  <p>
+                    Your app is ready to explore! It contains everything you need to get started including the{' '}
+                    <Link url='https://polaris.shopify.com/' external>
+                      Polaris design system
+                    </Link>
+                    ,{' '}
+                    <Link url='https://shopify.dev/api/admin-graphql' external>
+                      Shopify Admin API
+                    </Link>
+                    , and{' '}
+                    <Link url='https://shopify.dev/apps/tools/app-bridge' external>
+                      App Bridge
+                    </Link>{' '}
+                    UI library and components.
+                  </p>
+                  <p>Ready to go? Start populating your app with some sample products to view and test in your store. </p>
+                  <p>
+                    Learn more about building out your app in{' '}
+                    <Link url='https://shopify.dev/apps/getting-started/add-functionality' external>
+                      this Shopify tutorial
+                    </Link>{' '}
+                    📚{' '}
+                  </p>
+                </TextContainer>
+              </Stack.Item>
+            </Stack>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </Page>
+  );
+};
+
+Dashboard.propTypes = {};
+
+export default Dashboard;

@@ -7,10 +7,8 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\PageFactory;
-use SimiCart\SimpifyManagement\Api\Data\ShopInterface as IShop;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface as IShopRepository;
 use SimiCart\SimpifyManagement\Helper\PageLayoutTrait;
 use SimiCart\SimpifyManagement\Model\VerifyShopify;
@@ -73,7 +71,7 @@ class Index implements HttpGetActionInterface
         try {
             [$statusCode, $data] = $this->verifyShopify->execute($this->getRequest());
         } catch (\Exception $e) {
-            $this->logger->critical('INIT SHOP FAILED: ' . $e);
+            $this->logger->critical('Verify Shop FAILED: ' . $e);
             return $this->getPageFactory()->create(false, [
                 'template' => 'SimiCart_SimpifyManagement::initApp/404.phtml',
             ]);
@@ -83,6 +81,7 @@ class Index implements HttpGetActionInterface
             case 'logged_in':
                 return $this->redirectFactory->create()->setPath('dashboard', ['_query' => $data, '_nosid' => true]);
             case 'token_missing':
+                // @deprecated
                 return $this->redirectFactory->create()->setPath('simpify/authenticate/token', $data);
             default:
                 // status === new_shop

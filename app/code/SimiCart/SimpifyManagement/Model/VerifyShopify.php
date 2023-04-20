@@ -64,58 +64,97 @@ class VerifyShopify
         if ($request->getFullActionName() === 'simpify_authenticate_index') {
             return ['skip', null];
         }
+        // -> check shop has previous installed and has access key
+        // -> return flag for redirect to request token controller
+        // -> if shop has not installed previous, return flag for redirect to install app
+        if (!$request->getParam('shop')) {
+            throw new SignatureVerificationException(__("No shop provided. Please refresh Page."));
+        }
+        $shop = $this->loadShop($request->getParam('shop'));
+        $shopHasInstalledPrevious = $shop->getId() && $shop->hasOfflineAccess() && !$shop->hasUninstalled();
+        if ($shopHasInstalledPrevious) {
+            try {
+                // Preflight check for access token valid or data error between simi and shopify
+                $shop->getShopApi()->getShopInfo();
+            } catch (\Exception $e) {
+                $shop->uninstallShop();
+                $this->shopRepository->save($shop);
+                return $this->handleInvalidShop($request->getParam('shop'));
+            }
+            $hmac = $this->createHmac([
+                "data" => implode(
+                    ".",
+                    [
+                        $shop->getShopDomain(),
+                        $request->getParam('host')
+                    ],
+                ),
+                "raw" => true
+            ], $this->configProvider->getApiSecret());
+            return [
+                'logged_in',
+                [
+                    'shop' => $shop->getShopDomain(),
+                    'host' => $request->getParam('host'),
+                    'hmac' => $this->base64UrlEncode($hmac),
+                ]
+            ];
+        }
+        return $this->handleInvalidShop($request->getParam('shop'));
 
-        $tokenSource = $request->getParam('token');
-        if (!$tokenSource) {
+        /////// After self-review, it should not need to get and verify token.
+
+        // $tokenSource = $request->getParam('token');
+        // if (!$tokenSource) {
             // -> Missing token on request params
             // -> check shop has previous installed and has access key
             // -> return flag for redirect to request token controller
             // -> if shop has not installed previous, return flag for redirect to install app
-            $shop = $this->loadShop($request->getParam('shop'));
-            $shopHasInstalledPrevious = $shop->getId() && $shop->hasOfflineAccess() && !$shop->hasUninstalled();
+        //    $shop = $this->loadShop($request->getParam('shop'));
+        //    $shopHasInstalledPrevious = $shop->getId() && $shop->hasOfflineAccess() && !$shop->hasUninstalled();
 
-            if ($shopHasInstalledPrevious) {
-                try {
+        //    if ($shopHasInstalledPrevious) {
+        //        try {
                     // Preflight check for access token valid or data error between simi and shopify
-                    $shop->getShopApi()->getShopInfo();
-                } catch (\Exception $e) {
-                    $shop->uninstallShop();
-                    $this->shopRepository->save($shop);
-                    return $this->handleInvalidShop($request->getParam('shop'));
-                }
-                return $this->handleMissingToken($request, $shop);
-            }
-            return $this->handleInvalidShop($request->getParam('shop'));
-        }
+        //            $shop->getShopApi()->getShopInfo();
+        //        } catch (\Exception $e) {
+        //            $shop->uninstallShop();
+        //            $this->shopRepository->save($shop);
+        //            return $this->handleInvalidShop($request->getParam('shop'));
+        //        }
+        //        return $this->handleMissingToken($request, $shop);
+        //    }
+        //    return $this->handleInvalidShop($request->getParam('shop'));
+        // }
 
         // Has token:
         // -> Verify token
         // -> Return to dashboard
-        $token = $this->sessionTokenFactory->create(['token' => $tokenSource, 'verifyToken' => false]);
-        $shop = $this->loadShop($token->getShopDomain());
-        if (!$shop->getId()) {
-            throw new NoSuchEntityException(__('No shop provided!'));
-        }
-        $hmac = $this->createHmac([
-            "data" => implode(
-                ".",
-                [
-                    $shop->getShopDomain(),
-                    $request->getParam('host'),
-                    $token->getSessionId()
-                ],
-            ),
-            "raw" => true
-        ], $this->configProvider->getApiSecret());
-        return [
-            'logged_in',
-            [
-                'shop' => $shop->getShopDomain(),
-                'host' => $request->getParam('host'),
-                'session' => $token->getSessionId(),
-                'hmac' => $this->base64UrlEncode($hmac),
-            ]
-        ];
+//        $token = $this->sessionTokenFactory->create(['token' => $tokenSource, 'verifyToken' => false]);
+//        $shop = $this->loadShop($token->getShopDomain());
+//        if (!$shop->getId()) {
+//            throw new NoSuchEntityException(__('No shop provided!'));
+//        }
+//        $hmac = $this->createHmac([
+//            "data" => implode(
+//                ".",
+//                [
+//                    $shop->getShopDomain(),
+//                    $request->getParam('host'),
+//                    $token->getSessionId()
+//                ],
+//            ),
+//            "raw" => true
+//        ], $this->configProvider->getApiSecret());
+//        return [
+//            'logged_in',
+//            [
+//                'shop' => $shop->getShopDomain(),
+//                'host' => $request->getParam('host'),
+//                'session' => $token->getSessionId(),
+//                'hmac' => $this->base64UrlEncode($hmac),
+//            ]
+//        ];
     }
 
     /**
