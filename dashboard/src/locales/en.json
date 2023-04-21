@@ -8,7 +8,46 @@
     },
     "Page": {
       "Dashboard": {
-        "Title": "Simpify Dashboard"
+        "Title": "Simpify Dashboard",
+        "Welcome": {
+          "title": "Welcome, Name",
+          "subtitle": "Let's get ready to rock your business with Mobile App!",
+          "steps_1": "Design your app",
+          "steps_2": "Set languge for your app",
+          "steps_3": "Configure your app features",
+          "steps_4": "Preview your app",
+          "steps_5": "Publish",
+          "current_plan": "Current plan",
+          "price": "Free",
+          "current_edit" :"Current editing app",
+          "current_progress": "Current progress"
+        },
+        "Live_app" : {
+          "title": "Live App",
+          "installed" :"Installed",
+          "active": "Active",
+          "uninstalled": "Uninstalled"
+        },
+        "List_apps": {
+          "Title": "App Partners"
+        },
+        "Chart": {
+          "Title": "Sales Report",
+          "Month" : {
+            "Jan": "Jan.",
+            "Feb": "Feb.",
+            "Mar": "Mar.",
+            "Apr": "Apr.",
+            "May": "May.",
+            "Jun": "Jun.",
+            "Jul": "Jul.",
+            "Aug": "Aug.",
+            "Sep": "Sep.",
+            "Oct": "Oct.",
+            "Nov": "Nov.",
+            "Dec": "Dec."
+          }
+        }
       }
     },
     "Navigations": {

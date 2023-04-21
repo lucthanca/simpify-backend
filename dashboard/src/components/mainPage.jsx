@@ -1,25 +1,27 @@
 import React from 'react';
 import '@shopify/polaris/build/esm/styles.css';
-import { Text, Box, Grid, ProgressBar, Page, Thumbnail, Icon, Frame, Loading} from '@shopify/polaris';
+import { Text, Box, Grid, ProgressBar, Page, Thumbnail, Icon} from '@shopify/polaris';
 import {TickMinor} from '@shopify/polaris-icons';
-import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { useI18n } from '@shopify/react-i18n';
+import { ChartSale } from './chartSale';
+
 const MainPage = props => {
+  const [i18n] = useI18n();
   const title = (
     <div className='border-b-2 border-[var(--p-action-primary)]'>
       <Box background="bg" padding="6" shadow='md'>
         <Text variant="headingXl" as="h1">
-          Dashboard
+          {i18n.translate('SimiCart.Page.Dashboard.Title')}
         </Text>
       </Box>
     </div>
   );
   const steps = [
-    {label: 'Design your app', step: '1', active: true},
-    {label: 'Set languge for your app', step: '2', active: true},
-    {label: 'Configure your app features', step: '3', active: true},
-    {label: 'Preview your app', step: '4', active: false},
-    {label: 'Publish', step: '5', active: false},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_1')}`, step: '1', active: true},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_2')}`, step: '2', active: true},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_3')}`, step: '3', active: true},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_4')}`, step: '4', active: false},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_5')}`, step: '5', active: false},
   ];
   const stepGuide = (
     <div className='grid grid-cols-2 md:grid-cols-5 mt-4 gap-[5px]'>
@@ -56,28 +58,28 @@ const MainPage = props => {
         <Grid>
           <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 8, xl: 8}}>
             <Text variant="headingXl" as="h1">
-              Welcome, Name
+              {i18n.translate('SimiCart.Page.Dashboard.Welcome.title')}
             </Text>
             <Box paddingBlockStart='4' paddingBlockEnd='4'>
               <Text variant="headingXs" as="h6">
-                Let's get ready to rock your business with Mobile App!
+                {i18n.translate('SimiCart.Page.Dashboard.Welcome.subtitle')}
               </Text>
             </Box>
             <Grid gap={{xs: '5px', sm: '5px', md: '5px', lg: '5px', xl: '5px'}}>
               <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
                 <Box padding='8' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
                   <Text variant="headingSm" as="h5">
-                    Current plan
+                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_plan')}
                   </Text>
                   <Text variant="headingXl" as="h5" color="success">
-                    Free
+                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.price')}
                   </Text>
                 </Box>
               </Grid.Cell>
               <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
                 <Box padding='8' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
                   <Text variant="headingSm" as="h5">
-                    Current editing app
+                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_edit')}
                   </Text>
                   <Text variant="headingXl" as="h5" color="success">
                     Name
@@ -87,7 +89,7 @@ const MainPage = props => {
               <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
                 <Box padding='8' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
                   <Text variant="headingSm" as="h5">
-                    Current progress
+                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_progress')}
                   </Text>
                   <div className='flex justify-between'>
                     <Text variant="headingXl" as="h5" color="success">
@@ -113,15 +115,15 @@ const MainPage = props => {
     </div>
   );
   const options = [
-    {label: 'Installed', value: '90'},
-    {label: 'Active', value: '80'},
-    {label: 'Uninstalled', value: '10'},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Live_app.installed')}`, value: '90'},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Live_app.active')}`, value: '80'},
+    {label: `${i18n.translate('SimiCart.Page.Dashboard.Live_app.uninstalled')}`, value: '10'},
   ];
   const liveApp = (
     <Box background="bg" padding="6" shadow='md' borderRadius='2'>
       <Box paddingBlockEnd='6'>
         <Text variant="headingXl" as="h1">
-          Live app
+          {i18n.translate('SimiCart.Page.Dashboard.Live_app.title')}
         </Text>
       </Box>
       <Grid gap={{xs: '5px', sm: '5px', md: '5px', lg: '5px', xl: '5px'}}>
@@ -156,7 +158,7 @@ const MainPage = props => {
       <Box background="bg" padding="6" shadow='md' borderRadius='2'>
         <Box paddingBlockEnd='6'>
           <Text variant="headingXl" as="h1">
-            App Partners
+            {i18n.translate('SimiCart.Page.Dashboard.List_apps.Title')}
           </Text>
         </Box>
         <Grid gap={{xs: '5px', sm: '5px', md: '5px', lg: '5px', xl: '5px'}}>
@@ -185,51 +187,13 @@ const MainPage = props => {
       <Page fullWidth>
         {wellcome}
         {liveApp}
-        <Chart/>
+        <ChartSale/>
         {appPartners}
       </Page>
     </>
   )
 }
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip
-);
-export const options = {
-  responsive: true
-};
 
-const labels = ['January', 'February', 'March', 'April', 'May','January', 'February', 'March', 'April', 'May', 'June', 'July'];
-const dataChart = [203,156,99,251,247,251,247];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      data: labels.map((item, i) => dataChart[i]),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
-
-export function Chart() {
-  return (
-    <Box paddingBlockStart='8' paddingBlockEnd='8'>
-      <Box background="bg" padding="6" shadow='md' borderRadius='2'>
-        <Box paddingBlockEnd='6'>
-          <Text variant="headingXl" as="h1">
-            Sales Report
-          </Text>
-        </Box>
-        <Line options={options} data={data} />
-      </Box>
-    </Box>
-  )
-}
 
 export default MainPage
 

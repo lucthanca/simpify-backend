@@ -119,7 +119,7 @@ const VerifyRequest = props => {
   const pages = import.meta.globEager('./pages/**/!(*.test.[jt]sx)*.([jt]sx)');
 
   const isShopFilledAllRequiredFields = React.useMemo(() => {
-    return false;
+    return true;
   }, []);
   return (
     <>
