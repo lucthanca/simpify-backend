@@ -4,8 +4,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #0a6767;
-    z-index: 1;
+    background: #157a5c;
+    z-index: 31;
 }
 
 #loader {
@@ -51,6 +51,11 @@
     left: 0;
     border-radius: 50%;
     animation: shadow .5s linear infinite;
+}
+.loader_text {
+    position: absolute;
+    top: 68px;
+    left: -20px;
 }
 @keyframes shadow {
     50% {

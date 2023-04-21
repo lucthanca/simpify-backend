@@ -90,7 +90,7 @@ class VerifyShopify
                     ],
                 ),
                 "raw" => true
-            ], $this->configProvider->getApiSecret());
+            ], $this->configProvider->getApiSecret($request->getParam('store_code')));
             return [
                 'logged_in',
                 [
@@ -289,7 +289,8 @@ class VerifyShopify
      */
     public function verifyRequest(array $params): bool
     {
-        $apiSecret = $this->configProvider->getApiSecret();
+        $store = $params['store_code'] ?? null;
+        $apiSecret = $this->configProvider->getApiSecret($store);
         if (!$apiSecret) {
             throw new LocalizedException(__('API secret is missing'));
         }

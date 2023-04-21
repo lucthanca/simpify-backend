@@ -41,7 +41,8 @@ class FullPageRedirect extends Template
      */
     public function getApiKey(): string
     {
-        return $this->configProvider->getApiKey();
+        $store = $this->getRequest()->getParam('store_code');
+        return $this->configProvider->getApiKey($store);
     }
 
     /**
