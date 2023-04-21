@@ -8,7 +8,7 @@
     },
     "Page": {
       "Dashboard": {
-        "Title": "Simpify Dashboard",
+        "Title": "Dashboard",
         "Welcome": {
           "title": "Welcome, Name",
           "subtitle": "Let's get ready to rock your business with Mobile App!",
@@ -29,7 +29,8 @@
           "uninstalled": "Uninstalled"
         },
         "List_apps": {
-          "Title": "App Partners"
+          "Title": "App Partners",
+          "Button": "Visit now"
         },
         "Chart": {
           "Title": "Sales Report",

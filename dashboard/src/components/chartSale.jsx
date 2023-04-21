@@ -14,7 +14,8 @@ ChartJS.register(
 export const ChartSale = () => {
   const [i18n] = useI18n();
   const options = {
-      responsive: true
+      responsive: true,
+      maintainAspectRatio: false
   };
   const labels = ['January', 'February', 'March', 'April', 'May','January', 'February', 'March', 'April', 'May', 'June', 'July'];
   const dataChart = [203,156,99,251,247,251,247];
@@ -30,14 +31,16 @@ export const ChartSale = () => {
     ],
   };
   return (
-    <Box paddingBlockStart='8' paddingBlockEnd='8'>
-      <Box background="bg" padding="6" shadow='md' borderRadius='2'>
+    <Box paddingBlockStart='6' paddingBlockEnd='6'>
+      <Box background="bg" padding="8" shadow='md' borderRadius='2'>
         <Box paddingBlockEnd='6'>
-          <Text variant="headingXl" as="h1">
+          <Text variant="headingLg" as="h2" fontWeight='semibold'>
             {i18n.translate('SimiCart.Page.Dashboard.Chart.Title')}
           </Text>
         </Box>
-        <Line options={options} data={data} />
+        <div className='h-[375px]'>
+          <Line options={options} data={data} />
+        </div>
       </Box>
     </Box>
   )

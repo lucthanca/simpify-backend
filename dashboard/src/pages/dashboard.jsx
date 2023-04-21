@@ -6,6 +6,8 @@ import Popup from '@simpify/components/GetStartedPopup';
 import MainPage from '@simpify/components/mainPage';
 import { useI18n } from '@shopify/react-i18n';
 import {useAppContext} from "@simpify/context/app";
+import TitlePage from '@simpify/components/titlePage';
+
 
 const Dashboard = props => {
   const [{ xSimiAccessKey }] = useAppContext();
@@ -13,10 +15,10 @@ const Dashboard = props => {
 
   return (
     <>
-      {!xSimiAccessKey && <TitleBar title={i18n.translate('SimiCart.Page.Dashboard.Title')} primaryAction={null} />}
       <Layout>
         <Layout.Section>
           {/*<Popup />*/}
+          <TitlePage title={i18n.translate('SimiCart.Page.Dashboard.Title')} />
           <MainPage/>
         </Layout.Section>
       </Layout>
