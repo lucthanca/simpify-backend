@@ -14,7 +14,6 @@ const Dashboard = props => {
 
   return (
     <>
-      {!xSimiAccessKey && <TitleBar title={i18n.translate('SimiCart.Page.Dashboard.Title')} primaryAction={null} />}
       <Layout>
         <Layout.Section>
           {/*<Popup />*/}
