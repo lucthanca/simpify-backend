@@ -9,7 +9,7 @@ const storage = new BrowserPersistence();
 
 const AppContext = createContext(undefined);
 
-const GET_SHOP_DETAILS = gql`
+export const GET_SHOP_DETAILS = gql`
   query getShopDetails {
     simpifyShop {
       uid

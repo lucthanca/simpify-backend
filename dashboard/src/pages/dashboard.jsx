@@ -5,7 +5,8 @@ import { Layout } from '@shopify/polaris';
 import Popup from '@simpify/components/GetStartedPopup';
 import MainPage from '@simpify/components/mainPage';
 import { useI18n } from '@shopify/react-i18n';
-import { useAppContext } from '@simpify/context/app';
+import {useAppContext} from "@simpify/context/app";
+import TitlePage from '@simpify/components/titlePage';
 
 const Dashboard = props => {
   const [{ xSimiAccessKey }] = useAppContext();
@@ -17,7 +18,8 @@ const Dashboard = props => {
       <Layout>
         <Layout.Section>
           {/*<Popup />*/}
-          <MainPage />
+          <TitlePage title={i18n.translate('SimiCart.Page.Dashboard.Title')} />
+          <MainPage/>
         </Layout.Section>
       </Layout>
     </>

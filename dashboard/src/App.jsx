@@ -55,12 +55,13 @@ const VerifyRequest = props => {
     );
   }, [shopInfo]);
 
-  console.log({ isShopFilledAllRequiredFields });
   return (
     <>
       <AnimatePresence mode={'wait'}>{isLoadingWithoutData && xSimiAccessKey && !shopInfo && <FullPageLoading />}</AnimatePresence>
       {errorComponent}
-      {!isShopFilledAllRequiredFields && <GetStartedForm />}
+      <AnimatePresence mode={'wait'}>
+        {!isShopFilledAllRequiredFields && !errorComponent && !isLoadingWithoutData && <GetStartedForm />}
+      </AnimatePresence>
       {!errorComponent && shopInfo && !isLoadingWithoutData && isShopFilledAllRequiredFields && <Routes pages={pages} />}
     </>
   );

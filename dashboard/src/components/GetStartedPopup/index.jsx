@@ -1,8 +1,10 @@
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useI18n } from '@shopify/react-i18n';
 import React, { useCallback } from 'react';
 import { LegacyCard, Page, Toast, Frame } from '@shopify/polaris';
 import { SimiGroupCheck, SimiSelect, SimiTextField } from '@simpify/components/GetStartedPopup/Fields';
+import { GET_SHOP_DETAILS } from '@simpify/context/app';
+import { motion } from 'framer-motion';
 
 const UPDATE_SHOP_INFO_MUTATION = gql`
   mutation updateShopInformation($input: SimpifyShopInput!) {
@@ -23,7 +25,6 @@ const UPDATE_SHOP_INFO_MUTATION = gql`
 
 const useGetStartedForm = props => {
   const fieldRefs = React.useRef([]);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState();
 
   const listIndustries = React.useMemo(() => {
@@ -46,7 +47,7 @@ const useGetStartedForm = props => {
 
   const [updateShopInfo, { loading, error: mutationError }] = useMutation(UPDATE_SHOP_INFO_MUTATION);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     let allValid = true;
     let moreInfoPayload = {};
     Object.keys(fieldRefs.current).every(fieldK => {
@@ -65,7 +66,11 @@ const useGetStartedForm = props => {
 
     if (allValid) {
       // setIsLoading(true);
-      updateShopInfo({ variables: { input: { more_info: moreInfoPayload } } });
+      await updateShopInfo({
+        variables: { input: { more_info: moreInfoPayload } },
+        refetchQueries: [{ query: GET_SHOP_DETAILS }],
+        awaitRefetchQueries: true,
+      });
       // setIsLoading(false);
     }
   }, []);
@@ -110,10 +115,25 @@ const GetStartedForm = props => {
     }
     return true;
   }, []);
-
+  const loadingVariants = {
+    hidden: {
+      y: '-100vw',
+      opacity: 1,
+    },
+    visible: {
+      y: '0',
+      opacity: 1,
+      transition: { duration: 0.8, type: 'spring', stiffness: 80, mass: 0.5 },
+    },
+    exit: {
+      y: '100vh',
+      opacity: 1,
+      transition: { delay: 0.8, duration: 0.5, type: 'spring', stiffness: 80, mass: 0.5 },
+    },
+  };
   return (
     <Page fullWidth>
-      <div className='md:max-w-[30vw] max-w-[600px] mx-auto p-4 min-[30.625em]:p-0'>
+      <motion.div className='md:max-w-[30vw] max-w-[600px] mx-auto p-4 min-[30.625em]:p-0' variants={loadingVariants} initial='hidden' animate='visible' exit='exit'>
         <LegacyCard
           title={<span className={'font-semibold'}>{i18n.translate('SimiCart.GetStarted.Title')}</span>}
           sectioned
@@ -172,7 +192,7 @@ const GetStartedForm = props => {
             />
           </div>
         </LegacyCard>
-      </div>
+      </motion.div>
       <Frame>{toastMarkup}</Frame>
     </Page>
   );

@@ -9,8 +9,11 @@
 const typePolicies = {
   Query: {},
   StoreConfig: {
-    keyFields: ['store_code']
-}
+    keyFields: ['store_code'],
+  },
+  simpifyShop: {
+    keyFields: 'uid',
+  },
 };
 
 export default typePolicies;
