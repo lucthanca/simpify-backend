@@ -5,7 +5,7 @@ import { Layout } from '@shopify/polaris';
 import Popup from '@simpify/components/GetStartedPopup';
 import MainPage from '@simpify/components/mainPage';
 import { useI18n } from '@shopify/react-i18n';
-import {useAppContext} from "@simpify/context/app";
+import { useAppContext } from '@simpify/context/app';
 
 const Dashboard = props => {
   const [{ xSimiAccessKey }] = useAppContext();
@@ -17,7 +17,7 @@ const Dashboard = props => {
       <Layout>
         <Layout.Section>
           {/*<Popup />*/}
-          <MainPage/>
+          <MainPage />
         </Layout.Section>
       </Layout>
     </>
