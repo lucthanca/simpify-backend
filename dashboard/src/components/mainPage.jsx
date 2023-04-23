@@ -46,7 +46,7 @@ const MainPage = props => {
             </div>
           }
         </div>
-      )}
+      ))}
     </div>
   );
   const wellcome = (
@@ -101,8 +101,14 @@ const MainPage = props => {
           </Grid.Cell>
           <Grid.Cell columnSpan={{xs: 5, sm: 5, md: 5, lg: 5, xl: 5}}>
             <div className='relative h-full w-full'>
-              <iframe className=' absolute top-0 left-0 w-full h-full' width="560" height="315" src="https://www.youtube.com/embed/U-3WzWCK9lI" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen >
-              </iframe>
+              <iframe
+                className=' absolute top-0 left-0 w-full h-full'
+                width='560'
+                height='315'
+                src='https://www.youtube.com/embed/U-3WzWCK9lI'
+                title='YouTube video player'
+                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                allowFullScreen></iframe>
             </div>
           </Grid.Cell>
         </Grid>
@@ -142,7 +148,7 @@ const MainPage = props => {
               </div>
             </Box>
           </Grid.Cell>
-        )}
+        ))}
       </Grid>
     </Box>
   );
@@ -201,5 +207,4 @@ const MainPage = props => {
 }
 
 
-export default MainPage
-
+export default MainPage;

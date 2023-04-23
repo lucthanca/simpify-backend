@@ -57,11 +57,13 @@ class ShopApi implements IShopAPI
      */
     public function buildAuthUrl(int $authMode, string $scopes): string
     {
+        $request = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\RequestInterface::class);
         // authMode inString
         $mode = AuthMode::toNative($authMode);
         return $this->client->getAuthUrl(
             $scopes,
-            $this->urlBuilder->getUrl('simpify/authenticate', ['secure' => true]),
+            $this->urlBuilder->getUrl('simpify/authenticate', ['secure' => true, '_query' => ['store_code' => $request->getParam('store_code')] ]),
             strtolower($mode)
         );
     }

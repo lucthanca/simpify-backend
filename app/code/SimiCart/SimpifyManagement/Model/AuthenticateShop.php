@@ -18,6 +18,7 @@ class AuthenticateShop
     private IRequest $request;
     private ManagerInterface $eventManager;
     private \Psr\Log\LoggerInterface $logger;
+    private VerifyShopify $verifyShopify;
 
     /**
      * Authenticate Shop Constructor
@@ -26,17 +27,20 @@ class AuthenticateShop
      * @param IRequest $request
      * @param ManagerInterface $eventManager
      * @param LoggerInterface $logger
+     * @param VerifyShopify $verifyShopify
      */
     public function __construct(
         InstallShop $installShop,
         IRequest $request,
         ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        VerifyShopify $verifyShopify
     ) {
         $this->installShop = $installShop;
         $this->request = $request;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
+        $this->verifyShopify = $verifyShopify;
     }
 
     /**
@@ -54,9 +58,7 @@ class AuthenticateShop
         if (empty($code)) {
             return false;
         }
-        if (!$shop->getShopApi()->verifyRequest($this->getRequest()->getParams())) {
-            throw new SignatureVerificationException(__('HMAC verification failed.'));
-        }
+        $this->verifyShopify->execute($this->getRequest());
         try {
             $this->installShop->execute($shop, $code);
         } catch (\Exception $e) {

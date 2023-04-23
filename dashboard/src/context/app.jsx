@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '@simpify/store/example';
 import bindActionCreators from '@simpify/utils/bindActionCreators';
 import { useLocation } from 'react-router-dom';
-import BrowserPersistence from "@simpify/utils/simplePersistence";
+import BrowserPersistence from '@simpify/utils/simplePersistence';
 const storage = new BrowserPersistence();
 
 const AppContext = createContext(undefined);

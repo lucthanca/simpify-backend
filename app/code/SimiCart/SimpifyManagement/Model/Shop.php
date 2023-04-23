@@ -66,10 +66,12 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function getShopApi(): IShopApi
     {
+        $request = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\App\RequestInterface::class);
         if (!$this->api) {
             $opts = [
-                'api_key' => $this->configProvider->getApiKey(),
-                'api_secret' => $this->configProvider->getApiSecret(),
+                'api_key' => $this->configProvider->getApiKey($request->getParam('store_code')),
+                'api_secret' => $this->configProvider->getApiSecret($request->getParam('store_code')),
                 'access_token' => $this->getAccessToken(),
                 'api_version' => $this->configProvider->getApiVersion(),
                 'shop' => $this

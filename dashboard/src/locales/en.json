@@ -1,9 +1,16 @@
 {
   "SimiCart": {
     "GetStarted": {
+      "SubmitButtonTitle": "Let's get started",
       "Title": "Let's get to know you and your store before we start!",
       "Form": {
-        "Industry": "Industry"
+        "Industry": "Industry",
+        "howYouKnowLabel": "How do you know us?",
+        "YourName": "Your Name",
+        "YourEmail": "Your Email",
+        "YourNamePlaceholder": "Enter your name",
+        "YourEmailPlaceholder": "Enter your Email",
+        "RequiredFieldValidateMessage": "This field is required!"
       }
     },
     "Page": {

@@ -54,6 +54,8 @@ class UpdateShopInformation implements ResolverInterface
             }
             $this->shopRepository->save($shop);
             return $this->shopFormatter->formatToOutput($this->shopRepository->getById($shopId));
+        } catch (GraphQlInputException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new GraphQlUncommonErrorException(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SimiCart\SimpifyManagement\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use SimiCart\SimpifyManagement\Model\Source\AuthMode;
 
 class ConfigProvider
@@ -29,21 +30,31 @@ class ConfigProvider
     /**
      * Retrieve App API Key
      *
+     * @param mixed $store
      * @return string|null
      */
-    public function getApiKey(): ?string
+    public function getApiKey($store = null): ?string
     {
-        return $this->scopeConfig->getValue(self::API_KEY_CONFIG_XML_PATH);
+        return $this->scopeConfig->getValue(
+            self::API_KEY_CONFIG_XML_PATH,
+            ScopeInterface::SCOPE_STORES,
+            $store
+        );
     }
 
     /**
      * Retrieve app api secret
      *
+     * @param mixed $store
      * @return string|null
      */
-    public function getApiSecret(): ?string
+    public function getApiSecret($store = null): ?string
     {
-        return $this->scopeConfig->getValue(self::API_SECRET_CONFIG_XML_PATH);
+        return $this->scopeConfig->getValue(
+            self::API_SECRET_CONFIG_XML_PATH,
+            ScopeInterface::SCOPE_STORES,
+            $store
+        );
     }
 
     /**

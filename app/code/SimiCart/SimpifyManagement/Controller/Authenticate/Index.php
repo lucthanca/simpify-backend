@@ -60,7 +60,7 @@ class Index implements ActionInterface
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            return $this->jsonFactory->create()->setData(['success' => $e->getMessage()]);
+            return $this->jsonFactory->create()->setData(['message' => $e->getMessage()]);
         }
 
         // Authentication done => redirect to main app
