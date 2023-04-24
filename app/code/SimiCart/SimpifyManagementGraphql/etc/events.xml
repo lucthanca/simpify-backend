@@ -4,4 +4,8 @@
     <event name="shop_authenticated_success">
         <observer name="create_oauth_token_for_shop_when_authentication" instance="SimiCart\SimpifyManagementGraphql\Observer\GenerateShopToken" />
     </event>
+    <event name="shop_uninstalled_success">
+        <observer name="simiCart_simpifyManagementGraphql_remove_shop_token_observer"
+                  instance="SimiCart\SimpifyManagementGraphql\Observer\RemoveShopTokenObserver"/>
+    </event>
 </config>

@@ -97,6 +97,7 @@ class VerifyShopify
                     'shop' => $shop->getShopDomain(),
                     'host' => $request->getParam('host'),
                     'hmac' => $this->base64UrlEncode($hmac),
+                    'x-simi-access' => $shop->getSimiAccessToken(),
                 ]
             ];
         }
@@ -277,6 +278,15 @@ class VerifyShopify
         }
         // We have HMAC, validate it
         $data = $this->getRequestData($request, $hmac['source']);
+        if (isset($data['query'])) {
+            unset($data['query']);
+        }
+        if (isset($data['operationName'])) {
+            unset($data['operationName']);
+        }
+        if (isset($data['variables'])) {
+            unset($data['variables']);
+        }
         return $this->verifyRequest($data);
     }
 

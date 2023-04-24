@@ -123,6 +123,7 @@ class Shop extends AbstractModel implements ShopInterface
         $this->setAccessToken(null);
         $this->setSimiAccessToken(null);
         $this->setShopStorefrontToken(null);
+        $this->setMoreInfo(null);
     }
 
     /**
@@ -358,7 +359,8 @@ class Shop extends AbstractModel implements ShopInterface
         }
 
         $serializer = new \Magento\Framework\Serialize\Serializer\Json();
-        return $this->setData(self::MORE_INFO, $serializer->serialize($data));
+        $rawValue = is_array($data) ? $serializer->serialize($data) : $data;
+        return $this->setData(self::MORE_INFO, $rawValue);
     }
 
     /**

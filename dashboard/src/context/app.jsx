@@ -27,22 +27,32 @@ export const GET_SHOP_DETAILS = gql`
 `;
 
 const AppContextProvider = props => {
+  // eslint-disable-next-line react/prop-types
   const { actions, appState: reduxAppState, children } = props;
   const location = useLocation();
   const search = new URLSearchParams(location.search);
+  console.log(location.search);
   const accessKey = search.get('x-simi-access');
   const apiKey = search.get('app-api-key'); // using url param for flexible change app
   const requestHost = search.get('host');
-  storage.setItem('x-simpify-token', accessKey);
-
-  const [xSimiAccessKey, setSimiKey] = useState(accessKey);
   const [host] = useState(requestHost);
+
+  const xSimiAccessKey = useMemo(() => {
+    if (accessKey && accessKey !== storage.getItem('x-simpify-token')) {
+      storage.setItem('x-simpify-token', accessKey);
+    }
+    return storage.getItem('x-simpify-token');
+  }, [accessKey]);
 
   const isLoginFromShopify = useMemo(() => {
     return !!host;
   }, [host]);
 
-  const { data, loading, error } = useQuery(GET_SHOP_DETAILS, { fetchPolicy: 'cache-and-network', nextFetchPolicy: 'cache-first' });
+  const { data, loading, error } = useQuery(GET_SHOP_DETAILS, {
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
+    skip: !xSimiAccessKey,
+  });
 
   const shopInfo = useMemo(() => {
     return data?.simpifyShop || null;
@@ -62,9 +72,8 @@ const AppContextProvider = props => {
   const appApi = useMemo(
     () => ({
       ...actions,
-      setSimiKey,
     }),
-    [actions, setSimiKey],
+    [actions],
   );
   const appState = useMemo(() => {
     return {

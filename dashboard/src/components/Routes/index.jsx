@@ -1,4 +1,5 @@
-import { Routes as ReactRouterRoutes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes as ReactRouterRoutes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * File-based routing.
@@ -14,11 +15,23 @@ import { Routes as ReactRouterRoutes, Route } from 'react-router-dom';
  *
  * @return {Routes} `<Routes/>` from React Router, with a `<Route/>` for each file in `pages`
  */
+// eslint-disable-next-line react/prop-types
 export default function Routes({ pages }) {
   const routes = useRoutes(pages);
-  const routeComponents = routes.map(({ path, component: Component }) => <Route key={path} path={path} element={<Component />} />);
-
+  const routeComponents = routes.map(({ path, component: Component }) => {
+    // return <Route key={path} path={`/dashboard${path}`} element={<Component />} />;
+    return <Route key={path} path={`${path}`} element={<Component />} />;
+  });
   const NotFound = routes.find(({ path }) => path === '/notFound').component;
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (location.pathname.includes('simpify/initapp')) {
+      console.log('runnn');
+      navigate('/dashboard', { replace: true });
+    }
+  }, [location]);
 
   return (
     <ReactRouterRoutes>
