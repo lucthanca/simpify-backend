@@ -79,17 +79,21 @@ class AdminLogin extends Action implements HttpGetActionInterface
                 throw new NoSuchEntityException(__("Shop not found! Please go back!"));
             }
 
-            $params = ['shop' => $shop->getShopDomain()];
+            $params = ['shop' => $shop->getShopDomain(), 'timestamp' => time()];
             $buildHmac = $this->createHmac(
-                ["data" => implode(".", [$shop->getShopDomain()]), 'raw' => true],
+                ["data" => $params, 'buildQuery' => true, 'buildQueryWithJoin' => true],
                 $this->configProvider->getApiSecret()
             );
-            $params['hmac'] = $this->base64UrlEncode($buildHmac);
+            # $params['hmac'] = $this->base64UrlEncode($buildHmac);
+            $params['hmac'] = $buildHmac;
 
-            $targetStore = $this->storeManager->getStore((int) $this->storeManager->getDefaultStoreView()->getId());
-            $redirectUrl = $this->urlBuilder
-                ->setScope($targetStore)
-                ->getUrl('dashboard', ['_query' => $params, '_nosid' => true]);
+            $frontendUrl = $this->configProvider->getFrontendUrl();
+            $redirectUrl = $frontendUrl . '/?' . http_build_query($params);
+
+            # $targetStore = $this->storeManager->getStore((int) $this->storeManager->getDefaultStoreView()->getId());
+            # $redirectUrl = $this->urlBuilder
+            #    ->setScope($targetStore)
+            #    ->getUrl('dashboard', ['_query' => $params, '_nosid' => true]);
 
             return $this->redirectFactory->create()->setUrl($redirectUrl);
         } catch (\Exception $e) {

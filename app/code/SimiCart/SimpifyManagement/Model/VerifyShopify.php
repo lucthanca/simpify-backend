@@ -315,7 +315,15 @@ class VerifyShopify
             if (isset($params['secure'])) {
                 unset($params['secure']);
             }
+            // if (isset($params['force_to_shopify'])) {
+            //     unset($params['force_to_shopify']);
+            // }
             ksort($params);
+            // vadu_html($params, $hmac, hash_hmac(
+            //     'sha256',
+            //     urldecode(http_build_query($params)),
+            //     $apiSecret
+            // ));
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
                 'sha256',

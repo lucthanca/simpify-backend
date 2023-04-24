@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '@simpify/store/example';
 import bindActionCreators from '@simpify/utils/bindActionCreators';
 import { useLocation } from 'react-router-dom';
+import { useAuthContext } from "@simpify/context/auth";
 import BrowserPersistence from '@simpify/utils/simplePersistence';
+
 const storage = new BrowserPersistence();
 
 const AppContext = createContext(undefined);
@@ -29,24 +31,22 @@ export const GET_SHOP_DETAILS = gql`
 const AppContextProvider = props => {
   // eslint-disable-next-line react/prop-types
   const { actions, appState: reduxAppState, children } = props;
+  const [{ xSimiAccessKey, isLoading: isAuthenticationLoading, authenticationError }] = useAuthContext();
   const location = useLocation();
   const search = new URLSearchParams(location.search);
-  console.log(location.search);
-  const accessKey = search.get('x-simi-access');
+  // console.log(location.search);
   const apiKey = search.get('app-api-key'); // using url param for flexible change app
   const requestHost = search.get('host');
+  const shopifySession = search.get('session');
+  const forceRedirectToShopifyFlag = search.get('force_to_shopify');
   const [host] = useState(requestHost);
-
-  const xSimiAccessKey = useMemo(() => {
-    if (accessKey && accessKey !== storage.getItem('x-simpify-token')) {
-      storage.setItem('x-simpify-token', accessKey);
-    }
-    return storage.getItem('x-simpify-token');
-  }, [accessKey]);
+  const [session] = useState(shopifySession);
+  const [forceRedirect] = useState(forceRedirectToShopifyFlag);
 
   const isLoginFromShopify = useMemo(() => {
-    return !!host;
-  }, [host]);
+    return (!!host && !!session) || forceRedirect;
+  }, [host, session, forceRedirect]);
+  console.log({ xSimiAccessKey });
 
   const { data, loading, error } = useQuery(GET_SHOP_DETAILS, {
     fetchPolicy: 'cache-and-network',
@@ -59,6 +59,9 @@ const AppContextProvider = props => {
   }, [data]);
 
   const appError = useMemo(() => {
+    if (authenticationError) {
+      return authenticationError;
+    }
     if (error) {
       return error.message;
     }
@@ -67,7 +70,7 @@ const AppContextProvider = props => {
 
       return errs.join('<br />');
     }
-  }, [error]);
+  }, [error, authenticationError]);
 
   const appApi = useMemo(
     () => ({
@@ -75,6 +78,9 @@ const AppContextProvider = props => {
     }),
     [actions],
   );
+
+  const isLoadingWithData = !!data && loading;
+  const isLoadingWithoutData = !data && loading;
   const appState = useMemo(() => {
     return {
       ...reduxAppState,
@@ -82,11 +88,12 @@ const AppContextProvider = props => {
       apiKey,
       isLoginFromShopify,
       shopInfo,
-      isLoadingWithData: !!data && loading,
-      isLoadingWithoutData: !data && loading,
+      isAuthenticating: isAuthenticationLoading,
+      isLoadingWithData,
+      isLoadingWithoutData,
       appError,
     };
-  }, [reduxAppState, loading, appError, shopInfo, isLoginFromShopify, apiKey, xSimiAccessKey]);
+  }, [reduxAppState, loading, appError, shopInfo, isLoginFromShopify, apiKey, xSimiAccessKey, isAuthenticationLoading]);
   const contextValue = useMemo(() => [appState, appApi], [appApi, appState]);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

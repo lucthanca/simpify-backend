@@ -40,6 +40,10 @@
                     <label><![CDATA[Shopify API Scopes]]></label>
                     <comment>This option is for the scopes your application needs in the API.</comment>
                 </field>
+                <field id="frontend_url" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label><![CDATA[Dashboard Front-end URL]]></label>
+                    <comment>Note: No slash at the end.</comment>
+                </field>
             </group>
         </section>
     </system>

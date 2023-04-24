@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes as ReactRouterRoutes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes as ReactRouterRoutes, Route } from 'react-router-dom';
 
 /**
  * File-based routing.
@@ -23,15 +23,6 @@ export default function Routes({ pages }) {
     return <Route key={path} path={`${path}`} element={<Component />} />;
   });
   const NotFound = routes.find(({ path }) => path === '/notFound').component;
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (location.pathname.includes('simpify/initapp')) {
-      console.log('runnn');
-      navigate('/dashboard', { replace: true });
-    }
-  }, [location]);
 
   return (
     <ReactRouterRoutes>

@@ -86,9 +86,7 @@ export const useAdapter = props => {
   }, [initialized, apolloClient]);
   return {
     apolloProps,
-    routerProps: {
-      baseName: 'dashboard',
-    },
+    routerProps: {},
     initialized,
   };
 };

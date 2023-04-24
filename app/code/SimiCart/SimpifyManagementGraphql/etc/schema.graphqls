@@ -29,7 +29,7 @@ type SimpifyApp {
 type Query {
     simpifyShop: SimpifyShop @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\SimpifyShop") @doc(description: "The shimpifyShop query returns information about a shopify shop.")
     lastUpdatedApp: SimpifyApp @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetLastUpdatedApp") @doc(description: "The query returns information about last updated app from a shop.")
-    simpifyAuthenticateShop(param: AuthShopParam): AuthShopOutput @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\AuthenticateShop")
+    simpifyAuthenticateShop(query: String): AuthShopOutput @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\AuthenticateShop")
 }
 type Mutation {
     updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\UpdateShopInformation")
@@ -39,7 +39,8 @@ type AuthShopOutput {
     success: Boolean,
     type: String,
     redirect_url: String,
-    message: String
+    message: String,
+    access_token: String
 }
 
 input AuthShopParam {

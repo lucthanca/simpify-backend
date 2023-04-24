@@ -6,18 +6,18 @@ import { motion } from 'framer-motion';
 const Index = props => {
   const loadingVariants = {
     hidden: {
-      x: '100vw',
-      opacity: 1,
+      x: '0',
+      opacity: 0,
     },
     visible: {
       x: '0',
       opacity: 1,
-      transition: { duration: 0.8, type: 'spring', stiffness: 80, mass: 0.5 },
+      // transition: { duration: 0.5, type: 'spring', stiffness: 80, mass: 0.5 },
     },
     exit: {
       x: '-100vw',
       opacity: 1,
-      transition: { delay: 0.8, duration: 0.5, type: 'spring', stiffness: 80, mass: 0.5 },
+      transition: { delay: 0.15, duration: 1.25, type: 'spring', stiffness: 80, mass: 0.5 },
     },
   };
 
