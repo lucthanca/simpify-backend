@@ -59,7 +59,10 @@
       },
       "ManageApp": {
         "Title": "Manage Apps",
-        "addApp": "Add New App"
+        "addApp": "Add New App",
+        "last_update": "Last updated:",
+        "ios_update": "IOS Published Date:",
+        "android_update": "Android Published Date:"
       }
     },
     "Navigations": {
