@@ -56,6 +56,10 @@
             "Dec": "Dec."
           }
         }
+      },
+      "ManageApp": {
+        "Title": "Manage Apps",
+        "addApp": "Add New App"
       }
     },
     "Navigations": {

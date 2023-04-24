@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Text, Box, Grid, Page } from '@shopify/polaris';
+import { Layout, Text, Box, Grid, Page, Icon } from '@shopify/polaris';
+import {DuplicateMinor, EditMajor, DeleteMajor, AddMajor} from '@shopify/polaris-icons';
 import { useI18n } from '@shopify/react-i18n';
 import {useAppContext} from "@simpify/context/app";
 import TitlePage from '@simpify/components/titlePage';
@@ -13,7 +14,7 @@ const ManageApp = props => {
   return (
     <Layout>
       <Layout.Section>
-        <TitlePage title={i18n.translate('SimiCart.Page.Dashboard.Title')} />
+        <TitlePage title={i18n.translate('SimiCart.Page.ManageApp.Title')} />
         <Page fullWidth>
           <ListApp/>
         </Page>
@@ -27,12 +28,35 @@ const ListApp = () => {
     {id: '2', title: 'Bss Shopify Mobile App', last_update: '21-04-1023', ios_date: '21-04-1023', android_date: '21-04-1023', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450'}
   ]
   return (
-    <Box background="bg" padding="8" shadow='md' borderRadius='2'>
-      <Grid gap={{xs: '5px', sm: '5px', md: '6px', lg: '6px', xl: '6px'}}>
+    <Box>
+      <div className='grid grid-cols-4 gap-6'>
         {data.map((item) =>
-          <Grid.Cell key={item.id} columnSpan={{xs: 6, lg: 3}}>
-            <Box padding="6" borderRadius='2' borderWidth="1" borderStyle='dashed' borderColor='border-disabled'>
-              <img src={item.src} alt="" />
+          <div key={item.id} className='border border-dashed border-[var(--p-border-disabled)] rounded-lg bg-white'>
+            <Box padding="6">
+              <div className='relative w-full h-0 pb-[60%] group'>
+                <img src={item.src} className='absolute top-0 left-0 w-full h-full object-cover z-10' />
+                <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center duration-200 bg-black bg-opacity-50 opacity-0 z-0 group-hover:opacity-100 group-hover:z-20'>
+                  <div className='mx-2 w-10 h-10 flex items-center justify-center bg-white rounded'>
+                    <Icon
+                      source={DuplicateMinor}
+                      color="subdued"
+                    />
+                  </div>
+                  <div className='mx-2 w-10 h-10 flex items-center justify-center bg-white rounded-sm'>
+                    <Icon
+                      source={EditMajor}
+                      color="subdued"
+                    />
+                  </div>
+                  <div className='mx-2 w-10 h-10 flex items-center justify-center bg-white rounded-sm'>
+                    <Icon
+                      source={DeleteMajor}
+                      color="subdued"
+                    />
+                  </div>
+                </div>
+              </div>
+              
               <Box paddingBlockStart='4' paddingBlockEnd='3'>
                 <Text variant="headingSm" as="p" fontWeight='semibold'>
                   {item.title}
@@ -45,19 +69,25 @@ const ListApp = () => {
                 <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'>
                   {item.ios_date}
                 </Text>
-                <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'>
+                <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'> 
                   {item.android_date}
                 </Text>
               </Box>
             </Box>
-          </Grid.Cell>
+          </div>
         )}
-        <Grid.Cell columnSpan={{xs: 6, lg: 3}}>
-            <Box padding="6" borderRadius='2' borderWidth="1" borderStyle='dashed' borderColor='border-disabled'>
-              
-            </Box>
-          </Grid.Cell>
-      </Grid>
+        <div className='border border-dashed border-[var(--p-border-disabled)] rounded-lg flex items-center justify-center'>
+          <div>
+            <Icon
+              source={AddMajor}
+              color="subdued"
+            />
+            <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'> 
+              addd
+            </Text>
+          </div>
+        </div>
+      </div>
     </Box>
   )
 }
