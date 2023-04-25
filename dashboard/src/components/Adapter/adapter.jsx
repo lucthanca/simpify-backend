@@ -8,11 +8,15 @@ import { store } from '@simpify/store';
 import { string } from 'prop-types';
 
 function Adapter(props) {
+  const { shopDomain } = props;
   const talonProps = useAdapter(props);
   const { apolloProps, initialized, routerProps } = talonProps;
 
   if (!initialized) {
     return null;
+  }
+  if (!shopDomain) {
+    return <div>Please refresh the page!!!</div>;
   }
   // eslint-disable-next-line react/prop-types
   const children = props.children || <PlatformProvider />;

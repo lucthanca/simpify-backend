@@ -15,6 +15,7 @@ class ConfigProvider
     const API_GRANT_MODE_CONFIG_XML_PATH = 'simpify_management/general/shopify_api_grant_mode';
     const API_SCOPES_CONFIG_XML_PATH = 'simpify_management/general/shopify_api_scopes';
     const API_VERSION_CONFIG_XML_PATH = 'simpify_management/general/api_version';
+    const DASHBOARD_URL_CONFIG_XML_PATH = 'simpify_management/general/frontend_url';
 
     private ScopeConfigInterface $scopeConfig;
 
@@ -117,6 +118,19 @@ class ConfigProvider
             return '2023-01';
         }
         return $version;
+    }
+    
+    /**
+     * Return main frontend url
+     * @return string|null
+     */
+    public function getFrontendUrl($store = null): ?string
+    {
+        return $this->getScopeConfig()->getValue(
+            self::DASHBOARD_URL_CONFIG_XML_PATH,
+             ScopeInterface::SCOPE_STORES,
+            $store
+        );
     }
 
     /**

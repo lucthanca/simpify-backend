@@ -47,7 +47,9 @@ class GenerateShopToken implements ObserverInterface
             return;
         }
 
-        $this->oauthTokenFactory->create()->createSimpifyShopToken((int) $shop->getId());
+        $shopOauthToken = $this->oauthTokenFactory->create()->createSimpifyShopToken((int) $shop->getId());
+        $shop->setSimiAccessToken($shopOauthToken->getToken());
+        $shop->save();
     }
 
     /**

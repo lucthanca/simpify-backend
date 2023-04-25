@@ -182,10 +182,20 @@ location /media/ {
 }
 
 location /dashboard {
-    # rewrite ^/dashboard/(.*)$ /dashboard/$1 last;
-    index index.html;
-    subs_filter href="/ href="/dashboard/;
-    subs_filter src="/ src="/dashboard/;
+    ### DEV
+    #proxy_pass http://simpify_upstream;
+    #proxy_http_version 1.1;
+    #proxy_set_header Upgrade $http_upgrade;
+    #proxy_set_header Connection 'upgrade';
+    #proxy_set_header Host $host;
+    #proxy_cache_bypass $http_upgrade;
+
+    ### PROD
+    # index index.html;
+
+    ### OLD_WAY
+    ####subs_filter href="/ href="/dashboard/;
+    ####subs_filter src="/ src="/dashboard/;
 }
 
 location /media/customer/ {

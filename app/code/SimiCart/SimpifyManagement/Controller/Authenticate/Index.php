@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface;
 use SimiCart\SimpifyManagement\Model\AuthenticateShop;
+use SimiCart\SimpifyManagement\Model\ConfigProvider;
 
 class Index implements ActionInterface
 {
@@ -20,6 +21,7 @@ class Index implements ActionInterface
     protected ShopRepositoryInterface $shopRepository;
     protected AuthenticateShop $authenticateShop;
     protected \Psr\Log\LoggerInterface $logger;
+    protected ConfigProvider $configProvider;
 
     /**
      * Authenticate shop constructor
@@ -30,6 +32,7 @@ class Index implements ActionInterface
      * @param RedirectFactory $redirectFactory
      * @param ShopRepositoryInterface $shopRepository
      * @param AuthenticateShop $authenticateShop
+     * @param ConfigProvider $configProvider
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -37,7 +40,8 @@ class Index implements ActionInterface
         FJson $jsonFactory,
         RedirectFactory $redirectFactory,
         ShopRepositoryInterface $shopRepository,
-        AuthenticateShop $authenticateShop
+        AuthenticateShop $authenticateShop,
+        ConfigProvider $configProvider
     ) {
         $this->request = $request;
         $this->jsonFactory = $jsonFactory;
@@ -45,6 +49,7 @@ class Index implements ActionInterface
         $this->shopRepository = $shopRepository;
         $this->authenticateShop = $authenticateShop;
         $this->logger = $logger;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -64,12 +69,21 @@ class Index implements ActionInterface
         }
 
         // Authentication done => redirect to main app
-        return $this->redirectFactory
-            ->create()
-            ->setPath(
-                'simpify/initapp',
-                ['shop' => $shop->getShopDomain(), 'host' => $this->getRequest()->getParam('host')]
-            );
+        $params = $this->getRequest()->getParams();
+        if (isset($params['secure'])) {
+            unset($params['secure']);
+        }
+        $redirectQuery = http_build_query($params);
+        $frontendUrl = $this->configProvider->getFrontendUrl();
+        $redirectUrl = "$frontendUrl/?$redirectQuery&force_to_shopify=1";
+
+        return $this->redirectFactory->create()->setUrl($redirectUrl);
+//        return $this->redirectFactory
+//            ->create()
+//            ->setPath(
+//                'simpify/initapp',
+//                ['shop' => $shop->getShopDomain(), 'host' => $this->getRequest()->getParam('host')]
+//            );
     }
 
     /**

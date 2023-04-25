@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface as IRequest;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -18,6 +19,7 @@ class Uninstall implements HttpPostActionInterface, CsrfAwareActionInterface
     private Json $jsonSerializer;
     private DriverInterface $driver;
     private ShopRepositoryInterface $shopRepository;
+    private ManagerInterface $eventManager;
 
     /**
      * Unintall action constructor
@@ -26,17 +28,20 @@ class Uninstall implements HttpPostActionInterface, CsrfAwareActionInterface
      * @param Json $jsonSerializer
      * @param DriverInterface $driver
      * @param ShopRepositoryInterface $shopRepository
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         IRequest $request,
         Json $jsonSerializer,
         DriverInterface $driver,
-        ShopRepositoryInterface $shopRepository
+        ShopRepositoryInterface $shopRepository,
+        ManagerInterface $eventManager
     ) {
         $this->request = $request;
         $this->jsonSerializer = $jsonSerializer;
         $this->driver = $driver;
         $this->shopRepository = $shopRepository;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -55,6 +60,7 @@ class Uninstall implements HttpPostActionInterface, CsrfAwareActionInterface
             $shop->uninstallShop();
             try {
                 $this->shopRepository->save($shop);
+                $this->eventManager->dispatch('shop_uninstalled_success', ['shop' => $shop]);
             } catch (\Exception $e) {
                 // TODO: nothing, logged in repository
             }
