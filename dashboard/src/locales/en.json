@@ -62,7 +62,15 @@
         "addApp": "Add New App",
         "last_update": "Last updated:",
         "ios_update": "IOS Published Date:",
-        "android_update": "Android Published Date:"
+        "android_update": "Android Published Date:",
+        "create": {
+          "title": "Title",
+          "button": "Create"
+        },
+        "choose_theme": {
+          "title": "Choose a theme for your app",
+          "button": "Apply Theme"
+        }
       }
     },
     "Navigations": {
