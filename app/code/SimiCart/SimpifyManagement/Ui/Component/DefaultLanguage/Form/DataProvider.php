@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace SimiCart\SimpifyManagement\Ui\Component\Feature\Form;
+namespace SimiCart\SimpifyManagement\Ui\Component\DefaultLanguage\Form;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
-use SimiCart\SimpifyManagement\Api\Data\FeatureInterface as IFeature;
-use SimiCart\SimpifyManagement\Model\ResourceModel\Feature\CollectionFactory;
+use SimiCart\SimpifyManagement\Api\Data\DefaultLanguageInterface as IDefaultLanguage;
+use SimiCart\SimpifyManagement\Model\ResourceModel\DefaultLanguage\CollectionFactory;
 
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -18,7 +18,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Data Provider constructor
      *
-     * @param CollectionFactory $featureCollectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param DataPersistorInterface $dataPersistor
      * @param $name
      * @param $primaryFieldName
@@ -27,7 +27,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      */
     public function __construct(
-        CollectionFactory $featureCollectionFactory,
+        CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
         $name,
         $primaryFieldName,
@@ -35,7 +35,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
-        $this->collection = $featureCollectionFactory->create();
+        $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
@@ -53,15 +53,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
 
         /**
-         * @var IFeature $feature
+         * @var IDefaultLanguage $textItem
          */
-        foreach ($items as $feature) {
-            $this->loadedData[$feature->getId()]['feature'] = $feature->getData();
+        foreach ($items as $textItem) {
+            $this->loadedData[$textItem->getId()] = $textItem->getData();
         }
-        $data = $this->dataPersistor->get('feature_');
+        $data = $this->dataPersistor->get('apptext_');
         if (!empty($data)) {
-            $this->loadedData[$feature->getId()] = $data;
-            $this->dataPersistor->clear('feature_');
+            $this->loadedData[$textItem->getId()] = $data;
+            $this->dataPersistor->clear('apptext_');
         }
         dump($this->loadedData);
         return $this->loadedData;

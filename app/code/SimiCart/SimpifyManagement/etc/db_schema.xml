@@ -137,4 +137,12 @@
                     table="simicart_feature_field_options" column="field_id" referenceTable="simicart_feature_fields"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
+
+    <table name="simicart_simpify_default_app_language" resource="default" engine="innodb" comment="App Language Text">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="text" nullable="false" length="255" comment="Text default" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
 </schema>

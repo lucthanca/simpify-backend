@@ -46,6 +46,7 @@
                 <item name="simpify_management_shops_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop\Grid\Collection</item>
                 <item name="simpify_management_features_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Feature\Grid\Collection</item>
                 <item name="simpify_management_feature_fields_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\FeatureField\Grid\Collection</item>
+                <item name="simpify_management_apptext_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\AppText\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -67,6 +68,13 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">simicart_feature_fields</argument>
             <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\FeatureField</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SimiCart\SimpifyManagement\Model\ResourceModel\AppText\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">simicart_simpify_default_app_language</argument>
+            <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\DefaultLanguage</argument>
         </arguments>
     </virtualType>
 

@@ -105,5 +105,14 @@
             "SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID_VALUE": true,
             "SIMICART_FEATURE_FIELD_OPTIONS_FIELD_ID": true
         }
+    },
+    "simicart_simpify_default_app_language": {
+        "column": {
+            "entity_id": true,
+            "text": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
 }
