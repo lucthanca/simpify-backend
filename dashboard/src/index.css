@@ -20,7 +20,25 @@
 * {
   scroll-behavior: smooth;
 }
+.scroll {
+  scrollbar-color: var(--p-action-primary) var(--p-border-disabled);
+  scrollbar-width: 5px;
+}
+.scroll::-webkit-scrollbar {
+  height: 5px;
+}
 
+.scroll::-webkit-scrollbar-track {
+  background: var(--p-border-disabled); 
+  border-radius: 5px;
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: var(--p-action-primary); 
+  border-radius: 5px;
+}
+.scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--p-action-primary); 
+}
 .text-gradient {
   background: radial-gradient(
     64.18% 64.18% at 71.16% 35.69%,

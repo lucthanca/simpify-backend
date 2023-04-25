@@ -17,7 +17,18 @@ export const ChartSale = () => {
       responsive: true,
       maintainAspectRatio: false
   };
-  const labels = ['January', 'February', 'March', 'April', 'May','January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  const labels = [i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Jan'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Feb'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Mar'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Apr'),
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.May'),
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Jun'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Jul'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Aug'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Sep'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Oct'), 
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Nov'),
+    i18n.translate('SimiCart.Page.Dashboard.Chart.Month.Dec')];
   const dataChart = [203,156,99,251,247,251,247];
     
   const data = {
@@ -32,13 +43,13 @@ export const ChartSale = () => {
   };
   return (
     <Box paddingBlockStart='6' paddingBlockEnd='6'>
-      <Box background="bg" padding="8" shadow='md' borderRadius='2'>
+      <Box background="bg" padding={{xs: '6', sm: '6', md: '6', lg: '8', xl: '8'}} shadow='md' borderRadius='2'>
         <Box paddingBlockEnd='6'>
           <Text variant="headingLg" as="h2" fontWeight='semibold'>
             {i18n.translate('SimiCart.Page.Dashboard.Chart.Title')}
           </Text>
         </Box>
-        <div className='h-[375px]'>
+        <div className='h-[200px] lg:h-[375px]'>
           <Line options={options} data={data} />
         </div>
       </Box>

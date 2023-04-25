@@ -1,9 +1,11 @@
 import React from 'react';
 import '@shopify/polaris/build/esm/styles.css';
-import { Text, Box, Grid, ProgressBar, Page, Thumbnail, Icon, HorizontalStack, Button} from '@shopify/polaris';
+import { Text, Box, ProgressBar, Page, Thumbnail, Icon, HorizontalStack, Button} from '@shopify/polaris';
 import {TickMinor, ChevronRightMinor} from '@shopify/polaris-icons';
 import { useI18n } from '@shopify/react-i18n';
 import { ChartSale } from './chartSale';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 
 const MainPage = props => {
   const [i18n] = useI18n();
@@ -15,9 +17,9 @@ const MainPage = props => {
     {label: i18n.translate('SimiCart.Page.Dashboard.Welcome.steps_5'), step: '5', active: false},
   ];
   const stepGuide = (
-    <div className='grid grid-cols-2 md:grid-cols-5 mt-6 gap-[6px]'>
+    <div className='flex mt-6 sm:grid sm:grid-cols-5 gap-[6px] pt-3 pb-9 sm:pb-4 sm:pt-0 overflow-x-scroll sm:overflow-hidden scroll'>
       {steps.map((item) =>
-        <div key={item.label} className='bg-[var(--p-background-selected)] rounded-lg relative p-7 pb-10'>
+        <div key={item.label} className='bg-[var(--p-background-selected)] rounded-lg relative p-7 pb-10 min-w-[130px] sm:min-w-[auto]'>
           <div className='flex justify-center pb-2'>
             {item.active &&
               <div className='w-9 h-9 rounded-full bg-[var(--p-action-primary)] flex items-center justify-center fill-[var(--p-icon-on-primary)]'>
@@ -46,9 +48,9 @@ const MainPage = props => {
   );
   const wellcome = (
     <div className='mt-4 mb-6'>
-      <Box background="bg" padding="8" paddingBlockEnd='12' shadow='md' borderRadius='2'>
-        <Grid gap={{xs: '25px', sm: '35px', md: '35px', lg: '75px', xl: '75px'}}>
-          <Grid.Cell columnSpan={{xs: 7, sm: 7, md: 7, lg: 7, xl: 7}}>
+      <Box background="bg" padding={{xs: '6', sm: '6', md: '6', lg: '8', xl: '8'}} paddingBlockEnd={{xs: '6', sm: '6', md: '6', lg: '12', xl: '12'}} shadow='md' borderRadius='2'>
+        <div className='grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-14 xl:gap-[75px]'>
+          <div className='md:col-span-7'>
             <Text variant="headingLg" as="h2" fontWeight='semibold'>
               {i18n.translate('SimiCart.Page.Dashboard.Welcome.title')}
             </Text>
@@ -57,45 +59,47 @@ const MainPage = props => {
                 {i18n.translate('SimiCart.Page.Dashboard.Welcome.subtitle')}
               </Text>
             </Box>
-            <Grid gap={{xs: '5px', sm: '5px', md: '5px', lg: '5px', xl: '5px'}}>
-              <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
-                <Box padding='10' paddingBlockEnd='12' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
-                  <Text variant="headingSm" as="p">
-                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_plan')}
-                  </Text>
+            <div className='gap-[5px] grid grid-cols-2 md:grid-cols-3'>
+              <div className='p-6 lg:p-10 lg:pb-5 border border-dashed rounded-lg boder-[var(--p-border-disabled)]'>
+                <Text variant="headingSm" as="p" fontWeight='regular'>
+                  {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_plan')}
+                </Text>
+                <Box paddingBlockStart='2'>
                   <Text variant="heading2xl" as="h3" color="success" fontWeight='bold'>
                     {i18n.translate('SimiCart.Page.Dashboard.Welcome.price')}
                   </Text>
                 </Box>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
-                <Box padding='10' paddingBlockEnd='12' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
-                  <Text variant="headingSm" as="p">
-                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_edit')}
-                  </Text>
+              </div>
+              <div className='p-6 lg:p-10 lg:pb-5 border border-dashed rounded-lg boder-[var(--p-border-disabled)]'>
+                <Text variant="headingSm" as="p" fontWeight='regular'>
+                  {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_edit')}
+                </Text>
+                <Box paddingBlockStart='2'>
                   <Text variant="heading2xl" as="h3" color="success" fontWeight='bold'>
                     Name
                   </Text>
                 </Box>
-              </Grid.Cell>
-              <Grid.Cell columnSpan={{xs: 6, lg: 4}}>
-                <Box padding='10' paddingBlockEnd='12' borderWidth="1" borderStyle='dashed' borderRadius='2' borderColor='border-disabled'>
-                  <Text variant="headingSm" as="p">
-                    {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_progress')}
-                  </Text>
-                  <Text variant="heading2xl" as="h3" color="success" fontWeight='bold'>
-                    70%
-                  </Text>
-                  <div className='w-[190px] absolute mt-4'>
-                    <ProgressBar progress={40} color="primary" size="small" />
+              </div>
+              <div className='p-6 lg:p-10 lg:pb-5 border border-dashed rounded-lg boder-[var(--p-border-disabled)] col-span-2 md:col-span-1'>
+                <Text variant="headingSm" as="p" fontWeight='regular'>
+                  {i18n.translate('SimiCart.Page.Dashboard.Welcome.current_progress')}
+                </Text>
+                <div className='sm:block flex justify-between'>
+                  <Box paddingBlockStart='2'>
+                    <Text variant="heading2xl" as="h3" color="success" fontWeight='bold'>
+                      70%
+                    </Text>
+                  </Box>
+                  <div className='w-full pl-10 sm:pl-0 pt-5 sm:pt-0 sm:mt-4 sm:ml-0 mt-0 ml-2'>
+                    <ProgressBar progress={70} color="primary" size="small" />
                   </div>
-                </Box>
-              </Grid.Cell>
-            </Grid>
+                </div>
+              </div>
+            </div>
             {stepGuide}
-          </Grid.Cell>
-          <Grid.Cell columnSpan={{xs: 5, sm: 5, md: 5, lg: 5, xl: 5}}>
-            <div className='relative h-full w-full'>
+          </div>
+          <div className='md:col-span-5 flex flex-col justify-center'>
+            <div className='relative h-0 pb-[60%] md:pb-0 md:h-full'>
               <iframe
                 className=' absolute top-0 left-0 w-full h-full'
                 width='560'
@@ -105,8 +109,8 @@ const MainPage = props => {
                 allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
                 allowFullScreen></iframe>
             </div>
-          </Grid.Cell>
-        </Grid>
+          </div>
+        </div>
       </Box>
     </div>
   );
@@ -116,7 +120,7 @@ const MainPage = props => {
     {label: i18n.translate('SimiCart.Page.Dashboard.Live_app.uninstalled'), value: '10'},
   ];
   const liveApp = (
-    <Box background="bg" padding="8" shadow='md' borderRadius='2'>
+    <Box background="bg" padding={{xs: '6', sm: '6', md: '6', lg: '8', xl: '8'}} shadow='md' borderRadius='2'>
       <Box paddingBlockEnd='6'>
         <HorizontalStack>
           <Text variant="headingLg" as="h2" fontWeight='semibold'>
@@ -129,22 +133,20 @@ const MainPage = props => {
           </div>
         </HorizontalStack>
       </Box>
-      <Grid gap={{xs: '5px', sm: '5px', md: '6px', lg: '6px', xl: '6px'}}>
+      <div className='grid gap-[6px] gri sm:grid-cols-3'>
         {options.map((item) =>
-          <Grid.Cell key={item.label} columnSpan={{xs: 4, lg: 4}}>
-            <Box shadow='md' borderRadius='2' background='bg-primary'>
-              <div className='py-[60px] px-5'>
-                <Text variant="headingLg" as="h3" alignment="center" color="text-inverse" fontWeight='semibold'>
-                  {item.label}
-                </Text>
-                <Text variant="heading4xl" as="h3" alignment="center" color="text-inverse" fontWeight='bold'>
-                  {item.value}
-                </Text>
-              </div>
-            </Box>
-          </Grid.Cell>
+          <Box key={item.label} shadow='md' borderRadius='2' background='bg-primary'>
+            <div className='sm:py-[60px] py-6 px-5'>
+              <Text variant="headingLg" as="h3" alignment="center" color="text-inverse" fontWeight='semibold'>
+                {item.label}
+              </Text>
+              <Text variant="heading4xl" as="h3" alignment="center" color="text-inverse" fontWeight='bold'>
+                {item.value}
+              </Text>
+            </div>
+          </Box>
         )}
-      </Grid>
+      </div>
     </Box>
   );
 
@@ -159,34 +161,32 @@ const MainPage = props => {
     {id: '8', label: 'SEO:Image Optimizer Page', description: 'Track your orders across 1700+ global carriers, Embed branded tracking page, Auto email, Buyer Protection.', src:'https://burst.shopifycdn.com/photos/black-leather-choker-necklace_373x@2x.jpg'},
   ];
   const appPartners = (
-    <Box background="bg" padding="8" shadow='md' borderRadius='2'>
+    <Box background="bg" padding={{xs: '6', sm: '6', md: '6', lg: '8', xl: '8'}} shadow='md' borderRadius='2'>
       <Box paddingBlockEnd='6'>
         <Text variant="headingXl" as="h1">
           {i18n.translate('SimiCart.Page.Dashboard.List_apps.Title')}
         </Text>
       </Box>
-      <Grid gap={{xs: '5px', sm: '5px', md: '6px', lg: '6px', xl: '6px'}}>
+      <div className='grid gap-[6px] sm:grid-cols-4 grid-cols-1'>
         {listApp.map((item) =>
-          <Grid.Cell key={item.id} columnSpan={{xs: 6, lg: 3}}>
-            <Box padding="6" borderRadius='2' borderWidth="1" borderStyle='dashed' borderColor='border-disabled'>
-              <Thumbnail
-                source={item.src}
-              />
-              <Box paddingBlockStart='4' paddingBlockEnd='3'>
-                <Text variant="headingSm" as="p" fontWeight='semibold'>
-                  {item.label}
-                </Text>
-              </Box>
-              <Box paddingBlockEnd='6'>
-                <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'>
-                  {item.description}
-                </Text>
-              </Box>
-              <Button outline>{i18n.translate('SimiCart.Page.Dashboard.List_apps.Button')}</Button>
+          <Box key={item.id} padding="6" borderRadius='2' borderWidth="1" borderStyle='dashed' borderColor='border-disabled'>
+            <Thumbnail
+              source={item.src}
+            />
+            <Box paddingBlockStart='4' paddingBlockEnd='3'>
+              <Text variant="headingSm" as="p" fontWeight='semibold'>
+                {item.label}
+              </Text>
             </Box>
-          </Grid.Cell>
+            <Box paddingBlockEnd='6'>
+              <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'>
+                {item.description}
+              </Text>
+            </Box>
+            <Button outline>{i18n.translate('SimiCart.Page.Dashboard.List_apps.Button')}</Button>
+          </Box>
         )}
-      </Grid>
+      </div>
     </Box>
   );
   return (
