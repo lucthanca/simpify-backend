@@ -40,7 +40,8 @@ type AuthShopOutput {
     type: String,
     redirect_url: String,
     message: String,
-    access_token: String
+    access_token: String,
+    app_api_key: String
 }
 
 input AuthShopParam {

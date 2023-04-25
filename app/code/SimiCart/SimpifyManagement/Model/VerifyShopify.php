@@ -312,18 +312,46 @@ class VerifyShopify
             // Grab the HMAC, remove it from the params, then sort the params for hashing
             $hmac = $params['hmac'];
             unset($params['hmac']);
+
             if (isset($params['secure'])) {
                 unset($params['secure']);
             }
-            // if (isset($params['force_to_shopify'])) {
-            //     unset($params['force_to_shopify']);
-            // }
+
+            // Some case it required force_to_shopify in hmac signature
+            // case: when redirect from authenticate controller to frontend => 
+            // + first request outside of shopify admin => it not required in hmac signature
+            // + after shopifyAppBridge ingetration and redirect to shopify admin
+            // it (force_to_shopify) is required in hmac signature
+            // First we will try to verify hmac include force_to_shopify param
+            // if it failed then verify without force_to_shopify param
             ksort($params);
-            // vadu_html($params, $hmac, hash_hmac(
-            //     'sha256',
-            //     urldecode(http_build_query($params)),
-            //     $apiSecret
-            // ));
+
+            // vadu_html([
+            //     'params'=>$params,
+            //     'request_hmac'=> $hmac,
+            //     'built_query' => urldecode(http_build_query($params)),
+            //     'computed_hmac' => hash_hmac(
+            //         'sha256',
+            //         urldecode(http_build_query($params)),
+            //         $apiSecret
+            //     ),
+            //     'api_secret' => $apiSecret,
+            //     'store' => $store
+            // ]);
+
+            $computedHmac = hash_hmac(
+                'sha256',
+                urldecode(http_build_query($params)),
+                $apiSecret
+            );
+            
+            if ($hmac === $computedHmac) {
+                return true;
+            }
+
+            if (isset($params['force_to_shopify'])) {
+                unset($params['force_to_shopify']);
+            }
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
                 'sha256',

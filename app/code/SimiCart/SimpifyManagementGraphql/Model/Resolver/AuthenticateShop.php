@@ -10,6 +10,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Url;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use SimiCart\SimpifyManagement\Model\ConfigProvider;
 use SimiCart\SimpifyManagement\Model\VerifyShopify;
 
 class AuthenticateShop implements \Magento\Framework\GraphQl\Query\ResolverInterface
@@ -19,6 +20,7 @@ class AuthenticateShop implements \Magento\Framework\GraphQl\Query\ResolverInter
     private \Psr\Log\LoggerInterface $logger;
     private Url $urlBuilder;
     private StoreManagerInterface $storeManager;
+    private ConfigProvider $configProvider;
 
     /**
      * @param RequestInterfaceFactory $requestFactory
@@ -32,14 +34,15 @@ class AuthenticateShop implements \Magento\Framework\GraphQl\Query\ResolverInter
         VerifyShopify $verifyShopify,
         \Psr\Log\LoggerInterface $logger,
         Url $urlBuilder,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ConfigProvider $configProvider
     ) {
-
         $this->requestFactory = $requestFactory;
         $this->verifyShopify = $verifyShopify;
         $this->logger = $logger;
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -72,11 +75,13 @@ class AuthenticateShop implements \Magento\Framework\GraphQl\Query\ResolverInter
                 case 'logged_in':
                     $result['type'] = 'authenticated';
                     $result['access_token'] = $data['x-simi-access'];
+                    $result['app_api_key'] = $this->configProvider->getApiKey($urlQuery['store_code']??null);
                     break;
                 default:
                     throw new GraphQlAuthorizationException($unauthorizedErrorMessage);
             }
         } catch(GraphQlAuthorizationException $e) {
+            dd($e);
             throw $e;
         } catch (\Exception $e) {
             $this->logger->critical('Verify Shop FAILED: ' . $e);

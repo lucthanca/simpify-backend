@@ -4,8 +4,6 @@ import { Text, Box, ProgressBar, Page, Thumbnail, Icon, HorizontalStack, Button}
 import {TickMinor, ChevronRightMinor} from '@shopify/polaris-icons';
 import { useI18n } from '@shopify/react-i18n';
 import { ChartSale } from './chartSale';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css';
 
 const MainPage = props => {
   const [i18n] = useI18n();
