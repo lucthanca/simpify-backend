@@ -49,7 +49,8 @@ class Index implements HttpGetActionInterface
         IShopRepository $shopRepository,
         ILogger $logger,
         VerifyShopify $verifyShopify,
-        RedirectFactory $redirectFactory
+        RedirectFactory $redirectFactory,
+        \SimiCart\SimpifyManagement\Model\View\SimpifyPageFactory $simiPageFactory
     ) {
         $this->request = $request;
         $this->url = $url;
@@ -59,6 +60,7 @@ class Index implements HttpGetActionInterface
         $this->logger = $logger;
         $this->verifyShopify = $verifyShopify;
         $this->redirectFactory = $redirectFactory;
+        $this->simiPageFactory = $simiPageFactory;
     }
 
     /**
@@ -72,9 +74,9 @@ class Index implements HttpGetActionInterface
             [$statusCode, $data] = $this->verifyShopify->execute($this->getRequest());
         } catch (\Exception $e) {
             $this->logger->critical('Verify Shop FAILED: ' . $e);
-            return $this->getPageFactory()->create(false, [
-                'template' => 'SimiCart_SimpifyManagement::initApp/404.phtml',
-            ]);
+            $page = $this->simiPageFactory->create();
+            $page->getLayout()->getUpdate()->addHandle('handler_simpify_404');
+            return $page;
         }
 
         switch ($statusCode) {

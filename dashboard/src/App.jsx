@@ -2,8 +2,7 @@ import React from 'react';
 import Routes from '@simpify/components/Routes';
 import { AppBridgeProvider } from '@simpify/components/Providers';
 import ChannelMenu from '@simpify/components/ChannelMenu';
-import { useLocation } from 'react-router-dom';
-import { Banner, Layout, Page, LegacyCard, Select, TextField, Checkbox } from '@shopify/polaris';
+import { Banner, Layout, Page } from '@shopify/polaris';
 import AppContextProvider, { useAppContext } from '@simpify/context/app';
 import { PolarisProvider } from '@simpify/components/Providers';
 import { I18nManager, I18nContext, useI18n } from '@shopify/react-i18n';
@@ -11,30 +10,34 @@ import FullPageLoading from '@simpify/components/FullPageLoading';
 import { AnimatePresence } from 'framer-motion';
 
 import GetStartedForm from '@simpify/components/GetStartedPopup';
+import AuthContextProvider from '@simpify/context/auth';
 
+// eslint-disable-next-line no-unused-vars
 const App = props => {
   const i18nManager = new I18nManager({
     locale: 'en',
-    onError() {
-      // console.log(error);
-    },
+    onError() {},
   });
 
   return (
     <I18nContext.Provider value={i18nManager}>
-      <AppContextProvider>
-        <PolarisProvider>
-          <ChosenProvider />
-        </PolarisProvider>
-      </AppContextProvider>
+      <AuthContextProvider>
+        <AppContextProvider>
+          <PolarisProvider>
+            <ChosenProvider />
+          </PolarisProvider>
+        </AppContextProvider>
+      </AuthContextProvider>
     </I18nContext.Provider>
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 const VerifyRequest = props => {
-  const [{ xSimiAccessKey, shopInfo, isLoginFromShopify, appError, isLoadingWithoutData }] = useAppContext();
+  const [{ xSimiAccessKey, shopInfo, isLoginFromShopify, appError, isLoadingWithoutData, isAuthenticating }] = useAppContext();
+
   const errorComponent = React.useMemo(() => {
-    if (!xSimiAccessKey && !isLoginFromShopify) {
+    if (!xSimiAccessKey) {
       return <Unauthorized title={'Unauthorized!!!'} message={<>Hey, you! Stop right there. Authorization required.</>} />;
     }
 
@@ -55,18 +58,21 @@ const VerifyRequest = props => {
     );
   }, [shopInfo]);
 
+  // console.log('RE_RENDER_APP', {isShopFilledAllRequiredFields , errorComponent, isLoadingWithoutData , isAuthenticating, appError });
+
   return (
     <>
-      <AnimatePresence mode={'wait'}>{isLoadingWithoutData && xSimiAccessKey && !shopInfo && <FullPageLoading />}</AnimatePresence>
+      <AnimatePresence mode={'wait'}>{(isLoadingWithoutData || isAuthenticating) && <FullPageLoading />}</AnimatePresence>
       {errorComponent}
       <AnimatePresence mode={'wait'}>
-        {!isShopFilledAllRequiredFields && !errorComponent && !isLoadingWithoutData && <GetStartedForm />}
+        {!isShopFilledAllRequiredFields && !errorComponent && !isLoadingWithoutData && !isAuthenticating && <GetStartedForm />}
       </AnimatePresence>
-      {!errorComponent && shopInfo && !isLoadingWithoutData && isShopFilledAllRequiredFields && <Routes pages={pages} />}
+      {!errorComponent && !isLoadingWithoutData && !isAuthenticating && isShopFilledAllRequiredFields && <Routes pages={pages} />}
     </>
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 const ChosenProvider = props => {
   const [i18n] = useI18n();
   const [{ isLoginFromShopify }] = useAppContext();
@@ -106,11 +112,13 @@ const ChosenProvider = props => {
 };
 
 const Unauthorized = props => {
+  // eslint-disable-next-line react/prop-types
   const { title, message } = props;
   return (
     <Page narrowWidth>
       <Layout>
         <Layout.Section>
+          {/* eslint-disable-next-line react/no-children-prop */}
           <Banner title={title} children={message} status='critical' />
         </Layout.Section>
       </Layout>

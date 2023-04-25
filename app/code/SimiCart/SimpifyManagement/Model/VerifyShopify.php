@@ -97,6 +97,7 @@ class VerifyShopify
                     'shop' => $shop->getShopDomain(),
                     'host' => $request->getParam('host'),
                     'hmac' => $this->base64UrlEncode($hmac),
+                    'x-simi-access' => $shop->getSimiAccessToken(),
                 ]
             ];
         }
@@ -277,6 +278,15 @@ class VerifyShopify
         }
         // We have HMAC, validate it
         $data = $this->getRequestData($request, $hmac['source']);
+        if (isset($data['query'])) {
+            unset($data['query']);
+        }
+        if (isset($data['operationName'])) {
+            unset($data['operationName']);
+        }
+        if (isset($data['variables'])) {
+            unset($data['variables']);
+        }
         return $this->verifyRequest($data);
     }
 
@@ -305,7 +315,15 @@ class VerifyShopify
             if (isset($params['secure'])) {
                 unset($params['secure']);
             }
+            // if (isset($params['force_to_shopify'])) {
+            //     unset($params['force_to_shopify']);
+            // }
             ksort($params);
+            // vadu_html($params, $hmac, hash_hmac(
+            //     'sha256',
+            //     urldecode(http_build_query($params)),
+            //     $apiSecret
+            // ));
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
                 'sha256',
