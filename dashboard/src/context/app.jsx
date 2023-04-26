@@ -46,7 +46,7 @@ const AppContextProvider = props => {
   const isLoginFromShopify = useMemo(() => {
     return (!!host && !!session) || forceRedirect;
   }, [host, session, forceRedirect]);
-  console.log({ xSimiAccessKey });
+  // console.log({ xSimiAccessKey });
 
   const { data, loading, error } = useQuery(GET_SHOP_DETAILS, {
     fetchPolicy: 'cache-and-network',

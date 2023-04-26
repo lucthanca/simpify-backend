@@ -30,7 +30,7 @@ const ListApp = () => {
   ]
   return (
     <Box>
-      <div className='grid grid-cols-1 gap-3 sm:grid-cols-4 sm:gap-6'>
+      <div className='grid grid-cols-1 gap-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-6 p-5 sm:p-0 bg-white sm:bg-transparent mt-2'>
         {data.map((item) =>
           <div key={item.id} className='rounded-lg bg-white shadow-[rgba(0,0,0,0.1)_0px_0px_5px_0px,rgba(0,0,0,0.1)_0px_0px_1px_0px]'>
             <Box padding="6">
@@ -56,8 +56,8 @@ const ListApp = () => {
                     />
                   </div>
                 </div>
-                <div className='absolute top-2.5 -right-6 w-[100px] rotate-45 py-1 bg-[#f69435] z-50'>
-                  <p className='text-center text-[10px] tracking-widest font-semibold text-white uppercase'>Live</p>
+                <div className='absolute top-2 -right-8 w-[100px] rotate-45 py-1 bg-[#f69435] z-50'>
+                  <p className='text-center text-[10px] leading-tight tracking-widest font-semibold text-white uppercase'>Live</p>
                 </div>
               </div>
               
@@ -81,12 +81,12 @@ const ListApp = () => {
           </div>
         )}
         <div className='rounded-lg relative bg-white shadow-[rgba(0,0,0,0.1)_0px_0px_5px_0px,rgba(0,0,0,0.1)_0px_0px_1px_0px]'>
-          <div className='h-0 pb-[70%]'>
+          <div className='h-0 pb-[35%] sm:pb-[65%]'>
             <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
               <CreateApp/>
               <ApplyTheme/>
               <div>
-                <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'> 
+                <Text variant="headingXs" as="p"> 
                   {i18n.translate('SimiCart.Page.ManageApp.addApp')}
                 </Text>
               </div>

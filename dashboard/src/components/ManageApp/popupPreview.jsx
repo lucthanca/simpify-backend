@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import React, { useCallback } from 'react';
 import { Text, Box, Modal, Button, Icon } from '@shopify/polaris';
-import { ViewMinor, AddMajor} from '@shopify/polaris-icons';
+import { ViewMinor, CancelMajor} from '@shopify/polaris-icons';
 import { useI18n } from '@shopify/react-i18n';
 
 const PreviewTheme = props => {
@@ -24,20 +24,25 @@ const PreviewTheme = props => {
                 color="subdued"
               />
             </div>
-            <Modal
-              small
-              open={active}
-              onClose={toggleActive}
-              titleHidden
-            >
-              <Modal.Section>
-                <Box paddingBlockStart='4'>
-                  <div className='my-5 px-2 sm:px-5 max-h-[70vh] overflow-y-scroll scroll'>
-                    <img src={props.item.preview_img}/>
+            {active &&
+              <div className='fixed flex justify-center z-[999] items-end sm:items-center top-0 left-0 right-0 bottom-0 bg-black bg-opacity-30'>
+                <div onClick={toggleActive} className='absolute top-0 left-0 w-full h-full z-[1000]'></div>
+                <div className='w-full sm:max-w-[400px] z-[9999] bg-white sm:rounded-lg relative'>
+                  <div onClick={toggleActive} className='absolute right-4 top-4 cursor-pointer'>
+                    <Icon
+                      source={CancelMajor}
+                      color="base"
+                    />
                   </div>
-                </Box>
-              </Modal.Section>
-            </Modal>
+                  <div className='py-8 px-5'>
+                    <div className='my-5 px-2 sm:px-5 max-h-[75vh] min-h-[50vh] overflow-y-scroll scroll'>
+                      <img src={props.item.preview_img}/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            }
           </div>
         </Box>
       </div>

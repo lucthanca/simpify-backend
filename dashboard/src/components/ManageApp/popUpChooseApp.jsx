@@ -30,13 +30,13 @@ const ApplyTheme = () => {
               <Text variant="headingLg" as="h2" fontWeight='semibold' alignment="center"> 
                 {i18n.translate('SimiCart.Page.ManageApp.choose_theme.title')}
               </Text>
-              <div className='grid grid-cols-2 sm:grid-cols-3 p-1 gap-2 mt-5 max-h-[350px] overflow-y-scroll scroll'>
+              <div className='grid grid-cols-1 sm:grid-cols-3 p-1 gap-2 mt-5 max-h-[65vh] sm:max-h-[40vh] overflow-y-scroll scroll'>
                 {data.map((item) =>
                   <PreviewTheme key={item.id} item={item}/>
                 )}
                 <div className='rounded-lg relative bg-white shadow-[rgba(0,0,0,0.1)_0px_0px_5px_0px,rgba(0,0,0,0.1)_0px_0px_1px_0px]'>
                   <Box padding="6">
-                    <div className='w-full h-0 pb-[60%] rounded overflow-hidden'>
+                    <div className='w-full h-0 pb-[35%] sm:pb-[60%] rounded overflow-hidden'>
                       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
                         <div className='mb-5 scale-150 cursor-pointer'>
                           <Icon
@@ -44,7 +44,7 @@ const ApplyTheme = () => {
                             color="subdued"
                           />
                         </div>
-                        <Text variant="headingXs" as="p" color="subdued" fontWeight='regular'> 
+                        <Text variant="headingXs" as="p" fontWeight='regular'> 
                           {i18n.translate('SimiCart.Page.ManageApp.choose_theme.add_theme')}
                         </Text>
                       </div>
