@@ -63,7 +63,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->loadedData[$feature->getId()] = $data;
             $this->dataPersistor->clear('feature_');
         }
-        dump($this->loadedData);
         return $this->loadedData;
     }
 }
