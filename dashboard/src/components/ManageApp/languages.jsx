@@ -5,7 +5,7 @@ const Languages = props => {
 
   return (
     <div>
-      chieutx
+      language
     </div>
   );
 }

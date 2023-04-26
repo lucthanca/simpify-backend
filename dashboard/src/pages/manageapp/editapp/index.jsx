@@ -5,6 +5,10 @@ import EditAppContextProvider, { useEditAppContext } from '@simpify/context/edit
 
 const AppDesign = React.lazy(() => import('@simpify/components/ManageApp/appDesign'));
 const Languages = React.lazy(() => import('@simpify/components/ManageApp/languages'));
+const Features = React.lazy(() => import('@simpify/components/ManageApp/features'));
+const Preview = React.lazy(() => import('@simpify/components/ManageApp/preview'));
+const Publish = React.lazy(() => import('@simpify/components/ManageApp/publish'));
+
 
 // import {TickMinor, ChevronRightMinor} from '@shopify/polaris-icons';
 // import { useI18n } from '@shopify/react-i18n';
@@ -23,10 +27,14 @@ const EditApp = () => {
     switch(activeTab) {
       case 'app_design':
         return AppDesign;
-
-        case 'language':
-          return Languages;
-
+      case 'language':
+        return Languages;
+      case 'features':
+          return Features;
+      case 'preview':
+        return Preview;
+      case 'publish':
+        return Publish;
       default :
         return AppDesign 
     }
