@@ -42,6 +42,21 @@
         </index>
     </table>
 
+    <table name="simicart_simpify_themes" resource="default" engine="innodb" comment="Simicart Simpify Themes">
+        <!--        Generate fields: entity_id is primary key, name type varchar length 255 nullable true, image varchar 255 nullable true, previewImages text nullable true-->
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false" default="0" comment="Theme Status"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Theme Name" />
+        <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Theme Image" />
+        <column xsi:type="text" name="preview_images" nullable="true" comment="Theme Preview Images" />
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Theme creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Latest update Time"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
     <table name="simicart_simpify_apps" resource="default" engine="innodb" comment="Simicart Simpify Apps">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="shop_id" unsigned="true" nullable="false" comment="Shop ID"/>
@@ -57,6 +72,7 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
+
         <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APPS_SHOP_ID_SIMICART_SIMPIFY_USERS_ENTITY_ID"
                     table="simicart_simpify_apps" column="shop_id" referenceTable="simicart_simpify_users"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
@@ -65,6 +81,7 @@
     <table name="simicart_simpify_app_layouts" resource="default" engine="innodb" comment="Simicart Simpify App Layout">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="app_id" unsigned="true" nullable="false" comment="Shop ID" />
+        <column xsi:type="int" name="theme_id" unsigned="true" nullable="false" comment="Theme ID" />
         <column xsi:type="varchar" name="font" nullable="true" length="255" comment="Font name" />
         <column xsi:type="text" name="colors" nullable="true" comment="Color data" />
         <column xsi:type="text" name="menu" nullable="true" comment="Menu data" />
@@ -76,6 +93,10 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
+<!--        Define constraint for theme_id -->
+        <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APP_LAYOUT_THEME_ID_SIMICART_SIMPIFY_THEMES_ENTITY_ID"
+                    table="simicart_simpify_app_layouts" column="theme_id" referenceTable="simicart_simpify_themes"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APP_LAYOUT_APP_ID_SIMICART_SIMPIFY_APPS_ENTITY_ID"
                     table="simicart_simpify_app_layouts" column="app_id" referenceTable="simicart_simpify_apps"
                     referenceColumn="entity_id" onDelete="CASCADE"/>

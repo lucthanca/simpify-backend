@@ -54,11 +54,13 @@
             "homepage": true,
             "collection_page": true,
             "product_page": true,
-            "landing_page": true
+            "landing_page": true,
+            "theme_id": true
         },
         "constraint": {
             "PRIMARY": true,
-            "SIMICART_SIMPIFY_APP_LYTS_APP_ID_SIMICART_SIMPIFY_APPS_ENTT_ID": true
+            "SIMICART_SIMPIFY_APP_LYTS_APP_ID_SIMICART_SIMPIFY_APPS_ENTT_ID": true,
+            "FK_5C0340F0B00D7C609F9A3BA40CD060B8": true
         }
     },
     "simicart_features": {
@@ -125,6 +127,20 @@
         "constraint": {
             "SIMICART_SIMPIFY_APP_LANGUAGE_APP_ID_CODE": true,
             "FK_F2203D47F59949405A5C3FA09F106A75": true,
+            "PRIMARY": true
+        }
+    },
+    "simicart_simpify_themes": {
+        "column": {
+            "entity_id": true,
+            "status": true,
+            "name": true,
+            "image": true,
+            "preview_images": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
             "PRIMARY": true
         }
     }

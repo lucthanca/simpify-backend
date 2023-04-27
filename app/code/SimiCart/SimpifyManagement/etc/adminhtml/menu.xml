@@ -10,6 +10,6 @@
         <add id="SimiCart_SimpifyManagement::shops" title="Manage Shops" module="SimiCart_SimpifyManagement" sortOrder="10" action="simpify/shops" resource="SimiCart_SimpifyManagement::shop_management" parent="SimiCart_SimpifyManagement::simicart_simpify_management"/>
         <add id="SimiCart_SimpifyManagement::features" title="Manage Features" module="SimiCart_SimpifyManagement" sortOrder="20" action="simpify/features" resource="SimiCart_SimpifyManagement::feature_view" parent="SimiCart_SimpifyManagement::simicart_simpify_management"/>
         <add id="SimiCart_SimpifyManagement::apptext" title="Manage App Text" module="SimiCart_SimpifyManagement" sortOrder="30" action="simpify/apptext" resource="SimiCart_SimpifyManagement::apptext_view" parent="SimiCart_SimpifyManagement::simicart_simpify_management"/>
-
+        <add id="SimiCart_SimpifyManagement::theme" title="Manage Themes" module="SimiCart_SimpifyManagement" sortOrder="40" action="simpify/theme" resource="SimiCart_SimpifyManagement::theme_view" parent="SimiCart_SimpifyManagement::simicart_simpify_management"/>
     </menu>
 </config>

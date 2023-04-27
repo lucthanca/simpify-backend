@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Api\Data;
 
 interface AppLayoutInterface
 {
+    const THEME_ID = 'theme_id';
     const APP_ID = 'app_id';
     const FONT = 'font';
     const COLORS = 'colors';
@@ -13,6 +14,21 @@ interface AppLayoutInterface
     const COLLECTION_PAGE = 'collection_page';
     const PRODUCT_PAGE = 'product_page';
     const LANDING_PAGE = 'landing_page';
+
+    /**
+     * Get theme id
+     *
+     * @return int
+     */
+    public function getThemeId(): int;
+
+    /**
+     * Set theme id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setThemeId(int $id): self;
 
     /**
      * Get related app id

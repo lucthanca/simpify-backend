@@ -55,6 +55,23 @@ class AppLayout extends AbstractModel implements IAppLayout
         $this->_init(ResourceModel\AppLayout::class);
     }
 
+    // Implement getThemeId and setThemeId
+    /**
+     * @inheritDoc
+     */
+    public function getThemeId(): int
+    {
+        return (int) $this->getData(self::THEME_ID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setThemeId(int $id): IAppLayout
+    {
+        return $this->setData(self::THEME_ID, $id);
+    }
+
     /**
      * @inheritDoc
      */
