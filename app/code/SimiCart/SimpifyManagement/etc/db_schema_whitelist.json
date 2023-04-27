@@ -114,5 +114,18 @@
         "constraint": {
             "PRIMARY": true
         }
+    },
+    "simicart_simpify_app_language": {
+        "column": {
+            "entity_id": true,
+            "app_id": true,
+            "code": true,
+            "text_data": true
+        },
+        "constraint": {
+            "SIMICART_SIMPIFY_APP_LANGUAGE_APP_ID_CODE": true,
+            "FK_F2203D47F59949405A5C3FA09F106A75": true,
+            "PRIMARY": true
+        }
     }
 }

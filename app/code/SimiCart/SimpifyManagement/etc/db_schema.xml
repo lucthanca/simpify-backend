@@ -138,9 +138,28 @@
                     referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
 
-    <table name="simicart_simpify_default_app_language" resource="default" engine="innodb" comment="App Language Text">
+    <table name="simicart_simpify_default_app_language" resource="default" engine="innodb" comment="App Language Text Default">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" name="text" nullable="false" length="255" comment="Text default" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
+    <table name="simicart_simpify_app_language" resource="default" engine="innodb" comment="App Language Text">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="app_id" unsigned="true" nullable="false" comment="App ID"/>
+        <column xsi:type="varchar" name="code" nullable="true" length="6" comment="Language code"/>
+        <column xsi:type="mediumtext" name="text_data" nullable="true" comment="Language Text data" />
+
+        <constraint xsi:type="unique" referenceId="SIMICART_SIMPIFY_APP_LANGUAGE_APP_ID_CODE">
+            <column name="app_id"/>
+            <column name="code"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="SIMICART_SIMPIFY_APP_LANGUAGE_APP_ID_SIMICART_SIMPIFY_APPS_ENTITY_ID"
+                    table="simicart_simpify_app_language" column="app_id" referenceTable="simicart_simpify_apps"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>

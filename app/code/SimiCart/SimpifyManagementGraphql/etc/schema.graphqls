@@ -30,9 +30,16 @@ type Query {
     simpifyShop: SimpifyShop @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\SimpifyShop") @doc(description: "The shimpifyShop query returns information about a shopify shop.")
     lastUpdatedApp: SimpifyApp @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetLastUpdatedApp") @doc(description: "The query returns information about last updated app from a shop.")
     simpifyAuthenticateShop(query: String): AuthShopOutput @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\AuthenticateShop")
+
+    appTexts: [String] @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetAppTexts")
 }
 type Mutation {
     updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\UpdateShopInformation")
+    generateLanguageTextExample(code: String! @doc(description: "Language code"), app_id: Int!): LanguageTextExampleOutput @doc(description: "Generate/Get language examples text data") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GenerateLanguageTextExample")
+}
+
+type LanguageTextExampleOutput {
+    download_link: String @doc(description: "Download link")
 }
 
 type AuthShopOutput {

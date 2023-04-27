@@ -18,4 +18,17 @@ class DefaultLanguage extends AbstractDb
     {
         $this->_init(self::MAIN_TABLE, 'entity_id');
     }
+
+    /**
+     * Insert bulk text data
+     *
+     * @param array $textData
+     * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function insertBulkText(array $textData)
+    {
+        $connection = $this->getConnection();
+        return $connection->insertMultiple($this->getMainTable(), $textData);
+    }
 }
