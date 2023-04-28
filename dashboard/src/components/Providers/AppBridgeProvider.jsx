@@ -29,9 +29,9 @@ export function AppBridgeProvider({ children }) {
   const routerConfig = useMemo(() => ({ history, location }), [history, location]);
 
   const fiApiK = useMemo(() => {
-    if (!apiKey) {
-      return import.meta.env.VITE_SHOPIFY_API_KEY;
-    }
+    // if (!apiKey) {
+    //   return import.meta.env.VITE_SHOPIFY_API_KEY;
+    // }
     return apiKey;
   }, [apiKey]);
 
@@ -40,16 +40,24 @@ export function AppBridgeProvider({ children }) {
   // During the lifecycle of an app, these values should never be updated anyway.
   // Using state in this way is preferable to useMemo.
   // See: https://stackoverflow.com/questions/60482318/version-of-usememo-for-caching-a-value-that-will-never-change
-  const [appBridgeConfig] = useState(() => {
+
+  const [host] = useState(() => {
     const host = new URLSearchParams(location.search).get('host') || window.__SHOPIFY_DEV_HOST;
     window.__SHOPIFY_DEV_HOST = host;
+    return host;
+  });
 
+  const appBridgeConfig = useMemo(() => {
     return {
       host,
       apiKey: fiApiK,
       forceRedirect: true,
     };
-  });
+  }, [fiApiK]);
+
+  if (!fiApiK) {
+    return null;
+  }
 
   if (!fiApiK || !appBridgeConfig.host) {
     const bannerProps = !fiApiK

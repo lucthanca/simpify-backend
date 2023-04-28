@@ -4,10 +4,7 @@ import { connect } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '@simpify/store/example';
 import bindActionCreators from '@simpify/utils/bindActionCreators';
 import { useLocation } from 'react-router-dom';
-import { useAuthContext } from "@simpify/context/auth";
-import BrowserPersistence from '@simpify/utils/simplePersistence';
-
-const storage = new BrowserPersistence();
+import { useAuthContext } from '@simpify/context/auth';
 
 const AppContext = createContext(undefined);
 
@@ -31,22 +28,29 @@ export const GET_SHOP_DETAILS = gql`
 const AppContextProvider = props => {
   // eslint-disable-next-line react/prop-types
   const { actions, appState: reduxAppState, children } = props;
-  const [{ xSimiAccessKey, isLoading: isAuthenticationLoading, authenticationError }] = useAuthContext();
+  const [{ xSimiAccessKey, isLoading: isAuthenticationLoading, authenticationError, apiKey }] = useAuthContext();
   const location = useLocation();
   const search = new URLSearchParams(location.search);
   // console.log(location.search);
-  const apiKey = search.get('app-api-key'); // using url param for flexible change app
-  const requestHost = search.get('host');
-  const shopifySession = search.get('session');
-  const forceRedirectToShopifyFlag = search.get('force_to_shopify');
-  const [host] = useState(requestHost);
-  const [session] = useState(shopifySession);
-  const [forceRedirect] = useState(forceRedirectToShopifyFlag);
+  const [host] = useState(() => {
+    const host = search.get('host') || window.__SHOPIFY_DEV_HOST;
+    window.__SHOPIFY_DEV_HOST = host;
+    return host;
+  });
+  const [session] = useState(() => {
+    const session = search.get('session') || window.__SHOPIFY_DEV_SHOP_SESSION;
+    window.__SHOPIFY_DEV_SHOP_SESSION = session;
+    return session;
+  });
+  const [forceRedirect] = useState(() => {
+    const forceRedirect = search.get('force_to_shopify') || window.__SHOPIFY_DEV_IS_FORCE_REDIRECT_TO_SHOPIFY;
+    window.__SHOPIFY_DEV_IS_FORCE_REDIRECT_TO_SHOPIFY = forceRedirect;
+    return forceRedirect;
+  });
 
-  const isLoginFromShopify = useMemo(() => {
+  const [isLoginFromShopify] = useState(() => {
     return (!!host && !!session) || forceRedirect;
-  }, [host, session, forceRedirect]);
-  // console.log({ xSimiAccessKey });
+    }, [host, session, forceRedirect]);
 
   const { data, loading, error } = useQuery(GET_SHOP_DETAILS, {
     fetchPolicy: 'cache-and-network',
@@ -88,7 +92,7 @@ const AppContextProvider = props => {
       apiKey,
       isLoginFromShopify,
       shopInfo,
-      isAuthenticating: isAuthenticationLoading,
+      isAuthenticationLoading,
       isLoadingWithData,
       isLoadingWithoutData,
       appError,

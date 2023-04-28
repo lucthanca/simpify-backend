@@ -7,10 +7,11 @@ import AppContextProvider, { useAppContext } from '@simpify/context/app';
 import { PolarisProvider } from '@simpify/components/Providers';
 import { I18nManager, I18nContext, useI18n } from '@shopify/react-i18n';
 import FullPageLoading from '@simpify/components/FullPageLoading';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import GetStartedForm from '@simpify/components/GetStartedPopup';
 import AuthContextProvider from '@simpify/context/auth';
+import { useReloadAppWarning } from '@simpify/hooks/useReloadAppWarning';
 
 // eslint-disable-next-line no-unused-vars
 const App = props => {
@@ -24,7 +25,9 @@ const App = props => {
       <AuthContextProvider>
         <AppContextProvider>
           <PolarisProvider>
-            <ChosenProvider />
+            <FullPageLoadingWrapper>
+              <ChosenProvider />
+            </FullPageLoadingWrapper>
           </PolarisProvider>
         </AppContextProvider>
       </AuthContextProvider>
@@ -32,11 +35,47 @@ const App = props => {
   );
 };
 
+function FullPageLoadingWrapper(props) {
+  const { children } = props;
+  const [{ isLoadingWithoutData, isAuthenticationLoading }] = useAppContext();
+
+  const mainContentVariants = {
+    hidden: {
+      x: '0',
+      opacity: 0,
+    },
+    visible: {
+      x: '0',
+      opacity: 1,
+      transition: { delay: 0.5, duration: 0.5, type: 'spring', stiffness: 80, mass: 0.5 },
+    },
+    exit: {
+      x: '-100vw',
+      opacity: 1,
+      transition: { duration: 1.25, type: 'spring', stiffness: 80, mass: 0.5 },
+    },
+  };
+
+  return (
+    <>
+      <AnimatePresence mode={'wait'}>{(isLoadingWithoutData || isAuthenticationLoading) && <FullPageLoading />}</AnimatePresence>
+      <AnimatePresence mode={'wait'}>
+        {(!isLoadingWithoutData && !isAuthenticationLoading) && (
+          <motion.div variants={mainContentVariants} initial='hidden' animate='visible' exit='exit'>
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
 // eslint-disable-next-line no-unused-vars
 const VerifyRequest = props => {
-  const [{ xSimiAccessKey, shopInfo, isLoginFromShopify, appError, isLoadingWithoutData, isAuthenticating }] = useAppContext();
-
+  const [{ xSimiAccessKey, shopInfo, appError, isLoadingWithoutData, isAuthenticationLoading }] = useAppContext();
   const errorComponent = React.useMemo(() => {
+    if (isAuthenticationLoading || isLoadingWithoutData) return null;
+
     if (!xSimiAccessKey) {
       return <Unauthorized title={'Unauthorized!!!'} message={<>Hey, you! Stop right there. Authorization required.</>} />;
     }
@@ -46,7 +85,7 @@ const VerifyRequest = props => {
     }
 
     return null;
-  }, [xSimiAccessKey, isLoginFromShopify, appError]);
+  }, [xSimiAccessKey, appError, isAuthenticationLoading, isLoadingWithoutData]);
 
   // Any .tsx or .jsx files in /pages will become a route
   // See documentation for <Routes /> for more info
@@ -58,16 +97,13 @@ const VerifyRequest = props => {
     );
   }, [shopInfo]);
 
-  // console.log('RE_RENDER_APP', {isShopFilledAllRequiredFields , errorComponent, isLoadingWithoutData , isAuthenticating, appError });
-
   return (
     <>
-      <AnimatePresence mode={'wait'}>{(isLoadingWithoutData || isAuthenticating) && <FullPageLoading />}</AnimatePresence>
       {errorComponent}
       <AnimatePresence mode={'wait'}>
-        {!isShopFilledAllRequiredFields && !errorComponent && !isLoadingWithoutData && !isAuthenticating && <GetStartedForm />}
+        {!isShopFilledAllRequiredFields && !errorComponent && !isLoadingWithoutData && !isAuthenticationLoading && <GetStartedForm />}
       </AnimatePresence>
-      {!errorComponent && !isLoadingWithoutData && !isAuthenticating && isShopFilledAllRequiredFields && <Routes pages={pages} />}
+      {!errorComponent && !isLoadingWithoutData && !isAuthenticationLoading && isShopFilledAllRequiredFields && <Routes pages={pages} />}
     </>
   );
 };
@@ -76,6 +112,7 @@ const VerifyRequest = props => {
 const ChosenProvider = props => {
   const [i18n] = useI18n();
   const [{ isLoginFromShopify }] = useAppContext();
+  useReloadAppWarning();
   if (!isLoginFromShopify) {
     return <VerifyRequest />;
   }
