@@ -50,11 +50,7 @@ const AppContextProvider = props => {
 
   const [isLoginFromShopify] = useState(() => {
     return (!!host && !!session) || forceRedirect;
-  });
-
-  // const isLoginFromShopify = useMemo(() => {
-  //   return (!!host && !!session) || forceRedirect;
-  // }, [host, session, forceRedirect]);
+    }, [host, session, forceRedirect]);
 
   const { data, loading, error } = useQuery(GET_SHOP_DETAILS, {
     fetchPolicy: 'cache-and-network',

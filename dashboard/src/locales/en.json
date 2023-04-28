@@ -60,9 +60,18 @@
       "ManageApp": {
         "Title": "Manage Apps",
         "addApp": "Add New App",
-        "last_update": "Last updated:",
-        "ios_update": "IOS Published Date:",
-        "android_update": "Android Published Date:"
+        "last_update": "Last updated: {date}",
+        "ios_update": "IOS({version}) Published Date: {date}",
+        "android_update": "Android({version}) Published Date: {date}",
+        "create": {
+          "title": "Title",
+          "button": "Create"
+        },
+        "choose_theme": {
+          "title": "Choose a theme for your app",
+          "button": "Apply Theme",
+          "add_theme": "Blank theme"
+        }
       }
     },
     "Navigations": {
