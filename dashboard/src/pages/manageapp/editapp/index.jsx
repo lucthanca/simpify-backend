@@ -59,8 +59,8 @@ const EditApp = () => {
                 <ActiveContent/>
               </React.Suspense>
             </div>
-            <div className='w-[26%]'>
-
+            <div className='w-[26%] pl-4'>
+              <img src='/src/assets/ip2.png'/>
             </div>
           </div>
         </Box>
