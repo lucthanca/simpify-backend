@@ -46,6 +46,8 @@
                 <item name="simpify_management_shops_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Shop\Grid\Collection</item>
                 <item name="simpify_management_features_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Feature\Grid\Collection</item>
                 <item name="simpify_management_feature_fields_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\FeatureField\Grid\Collection</item>
+                <item name="simpify_management_apptext_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\AppText\Grid\Collection</item>
+                <item name="simpify_theme_listing_data_source" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Theme\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -67,6 +69,20 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">simicart_feature_fields</argument>
             <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\FeatureField</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SimiCart\SimpifyManagement\Model\ResourceModel\AppText\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">simicart_simpify_default_app_language</argument>
+            <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\DefaultLanguage</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SimiCart\SimpifyManagement\Model\ResourceModel\Theme\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">simicart_simpify_themes</argument>
+            <argument name="resourceModel" xsi:type="string">SimiCart\SimpifyManagement\Model\ResourceModel\Theme</argument>
         </arguments>
     </virtualType>
 
@@ -94,6 +110,8 @@
     <preference for="SimiCart\SimpifyManagement\Api\FeatureRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\FeatureFieldRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureFieldRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\FeatureFieldOptionRepositoryInterface" type="SimiCart\SimpifyManagement\Model\FeatureFieldOptionRepository"/>
+    <preference for="SimiCart\SimpifyManagement\Api\Data\AppLanguageTextInterface" type="SimiCart\SimpifyManagement\Model\AppLanguageText"/>
+    <preference for="SimiCart\SimpifyManagement\Api\Data\ThemeInterface" type="SimiCart\SimpifyManagement\Model\Theme"/>
 
 
     <preference for="SimiCart\SimpifyManagement\Api\Data\FieldOptionSearchResultsInterface"

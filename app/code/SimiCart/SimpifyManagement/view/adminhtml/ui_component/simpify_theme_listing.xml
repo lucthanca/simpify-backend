@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- define listing ui component -->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <!-- define js_config provider -->
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">simpify_theme_listing.simpify_theme_listing_data_source</item>
+        </item>
+    </argument>
+    <!-- define settings spinner and add new button -->
+    <settings>
+        <spinner>simpify_theme_listing_columns</spinner>
+        <deps>
+            <dep>simpify_theme_listing.simpify_theme_listing_data_source</dep>
+        </deps>
+
+        <buttons>
+            <button name="add" class="SimiCart\SimpifyManagement\Ui\Component\Form\Button\ThemeAddNew" />
+        </buttons>
+    </settings>
+    <!-- define listing toolbar -->
+    <listingToolbar name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters" />
+        <paging name="listing_paging"/>
+        <exportButton name="export_button"/>
+    </listingToolbar>
+    <!-- define data source -->
+    <dataSource name="simpify_theme_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render" />
+            <storageConfig>
+                <param name="indexField" xsi:type="string">entity_id</param>
+            </storageConfig>
+        </settings>
+        <dataProvider name="simpify_theme_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <!-- define columns with id, name, image and preview images -->
+    <columns name="simpify_theme_listing_columns" sortOrder="10">
+        <column name="theme_id">
+            <!-- define settings with label, sortable, filter, dataScope-->
+            <settings>
+                <label translate="true">ID</label>
+                <sortable>true</sortable>
+                <filter>true</filter>
+                <dataScope>entity_id</dataScope>
+            </settings>
+        </column>
+        <column name="name" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <sortable>true</sortable>
+                <label translate="true">Name</label>
+                <dataType>text</dataType>
+                <dataScope>name</dataScope>
+            </settings>
+        </column>
+<!--        <column name="image" class="SimiCart\SimpifyManagement\Ui\Component\Listing\Column\Thumbnail">-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="sortable" xsi:type="boolean">false</item>-->
+<!--                    <item name="label" xsi:type="string" translate="true">Image</item>-->
+<!--                    <item name="sortOrder" xsi:type="number">30</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--        </column>-->
+<!--        <column name="preview_images" class="SimiCart\SimpifyManagement\Ui\Component\Listing\Column\PreviewImages">-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="sortable" xsi:type="boolean">false</item>-->
+<!--                    <item name="label" xsi:type="string" translate="true">Preview Images</item>-->
+<!--                    <item name="sortOrder" xsi:type="number">40</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--        </column>-->
+
+        <!-- define two column is created_at and updated_at -->
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+                <visible>true</visible>
+            </settings>
+        </column>
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Updated</label>
+                <visible>true</visible>
+            </settings>
+        </column>
+<!-- define action column -->
+        <actionsColumn name="actions" class="SimiCart\SimpifyManagement\Ui\Component\Listing\Column\ThemeActions">
+            <settings>
+                <indexField>entity_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
