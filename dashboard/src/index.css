@@ -40,6 +40,21 @@
 .scroll::-webkit-scrollbar-thumb:hover {
   background: var(--p-action-primary); 
 }
+.menu-appdesign {
+ border-left: 2px solid transparent;
+}
+.menu-editapp {
+  border-bottom: 2px solid transparent;
+ }
+.active.menu-editapp {
+  border-color: var(--p-action-primary);
+}
+.active-menu.menu-appdesign {
+  border-color: var(--p-action-primary);
+ }
+.active-menu .child {
+  color: var(--p-color-text-primary);
+}
 .text-gradient {
   background: radial-gradient(
     64.18% 64.18% at 71.16% 35.69%,

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { Link, Outlet, NavLink } from 'react-router-dom';
-import { ProgressBar, Text  } from '@shopify/polaris';
+import { ProgressBar, Text, Page, Box  } from '@shopify/polaris';
 import EditAppContextProvider, { useEditAppContext } from '@simpify/context/editAppContext';
 
 const AppDesign = React.lazy(() => import('@simpify/components/ManageApp/appDesign'));
@@ -42,15 +41,30 @@ const EditApp = () => {
 
   return (
     <>
-    <div className='flex'>
-      <Title/>
-      <TabMenu/>
-    </div>
-    <div className='main-content '>
-      <React.Suspense fallback={<div>Loading..........</div>}>
-        <ActiveContent />
-      </React.Suspense>
-    </div>
+      <Page fullWidth>
+        <div className='flex items-center'>
+          <div className='w-[18%]'>
+          <Title/>
+          </div>
+          <div className='w-[82%] flex justify-center'>
+            <TabMenu/>
+          </div>
+        </div>
+      </Page>
+      <Page fullWidth>
+        <Box padding='8' background='bg' borderRadius='2'>
+          <div className='flex'>
+            <div className='w-[74%]'>
+              <React.Suspense fallback={<div>Loading..........</div>}>
+                <ActiveContent/>
+              </React.Suspense>
+            </div>
+            <div className='w-[26%]'>
+
+            </div>
+          </div>
+        </Box>
+      </Page>
     </>
   )
 }
@@ -60,11 +74,11 @@ const Title = () => {
       <Text variant="headingLg" as="p"> 
         Title name
       </Text>
-      <div className='flex'>
+      <div className='flex items-center gap-4 relative'>
         <Text variant="headingLg" as="p"> 
           20%
         </Text>
-        <div className='w-36'>
+        <div className='w-full'>
           <ProgressBar progress={20} color="primary" size="small" />
         </div>
       </div>
@@ -79,14 +93,23 @@ const TabMenu = () => {
   }, []);
   return (
   <>
-      <div>
-        <span className={ (activeTab === 'app_design') ? "bg-red-300":'' } onClick={() => handleClickTab('app_design')}>App Design</span>
-        <span className={ (activeTab === 'language') ? "bg-red-300":'' } onClick={() => handleClickTab('language')}>Language</span>
-        <span className={ (activeTab === 'features') ? "bg-red-300":'' } onClick={() => handleClickTab('features')}>Features</span>
-        <span className={ (activeTab === 'preview') ? "bg-red-300":'' } onClick={() => handleClickTab('preview')}>Preview</span>
-        <span className={ (activeTab === 'publish') ? "bg-red-300":'' } onClick={() => handleClickTab('publish')}>Publish</span>
+    <div className='flex gap-2'>
+      <div className={ (activeTab === 'app_design') ? "active menu-editapp":'menu-editapp' }>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('app_design')}>App Design</p>
       </div>
-    
+      <div className={ (activeTab === 'language') ? "active menu-editapp":'menu-editapp' }>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('language')}>Language</p>
+      </div>
+      <div className={ (activeTab === 'features') ? "active menu-editapp":'menu-editapp' }>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('features')}>Features</p>
+      </div>
+      <div className={ (activeTab === 'preview') ? "active menu-editapp":'menu-editapp' } >
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('preview')}>Preview</p>
+      </div>
+      <div className={ (activeTab === 'publish') ? "active menu-editapp":'menu-editapp' }>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('publish')}>Publish</p>
+      </div>
+    </div>
   </>
   );
 }
