@@ -126,6 +126,12 @@
         </arguments>
     </type>
 
+    <type name="SimiCart\SimpifyManagement\Controller\Adminhtml\Theme\Save">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">SimiCart\SimpifyManagement\ThemeImageUpload</argument>
+        </arguments>
+    </type>
+
 
     <preference for="SimiCart\SimpifyManagement\Api\ShopRepositoryInterface" type="SimiCart\SimpifyManagement\Model\ShopRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\ShopApiInterface" type="SimiCart\SimpifyManagement\Model\ShopApi"/>

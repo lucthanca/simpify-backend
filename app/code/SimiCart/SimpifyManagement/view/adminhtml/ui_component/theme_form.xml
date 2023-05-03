@@ -97,7 +97,7 @@
         <field name="image" sortOrder="300" formElement="imageUploader">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">category</item>
+                    <item name="source" xsi:type="string">theme</item>
                 </item>
             </argument>
             <settings>
@@ -116,7 +116,7 @@
                         </uploaderConfig>
                         <previewTmpl>Magento_Catalog/image-preview</previewTmpl>
                         <openDialogTitle>Theme Gallery</openDialogTitle>
-                        <initialMediaGalleryOpenSubpath>simpify/theme</initialMediaGalleryOpenSubpath>
+                        <initialMediaGalleryOpenSubpath>simpify</initialMediaGalleryOpenSubpath>
                         <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                         <maxFileSize>4194304</maxFileSize>
                     </settings>
@@ -152,7 +152,7 @@
                 <block class="SimiCart\SimpifyManagement\Block\Adminhtml\Theme\Helper\Form\ImagePreview\Content" as="content">
                     <arguments>
                         <argument name="config" xsi:type="array">
-                            <item name="parentComponent" xsi:type="string">theme_form.theme_form.block_gallery.block_gallery</item>
+                            <item name="parentComponent" xsi:type="string">theme_form.theme_form.general</item>
                         </argument>
                     </arguments>
 <!--                    <block class="Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo" name="new-video" template="Magento_ProductVideo::product/edit/slideout/form.phtml"/>-->

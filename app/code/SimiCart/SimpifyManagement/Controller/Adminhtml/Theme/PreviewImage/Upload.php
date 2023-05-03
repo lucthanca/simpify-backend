@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use SimiCart\SimpifyManagement\Model\Theme;
 
 class Upload extends \Magento\Catalog\Controller\Adminhtml\Product\Gallery\Upload
 {
@@ -161,7 +162,7 @@ class Upload extends \Magento\Catalog\Controller\Adminhtml\Product\Gallery\Uploa
      */
     protected function getBasePath()
     {
-        return 'simpify/theme/images';
+        return Theme::BASE_PREVIEW_IMAGES_PATH;
     }
 
     /**

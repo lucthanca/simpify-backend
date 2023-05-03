@@ -11,8 +11,24 @@ interface ThemeInterface
     const PREVIEW_IMAGES = 'preview_images';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const STATUS = 'status';
 
     // define all getter/setter methods for the fields above
+
+    /**
+     * Get theme status
+     *
+     * @return string
+     */
+    public function getStatus(): int;
+
+    /**
+     * Set theme status
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function setStatus(int $status): self;
 
     /**
      * Get theme name

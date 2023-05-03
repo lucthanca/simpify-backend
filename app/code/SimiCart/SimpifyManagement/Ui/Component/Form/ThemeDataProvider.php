@@ -81,7 +81,8 @@ class ThemeDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     $data[ITheme::IMAGE] = [
                         [
                             'name' => $data[ITheme::IMAGE],
-                            'url' => $this->getMediaUrl() . $data[ITheme::IMAGE]
+                            'url' => $item->getImageUrl(),
+                            'size' => $item->getThemeImageSize()
                         ]
                     ];
                 }

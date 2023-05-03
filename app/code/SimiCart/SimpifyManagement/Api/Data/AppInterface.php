@@ -108,17 +108,17 @@ interface AppInterface
     /**
      * Get shop industry
      *
-     * @return Int
+     * @return string|null
      */
-    public function getIndustry(): int;
+    public function getIndustry(): ?string;
 
     /**
      * Set app industry
      *
-     * @param int $value
+     * @param string|null $value
      * @return $this
      */
-    public function setIndustry(int $value): self;
+    public function setIndustry(?string $value): self;
 
     /**
      * Get app layout
