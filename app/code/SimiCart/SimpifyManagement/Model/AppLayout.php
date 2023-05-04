@@ -99,6 +99,14 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
+    public function setFont(?string $fontId): IAppLayout
+    {
+        return $this->setData(self::FONT, $fontId);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function setLayoutFont(string $fontName): IAppLayout
     {
         return $this->setData(self::FONT, $fontName);
@@ -128,7 +136,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setColors(array $colors): IAppLayout
+    public function setColors(?array $colors): IAppLayout
     {
         $encoded = $this->jsonSerializer->serialize($colors);
         return $this->setData(self::COLORS, $encoded);
@@ -145,10 +153,12 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setMenu(array $data): IAppLayout
+    public function setMenu($data): IAppLayout
     {
-        $encoded = $this->jsonSerializer->serialize($data);
-        return $this->setData(self::MENU, $encoded);
+        if (is_array($data)) {
+            $data = $this->jsonSerializer->serialize($data);
+        }
+        return $this->setData(self::MENU, $data);
     }
 
     /**
@@ -162,7 +172,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setHomepage(string $data): IAppLayout
+    public function setHomepage(?string $data): IAppLayout
     {
         return $this->setData(self::HOMEPAGE, $data);
     }
@@ -178,7 +188,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setCollectionPage(string $data): IAppLayout
+    public function setCollectionPage(?string $data): IAppLayout
     {
         return $this->setData(self::COLLECTION_PAGE, $data);
     }
@@ -194,7 +204,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setProductPage(string $data): IAppLayout
+    public function setProductPage(?string $data): IAppLayout
     {
         return $this->setData(self::PRODUCT_PAGE, $data);
     }
@@ -210,7 +220,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setLandingPage(string $data): IAppLayout
+    public function setLandingPage(?string $data): IAppLayout
     {
         return $this->setData(self::LANDING_PAGE, $data);
     }

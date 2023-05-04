@@ -7,9 +7,12 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use SimiCart\SimpifyManagement\Api\Data\ThemeInterface;
 use SimiCart\SimpifyManagement\Model\ResourceModel\Theme\CollectionFactory;
+use SimiCart\SimpifyManagementGraphql\Model\Formatter\ThemeFormatterTrait;
 
 class GetThemes implements \Magento\Framework\GraphQl\Query\ResolverInterface
 {
+    use ThemeFormatterTrait;
+
     private CollectionFactory $themeCollectionFactory;
 
     /**
@@ -31,33 +34,9 @@ class GetThemes implements \Magento\Framework\GraphQl\Query\ResolverInterface
         $collection = $this->themeCollectionFactory->create()->addFieldToFilter(ThemeInterface::STATUS, 1);
         $result = [];
         foreach ($collection->getItems() as $item) {
-            $resultI = [
-                'model' => $item,
-            ];
-            $this->formatOutput($resultI);
-            $result[] = $resultI;
+            $result[] = $this->formatOutput($item);
         }
 
         return $result;
-    }
-
-    /**
-     * Format data item output
-     *
-     * @param array $data
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function formatOutput(array &$data)
-    {
-        /** @var ThemeInterface $i */
-        $i = $data['model'];
-        $data = [
-            'uid' => base64_encode($i->getId()),
-            'name' => $i->getName(),
-            'is_active' => (bool) $i->getStatus(),
-            'image' => $i->getImageUrl(),
-            'preview_images' => $i->getPreviewImagesAsArray(),
-            'model' => $i,
-        ];
     }
 }

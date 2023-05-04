@@ -120,6 +120,25 @@
         </arguments>
     </virtualType>
 
+    <type name="SimiCart\SimpifyManagement\Model\AppImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">simpify/tmp/app</argument>
+            <argument name="basePath" xsi:type="string">simpify/app</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="SimiCart\SimpifyManagement\Controller\Adminhtml\Theme\Image\Upload">
         <arguments>
             <argument name="imageUploader" xsi:type="object">SimiCart\SimpifyManagement\ThemeImageUpload</argument>
@@ -132,6 +151,17 @@
         </arguments>
     </type>
 
+    <type name="SimiCart\SimpifyManagement\Controller\App\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">SimiCart\SimpifyManagement\Model\AppImageUploader</argument>
+        </arguments>
+    </type>
+
+    <type name="SimiCart\SimpifyManagementGraphql\Model\Resolver\CreateApp">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">SimiCart\SimpifyManagement\Model\AppImageUploader</argument>
+        </arguments>
+    </type>
 
     <preference for="SimiCart\SimpifyManagement\Api\ShopRepositoryInterface" type="SimiCart\SimpifyManagement\Model\ShopRepository"/>
     <preference for="SimiCart\SimpifyManagement\Api\ShopApiInterface" type="SimiCart\SimpifyManagement\Model\ShopApi"/>

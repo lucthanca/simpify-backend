@@ -53,6 +53,13 @@ interface AppLayoutInterface
     public function getFont(): string;
 
     /**
+     * Set font
+     *
+     * @return $this
+     */
+    public function setFont(?string $fontId): self;
+
+    /**
      * Set font for layout
      *
      * @param string $fontName
@@ -80,7 +87,7 @@ interface AppLayoutInterface
      * @param array $colors
      * @return $this
      */
-    public function setColors(array $colors): self;
+    public function setColors(?array $colors): self;
 
     /**
      * Get raw menu data
@@ -92,10 +99,10 @@ interface AppLayoutInterface
     /**
      * Encode n set menu data
      *
-     * @param array $data
+     * @param mixed $data
      * @return $this
      */
-    public function setMenu(array $data): self;
+    public function setMenu($data): self;
 
     /**
      * Get homepage data
@@ -107,10 +114,10 @@ interface AppLayoutInterface
     /**
      * Set homepage data
      *
-     * @param string $data
+     * @param string|null $data
      * @return $this
      */
-    public function setHomepage(string $data): self;
+    public function setHomepage(?string $data): self;
 
     /**
      * Get collection\product page
@@ -122,10 +129,10 @@ interface AppLayoutInterface
     /**
      * Set collection page configuration
      *
-     * @param string $data
+     * @param string|null $data
      * @return $this
      */
-    public function setCollectionPage(string $data): self;
+    public function setCollectionPage(?string $data): self;
 
     /**
      * Get configured product page
@@ -140,7 +147,7 @@ interface AppLayoutInterface
      * @param string $data
      * @return $this
      */
-    public function setProductPage(string $data): self;
+    public function setProductPage(?string $data): self;
 
     /**
      * Get landing page
@@ -155,7 +162,7 @@ interface AppLayoutInterface
      * @param string $data
      * @return $this
      */
-    public function setLandingPage(string $data): self;
+    public function setLandingPage(?string $data): self;
 
     /**
      * Get related app object
