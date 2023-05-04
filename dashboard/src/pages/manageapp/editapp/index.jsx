@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { ProgressBar, Text, Page, Box  } from '@shopify/polaris';
 import EditAppContextProvider, { useEditAppContext } from '@simpify/context/editAppContext';
+import { useI18n } from '@shopify/react-i18n';
 
 const AppDesign = React.lazy(() => import('@simpify/components/ManageApp/appDesign'));
 const Languages = React.lazy(() => import('@simpify/components/ManageApp/languages'));
@@ -87,7 +88,7 @@ const Title = () => {
 }
 const TabMenu = () => {
   const [{ activeTab } ,{ setActiveTab }] = useEditAppContext();
-
+  const [i18n] = useI18n();
   const handleClickTab = useCallback((tabId) => {
     setActiveTab(tabId);
   }, []);
@@ -95,19 +96,29 @@ const TabMenu = () => {
   <>
     <div className='flex gap-2'>
       <div className={ (activeTab === 'app_design') ? "active menu-editapp":'menu-editapp' }>
-        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('app_design')}>App Design</p>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('app_design')}>
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.app_design')}
+        </p>
       </div>
       <div className={ (activeTab === 'language') ? "active menu-editapp":'menu-editapp' }>
-        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('language')}>Language</p>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('language')}>
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.language')}
+        </p>
       </div>
       <div className={ (activeTab === 'features') ? "active menu-editapp":'menu-editapp' }>
-        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('features')}>Features</p>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('features')}>
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.features')}
+        </p>
       </div>
       <div className={ (activeTab === 'preview') ? "active menu-editapp":'menu-editapp' } >
-        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('preview')}>Preview</p>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('preview')}>
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.preview')}
+        </p>
       </div>
       <div className={ (activeTab === 'publish') ? "active menu-editapp":'menu-editapp' }>
-        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('publish')}>Publish</p>
+        <p className='py-2 px-3 text-sm font-medium cursor-pointer' onClick={() => handleClickTab('publish')}>
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.publish')}
+        </p>
       </div>
     </div>
   </>

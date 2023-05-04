@@ -71,6 +71,13 @@
           "title": "Choose a theme for your app",
           "button": "Apply Theme",
           "add_theme": "Blank theme"
+        },
+        "edit_app": {
+          "app_design": "App Design",
+          "language": "Language",
+          "features": "Features",
+          "preview": "Preview",
+          "publish": "Publish"
         }
       }
     },
