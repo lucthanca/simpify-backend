@@ -15,5 +15,15 @@
                 <api_version>2023-01</api_version>
             </general>
         </simpify_management>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <media_gallery_image_folders>
+                        <simpify_theme_image_folder>simpify/theme</simpify_theme_image_folder>
+                        <simpify_theme_preview_images_folder>simpify/theme/images</simpify_theme_preview_images_folder>
+                    </media_gallery_image_folders>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

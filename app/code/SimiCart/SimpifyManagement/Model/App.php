@@ -148,15 +148,15 @@ class App extends AbstractModel implements IApp
     /**
      * @inheritDoc
      */
-    public function getIndustry(): int
+    public function getIndustry(): ?string
     {
-        return (int) $this->getData(self::INDUSTRY);
+        return $this->getData(self::INDUSTRY);
     }
 
     /**
      * @inheritDoc
      */
-    public function setIndustry(int $value): IApp
+    public function setIndustry(?string $value): IApp
     {
         return $this->setData(self::INDUSTRY, $value);
     }

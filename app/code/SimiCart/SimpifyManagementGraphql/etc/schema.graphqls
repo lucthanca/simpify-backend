@@ -24,6 +24,7 @@ type SimpifyApp {
     completed_progress: [String] @doc(description: "Completed step keys")
     updated_at: String @doc(description: "Updated time")
     created_at: String @doc(description: "Creation time")
+    layout: SimpifyAppLayout @doc(description: "App layout")
 }
 
 type Query {
@@ -32,10 +33,55 @@ type Query {
     simpifyAuthenticateShop(query: String): AuthShopOutput @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\AuthenticateShop")
 
     appTexts: [String] @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetAppTexts")
+    themes: [SimpifyTheme] @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetThemes") @doc(description: "Get all themes")
+}
+type SimpifyTheme {
+    uid: ID! @doc(description: "The unique ID for a `SimpifyTheme` object.")
+    name: String @doc(description: "Theme name")
+    preview_images: [ThemePreviewImage] @doc(description: "Theme preview images")
+    image: String @doc(description: "Theme image url")
+    is_active: Boolean @doc(description: "Theme is active or not")
+}
+type ThemePreviewImage {
+    url: String @doc(description: "Image url")
+    position: Int @doc(description: "Image position")
+    label: String @doc(description: "Image label")
 }
 type Mutation {
     updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\UpdateShopInformation")
     generateLanguageTextExample(code: String! @doc(description: "Language code"), app_id: Int!): LanguageTextExampleOutput @doc(description: "Generate/Get language examples text data") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GenerateLanguageTextExample")
+    saveApp(input: SimpifyAppInput): SimpifyApp @doc(description: "Create/update an app") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\CreateApp")
+}
+
+input SimpifyAppInput {
+    app_name: String! @doc(description: "App name")
+    industry: String @doc(description: "Shop industry")
+    splash_is_full: Boolean @doc(description: "Splash is full")
+    splash_bg_color: String @doc(description: "Splash background color")
+    layout: SimpifyAppLayoutInput @doc(description: "App layout")
+}
+
+input SimpifyAppLayoutInput {
+    font: String @doc(description: "Font")
+    colors: [PairedKeyValueInput] @doc(description: "Colors")
+    menu: String @doc(description: "Menu layout data")
+    homepage: String @doc(description: "Homepage layout data")
+    collection_page: String @doc(description: "Collection page layout data")
+    product_page: String @doc(description: "Product page layout data")
+    landing_page: String @doc(description: "Landing page layout data")
+    theme_id: ID @doc(description: "Applied Theme")
+}
+
+type SimpifyAppLayout {
+    uid: ID! @doc(description: "The unique ID for a `SimpifyAppLayout` object.")
+    font: String @doc(description: "Font")
+    colors: [PairedKeyValue] @doc(description: "Colors")
+    menu: String @doc(description: "Menu layout data")
+    homepage: String @doc(description: "Homepage layout data")
+    collection_page: String @doc(description: "Collection page layout data")
+    product_page: String @doc(description: "Product page layout data")
+    landing_page: String @doc(description: "Landing page layout data")
+    theme: SimpifyTheme @doc(description: "Applied Theme")
 }
 
 type LanguageTextExampleOutput {
