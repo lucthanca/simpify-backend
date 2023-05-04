@@ -7,6 +7,7 @@ interface AppInterface
     const SHOP_ID = 'shop_id';
     const INDUSTRY = 'industry';
     const APP_LOGO = 'app_logo';
+    const APP_NAME = 'app_name';
     const APP_ICON = 'app_icon';
 
     const SPLASH_IMAGE = 'splash_image';
@@ -14,6 +15,21 @@ interface AppInterface
     const SPLASH_IS_FULL = 'splash_is_full';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+
+    /**
+     * Get app name
+     *
+     * @return string
+     */
+    public function getAppName(): string;
+
+    /**
+     * Set app name
+     *
+     * @param string $appName
+     * @return $this
+     */
+    public function setAppName(string $appName): self;
 
     /**
      * Get splash is full

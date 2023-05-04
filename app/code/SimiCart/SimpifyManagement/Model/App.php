@@ -51,6 +51,22 @@ class App extends AbstractModel implements IApp
     /**
      * @inheritDoc
      */
+    public function getAppName(): string
+    {
+        return $this->getData(self::APP_NAME);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAppName(string $appName): IApp
+    {
+        return $this->setData(self::APP_NAME, $appName);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function isSplashFull(): bool
     {
         $v = $this->getData(self::SPLASH_IS_FULL);
@@ -171,5 +187,10 @@ class App extends AbstractModel implements IApp
         }
 
         return $this->appLayout;
+    }
+
+    public function getAppImageUrl($path)
+    {
+        return '';
     }
 }

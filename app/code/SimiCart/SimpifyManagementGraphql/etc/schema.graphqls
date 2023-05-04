@@ -19,12 +19,12 @@ type SimpifyApp {
     app_logo: String @doc(description: "App Logo url")
     app_icon: String @doc(description: "App Logo icon url")
     splash_image: String @doc(description: "App splash url")
-    splash_image: String @doc(description: "App splash color string")
+    splash_bg_color: String @doc(description: "App splash color string")
     splash_is_full: Boolean @doc(description: "App splash is full?")
     completed_progress: [String] @doc(description: "Completed step keys")
     updated_at: String @doc(description: "Updated time")
     created_at: String @doc(description: "Creation time")
-    layout: SimpifyAppLayout @doc(description: "App layout")
+    layout: SimpifyAppLayout @doc(description: "App layout") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetAppLayout")
 }
 
 type Query {
@@ -53,15 +53,19 @@ type Mutation {
     saveApp(input: SimpifyAppInput): SimpifyApp @doc(description: "Create/update an app") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\CreateApp")
 }
 
-input SimpifyAppInput {
-    app_name: String! @doc(description: "App name")
-    industry: String @doc(description: "Shop industry")
-    splash_is_full: Boolean @doc(description: "Splash is full")
-    splash_bg_color: String @doc(description: "Splash background color")
+input SimpifyAppInput @doc(description: "App input. If you dont want to update any field, just dont pass it. If you want to remove a field, just set it to null.") {
+    app_id: ID @doc(description: "App ID. This field can not remove")
+    app_name: String @doc(description: "App name. This field can not remove")
+    industry: String @doc(description: "Shop industry. This field can not remove")
+    app_logo: FileInput @doc(description: "App logo, removable")
+    app_icon: FileInput @doc(description: "App icon, removable")
+    splash_image: FileInput @doc(description: "App splash loading image, removable")
+    splash_is_full: Boolean @doc(description: "Splash is full, if you remove this field, it will be set to true as default")
+    splash_bg_color: String @doc(description: "Splash background color, if you remove this field, it will be set to #ffffff as default")
     layout: SimpifyAppLayoutInput @doc(description: "App layout")
 }
 
-input SimpifyAppLayoutInput {
+input SimpifyAppLayoutInput @doc(description: "App layout input. If you dont want to update any field, just dont pass it. If you want to remove a field, just set it to null.") {
     font: String @doc(description: "Font")
     colors: [PairedKeyValueInput] @doc(description: "Colors")
     menu: String @doc(description: "Menu layout data")
@@ -70,6 +74,13 @@ input SimpifyAppLayoutInput {
     product_page: String @doc(description: "Product page layout data")
     landing_page: String @doc(description: "Landing page layout data")
     theme_id: ID @doc(description: "Applied Theme")
+}
+
+input FileInput @doc(description: "Define file input. Currently, we only support base64 content") {
+    # base64_content: String @doc(description: "Base64 content, using base64 content or use file, not both. Currently, we only support base64 content")
+    name: String @doc(description: "File name not include extension")
+    type: String @doc(description: "File mime type")
+    file: String @doc(description: "File tmp path")
 }
 
 type SimpifyAppLayout {
@@ -81,7 +92,7 @@ type SimpifyAppLayout {
     collection_page: String @doc(description: "Collection page layout data")
     product_page: String @doc(description: "Product page layout data")
     landing_page: String @doc(description: "Landing page layout data")
-    theme: SimpifyTheme @doc(description: "Applied Theme")
+    theme: SimpifyTheme @doc(description: "Applied Theme") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetAppliedTheme")
 }
 
 type LanguageTextExampleOutput {
