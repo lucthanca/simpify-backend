@@ -17,6 +17,7 @@ use SimiCart\SimpifyManagement\Api\AppRepositoryInterface;
 use SimiCart\SimpifyManagement\Api\Data\AppSearchResultsInterface;
 use SimiCart\SimpifyManagement\Model\AppFactory;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
+use SimiCart\SimpifyManagementGraphql\Exceptions\GraphQlUncommonErrorException;
 use SimiCart\SimpifyManagementGraphql\Model\Formatter\AppFormatterTrait;
 
 class GetApps implements ResolverInterface
@@ -77,8 +78,16 @@ class GetApps implements ResolverInterface
         $args['filters']['shop_uid'] = ['eq' => $context->getExtensionAttributes()->getSimpifyShopId()];
 
         $processedArgs = $this->argsSelection->process($info->fieldName, $args);
-        $searchCriteria = $this->buildCriteria($processedArgs);
-        $searchResult = $this->appRepository->getList($searchCriteria);
+        try {
+            $searchCriteria = $this->buildCriteria($processedArgs);
+        } catch (InputException $e) {
+            throw new GraphQlInputException(__($e->getMessage()));
+        }
+        try {
+            $searchResult = $this->appRepository->getList($searchCriteria);
+        } catch (\Exception $e) {
+            throw new GraphQlUncommonErrorException(__($e->getMessage()));
+        }
 
         return $this->extractDataFromResult($searchResult, $searchCriteria);
     }
@@ -160,8 +169,8 @@ class GetApps implements ResolverInterface
             if ($conditionType === 'match') {
                 $searchValue = trim(str_replace(self::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
                 $matchLength = strlen($searchValue);
-                if ($matchLength < 255) {
-                    throw new InputException(__('Invalid match filter. Minimum length is %1.', 255));
+                if ($matchLength < 3) {
+                    throw new InputException(__('Invalid match filter. Minimum length is %1.', 3));
                 }
                 unset($filters[$filter]['match']);
                 $filters[$filter]['like'] = '%' . $searchValue . '%';

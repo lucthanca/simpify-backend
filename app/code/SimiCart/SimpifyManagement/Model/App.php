@@ -5,6 +5,7 @@ namespace SimiCart\SimpifyManagement\Model;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
 use SimiCart\SimpifyManagement\Api\AppLayoutRepositoryInterface as IAppLayoutRepository;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
 use Magento\Framework\Model\AbstractModel;
@@ -15,6 +16,7 @@ class App extends AbstractModel implements IApp
 {
     protected ?IAppLayout $appLayout = null;
     protected IAppLayoutRepository $appLayoutRepository;
+    protected StoreManagerInterface $storeManager;
 
     /**
      * App constructor
@@ -30,10 +32,12 @@ class App extends AbstractModel implements IApp
         IAppLayoutRepository $appLayoutRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->appLayoutRepository = $appLayoutRepository;
     }
@@ -193,8 +197,19 @@ class App extends AbstractModel implements IApp
         return $this->appLayout;
     }
 
-    public function getAppImageUrl($path)
+    /**
+     * Get app image url
+     *
+     * @param string|null $imagePath
+     * @return string|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAppImageUrl(?string $imagePath): ?string
     {
-        return '';
+        if (!empty($imagePath)) {
+            $baseUrl = $this->storeManager->getStore()->getBaseUrl();
+            return rtrim($baseUrl, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($imagePath, DIRECTORY_SEPARATOR);
+        }
+        return null;
     }
 }
