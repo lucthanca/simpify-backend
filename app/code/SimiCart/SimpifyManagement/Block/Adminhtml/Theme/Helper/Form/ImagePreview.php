@@ -39,6 +39,10 @@ class ImagePreview extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\
             $images = ((array)$this->dataPersistor->get('simpify_theme'))[ITheme::PREVIEW_IMAGES] ?? null;
         }
 
+        if ($images === null) {
+            return null;
+        }
+
         $serializer = new \Magento\Framework\Serialize\Serializer\Json();
         return is_array($images) ? $images : $serializer->unserialize($images);
     }

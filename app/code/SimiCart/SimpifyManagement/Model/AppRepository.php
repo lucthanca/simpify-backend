@@ -75,12 +75,9 @@ class AppRepository implements IAppRepository
     }
 
     /**
-     * Get list
-     *
-     * @param SearchCriteriaInterface $criteria
-     * @return AppSearchResultsInterface
+     * @inheritDoc
      */
-    public function getList(SearchCriteriaInterface $criteria)
+    public function getList(SearchCriteriaInterface $criteria): AppSearchResultsInterface
     {
         /** @var AppCollection $collection */
         $collection = $this->collectionFactory->create();

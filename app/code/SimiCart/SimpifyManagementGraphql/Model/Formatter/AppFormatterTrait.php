@@ -3,20 +3,23 @@ declare(strict_types=1);
 
 namespace SimiCart\SimpifyManagementGraphql\Model\Formatter;
 
+use SimiCart\SimpifyManagement\Api\Data\AppInterface;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
 
-/**
- * Class AppFormatter to graphql response
- */
-class AppFormatter
+trait AppFormatterTrait
 {
-    public function execute(IApp $app)
+    /**
+     * Format app output
+     *
+     * @param AppInterface $app
+     * @return array|mixed|null
+     */
+    protected function formatAppOutput(AppInterface $app)
     {
-        $result = [
+        $result = $app->getData() + [
+            'uid' => base64_encode($app->getId()),
             'model' => $app,
         ];
-
-        $result['uid'] = base64_encode($app->getId());
         $result[IApp::APP_LOGO] = $app->getAppImageUrl($app->getAppLogo());
         $result[IApp::APP_ICON] = $app->getAppImageUrl($app->getAppIcon());
         $result[IApp::SPLASH_IMAGE] = $app->getAppImageUrl($app->getSplashImage());

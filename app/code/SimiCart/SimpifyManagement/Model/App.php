@@ -86,7 +86,11 @@ class App extends AbstractModel implements IApp
      */
     public function getSplashBgColor(): string
     {
-        return $this->getData(self::SPLASH_BG_COLOR);
+        $value = $this->getData(self::SPLASH_BG_COLOR);
+        if ($value) {
+            return $value;
+        }
+        return '#ffffff';
     }
 
     /**
@@ -100,7 +104,7 @@ class App extends AbstractModel implements IApp
     /**
      * @inheritDoc
      */
-    public function getAppLogo(): string
+    public function getAppLogo(): ?string
     {
         return $this->getData(self::APP_LOGO);
     }
@@ -116,7 +120,7 @@ class App extends AbstractModel implements IApp
     /**
      * @inheritDoc
      */
-    public function getSplashImage(): string
+    public function getSplashImage(): ?string
     {
         return $this->getData(self::SPLASH_IMAGE);
     }
@@ -132,7 +136,7 @@ class App extends AbstractModel implements IApp
     /**
      * @inheritDoc
      */
-    public function getAppIcon(): string
+    public function getAppIcon(): ?string
     {
         return $this->getData(self::APP_ICON);
     }

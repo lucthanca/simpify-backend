@@ -16,6 +16,8 @@ type SimpifyShop {
 
 type SimpifyApp {
     uid: ID! @doc(description: "The unique ID for a `SimpifyApp` object.")
+    app_name: String @doc(description: "App Name")
+    status: String @doc(description: "App status, 0: Inactive, has other clone from current app instead, 1: current active.")
     app_logo: String @doc(description: "App Logo url")
     app_icon: String @doc(description: "App Logo icon url")
     splash_image: String @doc(description: "App splash url")
@@ -31,9 +33,18 @@ type Query {
     simpifyShop: SimpifyShop @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\SimpifyShop") @doc(description: "The shimpifyShop query returns information about a shopify shop.")
     lastUpdatedApp: SimpifyApp @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetLastUpdatedApp") @doc(description: "The query returns information about last updated app from a shop.")
     simpifyAuthenticateShop(query: String): AuthShopOutput @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\AuthenticateShop")
-
+    apps(
+        filters: AppFilterInput @doc(description: "Identifies which App filter inputs to search for and return.")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
+    ): AppSearchResult @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetApps") @doc(description: "Get all apps")
     appTexts: [String] @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetAppTexts")
     themes: [SimpifyTheme] @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GetThemes") @doc(description: "Get all themes")
+}
+type AppSearchResult @doc(description: "A collection of App objects and pagination information.") {
+    items: [SimpifyApp] @doc(description: "A list of apps that match the filter criteria.")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
+    total_count: Int @doc(description: "The total number of apps that match the criteria.")
 }
 type SimpifyTheme {
     uid: ID! @doc(description: "The unique ID for a `SimpifyTheme` object.")
@@ -51,6 +62,21 @@ type Mutation {
     updateShopInformation(input: SimpifyShopInput): SimpifyShop  @doc(description: "Update shop information.") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\UpdateShopInformation")
     generateLanguageTextExample(code: String! @doc(description: "Language code"), app_id: Int!): LanguageTextExampleOutput @doc(description: "Generate/Get language examples text data") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\GenerateLanguageTextExample")
     saveApp(input: SimpifyAppInput): SimpifyApp @doc(description: "Create/update an app") @resolver(class: "SimiCart\\SimpifyManagementGraphql\\Model\\Resolver\\CreateApp")
+}
+input AppFilterInput  @doc(description: "AppFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
+{
+    uid: FilterEqualTypeInput @doc(description: "Filter by the unique category ID for a `CategoryInterface` object.")
+    status: FilterEqualTypeInput @doc(description: "Filter by the status of app.")
+    shop_uid: FilterEqualTypeInput @doc(description: "Just defined for search scriteria. Not use for filter.")
+    industry: FilterEqualTypeInput @doc(description: "industry string code")
+    app_name: FilterMatchTypeInput @doc(description: "App Name.")
+    app_logo: FilterTypeInput @doc(description: "The app logo image")
+    app_icon: FilterTypeInput @doc(description: "The app icon image")
+    splash_image: FilterTypeInput @doc(description: "The splash image")
+    splash_bg_color: FilterTypeInput @doc(description: "The splash image")
+    splash_is_full: FilterEqualTypeInput @doc(description: "The splash loading screen is full or not")
+    created_at: FilterTypeInput @doc(description: "The created time")
+    updated_at: FilterTypeInput @doc(description: "The updated time")
 }
 
 input SimpifyAppInput @doc(description: "App input. If you dont want to update any field, just dont pass it. If you want to remove a field, just set it to null.") {
