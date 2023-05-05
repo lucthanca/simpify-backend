@@ -32,7 +32,7 @@ const Content = () => {
       case 'theme_settings':
         return ThemeSettings;
       case 'pages':
-          return Pages;
+        return Pages;
       case 'menu_item':
         return MenuItem;
       default :
