@@ -38,7 +38,8 @@
             "splash_is_full": true,
             "created_at": true,
             "updated_at": true,
-            "app_name": true
+            "app_name": true,
+            "status": true
         },
         "constraint": {
             "PRIMARY": true,

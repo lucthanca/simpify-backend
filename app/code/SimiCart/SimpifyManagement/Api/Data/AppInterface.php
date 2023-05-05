@@ -66,7 +66,7 @@ interface AppInterface
      *
      * @return string
      */
-    public function getAppLogo(): string;
+    public function getAppLogo(): ?string;
 
     /**
      * Set app logo path
@@ -81,7 +81,7 @@ interface AppInterface
      *
      * @return string
      */
-    public function getSplashImage(): string;
+    public function getSplashImage(): ?string;
 
     /**
      * Set app splash image path
@@ -96,7 +96,7 @@ interface AppInterface
      *
      * @return string
      */
-    public function getAppIcon(): string;
+    public function getAppIcon(): ?string;
 
     /**
      * Set app icon path

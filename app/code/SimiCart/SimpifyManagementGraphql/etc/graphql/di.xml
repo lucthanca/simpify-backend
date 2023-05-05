@@ -27,4 +27,12 @@
             <argument name="oauthHelper" xsi:type="object">Magento\Integration\Helper\Oauth\Data</argument>
         </arguments>
     </type>
+
+    <type name="SimiCart\SimpifyManagementGraphql\Model\Resolver\ArgsCompositeProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="uid_processor" xsi:type="object">SimiCart\SimpifyManagementGraphql\Model\Query\UidArgsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

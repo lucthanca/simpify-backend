@@ -13,12 +13,15 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface;
+use SimiCart\SimpifyManagement\Api\ShopRepositoryInterface;
 use SimiCart\SimpifyManagement\Model\AppFactory;
 use SimiCart\SimpifyManagementGraphql\Exceptions\GraphQlUncommonErrorException;
-use SimiCart\SimpifyManagementGraphql\Model\Formatter\AppFormatter;
+use SimiCart\SimpifyManagementGraphql\Model\Formatter\AppFormatterTrait;
 
 class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
 {
+    use AppFormatterTrait;
+
     protected $fileFields = [
         'app_logo',
         'app_icon',
@@ -30,7 +33,7 @@ class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
     private ImageUploader $imageUploader;
 
     private $context;
-    private AppFormatter $appFormatter;
+    private ShopRepositoryInterface $shopRepository;
 
     /**
      * CreateApp constructor.
@@ -39,20 +42,20 @@ class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
      * @param LoggerInterface $logger
      * @param StoreManagerInterface $storeManager
      * @param ImageUploader $imageUploader
-     * @param AppFormatter $appFormatter
+     * @param ShopRepositoryInterface $shopRepository
      */
     public function __construct(
         AppFactory $appFactory,
         \Psr\Log\LoggerInterface $logger,
         StoreManagerInterface $storeManager,
         ImageUploader $imageUploader,
-        AppFormatter $appFormatter
+        ShopRepositoryInterface $shopRepository
     ) {
         $this->appFactory = $appFactory;
         $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->imageUploader = $imageUploader;
-        $this->appFormatter = $appFormatter;
+        $this->shopRepository = $shopRepository;
     }
 
     /**
@@ -65,6 +68,10 @@ class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
         if ($isSimpiShop) {
             $shopId = $context->getExtensionAttributes()->getSimpifyShopId();
             try {
+                $shop = $this->shopRepository->getById($shopId);
+                if (!$shop->getId()) {
+                    throw new GraphQlAuthorizationException(__("Unauthorized Shop!"));
+                }
                 $this->validate($args);
                 $input = $args['input'];
                 /** @var AppInterface $app */
@@ -73,7 +80,8 @@ class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
                 if (isset($input['app_id'])) {
                     $app->load($input['app_id']);
                 }
-
+                $moreInfo = $shop->getArrayMoreInfo();
+                $app->setIndustry($moreInfo['industry'] ?? 'default');
                 $app->setShopId((int) $shopId);
 
                 if (array_key_exists('app_name', $input)) {
@@ -117,7 +125,7 @@ class CreateApp implements \Magento\Framework\GraphQl\Query\ResolverInterface
                 $this->logger->error($e->getMessage());
                 throw new GraphQlUncommonErrorException(__("Failed to save App Layout."));
             }
-            return $this->appFormatter->execute($app);
+            return $this->formatAppOutput($app);
         }
         throw new GraphQlAuthorizationException(__("Unauthorized Shop!"));
     }

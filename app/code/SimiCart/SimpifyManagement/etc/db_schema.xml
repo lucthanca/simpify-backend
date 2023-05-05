@@ -61,6 +61,7 @@
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="shop_id" unsigned="true" nullable="false" comment="Shop ID"/>
         <column xsi:type="varchar" name="industry" nullable="true" length="255" comment="Industry value"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false" default="1" comment="Feature Config Field Enabled"/>
         <column xsi:type="varchar" name="app_name" nullable="true" length="255" comment="App Name"/>
         <column xsi:type="varchar" name="app_logo" nullable="true" length="255" comment="App Logo url path"/>
         <column xsi:type="varchar" name="app_icon" nullable="true" length="255" comment="App ico url path"/>
