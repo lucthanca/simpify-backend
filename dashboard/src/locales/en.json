@@ -77,7 +77,20 @@
           "language": "Language",
           "features": "Features",
           "preview": "Preview",
-          "publish": "Publish"
+          "publish": "Publish",
+          "button_save": "Save",
+          "button_reset": "Reset",
+          "app_settings" : {
+            "title": "App Settings",
+            "app_name": "App Name",
+            "app_logo": "App Logo",
+            "app_icon": "App Icon",
+            "loading_screen": "Loading Screen"
+          },
+          "theme_settings": {
+            "title": "Theme Settings"
+
+          }
         }
       }
     },

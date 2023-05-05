@@ -4,19 +4,33 @@ import { Text, Box, Modal, Button, Icon } from '@shopify/polaris';
 import { ViewMinor, AddMajor} from '@shopify/polaris-icons';
 import { useI18n } from '@shopify/react-i18n';
 import PreviewTheme from '@simpify/components/ManageApp/popupPreview';
+import { useQuery, gql } from '@apollo/client';
 
+const GET_LIST_THEME = gql`
+  query getthemes{
+    themes {
+      image
+      preview_images {label position url}
+      name 
+      is_active
+      uid
+    }
+  }
+`;
 const ApplyTheme = () => {
     const [i18n] = useI18n();
+    const { data, loading, error } = useQuery(GET_LIST_THEME);
+    console.log('data', data);
     const [active, setActive] = useState(true);
     const toggleActive = useCallback(() => setActive((active) => !active), []);
-    const data = [
-      {id: '1', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
-      {id: '2', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
-      {id: '3', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
-      {id: '4', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
-      {id: '5', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
-      {id: '6', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'}
-    ]
+    // const data = [
+    //   {id: '1', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
+    //   {id: '2', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
+    //   {id: '3', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
+    //   {id: '4', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
+    //   {id: '5', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'},
+    //   {id: '6', title: 'Theme name', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450', preview_img:'https://cdn.shopify.com/s/files/1/0748/3336/3250/files/01-Mobile-Dashboard.jpg?v=1682415597'}
+    // ]
     return (
       <>
         <Modal
@@ -31,8 +45,8 @@ const ApplyTheme = () => {
                 {i18n.translate('SimiCart.Page.ManageApp.choose_theme.title')}
               </Text>
               <div className='grid grid-cols-1 sm:grid-cols-3 p-1 gap-2 mt-5 max-h-[65vh] sm:max-h-[40vh] overflow-y-scroll scroll'>
-                {data.map((item) =>
-                  <PreviewTheme key={item.id} item={item}/>
+                {data.themes.map((item) =>
+                  <PreviewTheme key={item.uid} item={item}/>
                 )}
                 <div className='rounded-lg relative bg-white shadow-[rgba(0,0,0,0.1)_0px_0px_5px_0px,rgba(0,0,0,0.1)_0px_0px_1px_0px]'>
                   <Box padding="6">

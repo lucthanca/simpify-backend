@@ -1,28 +1,24 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Text, Divider, TextField, Popover, Icon, ColorPicker, hsbToHex, Modal} from '@shopify/polaris';
+import { Text, Divider, TextField, Popover, Icon, ColorPicker, hsbToHex, Modal, ButtonGroup, Button} from '@shopify/polaris';
 import { UploadMajor} from '@shopify/polaris-icons';
-// import Cropper from "react-cropper";
-// import "cropperjs/dist/cropper.css";
-
+import { useI18n } from '@shopify/react-i18n';
 import { FixedCropper, ImageRestriction, CropperPreview  } from 'react-advanced-cropper';
 import 'react-advanced-cropper/dist/style.css'
 
 const AppSettings = props => {
-
+  const [i18n] = useI18n();
   return (
     <>
       <div className="pt-6 pb-4">
         <Text variant="headingLg" as="h2" fontWeight='semibold'>
-          App Settings
+          {i18n.translate('SimiCart.Page.ManageApp.edit_app.app_settings.title')}
         </Text>
       </div>
       <Divider />
       <div className="flex justify-end items-center my-10">
-        <p className="w-[26%] text-end">App name</p>
+        <p className="w-[26%] text-end">{i18n.translate('SimiCart.Page.ManageApp.edit_app.app_settings.app_name')}</p>
         <div className="w-[74%] pl-4">
-          <TextField
-          autoComplete="off"
-          />
+          <AppName/>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2 mt-10">
@@ -32,10 +28,27 @@ const AppSettings = props => {
       </div>
       <ScreenColor/>
       <LoadingColor/>
+      <Divider />
+      <div className="flex justify-center py-5">
+        <ButtonGroup>
+          <Button primary>{i18n.translate('SimiCart.Page.ManageApp.edit_app.button_save')}</Button>
+          <Button>{i18n.translate('SimiCart.Page.ManageApp.edit_app.button_reset')}</Button>
+        </ButtonGroup>
+      </div>
     </>
   );
 }
-
+const AppName = () => {
+  const [value, setValue] = useState('');
+  const handleChange = useCallback((newValue) => setValue(newValue),[]);
+  return (
+    <TextField
+      value={value}
+      onChange={handleChange}
+      autoComplete="off"
+    />
+  )
+}
 const ScreenColor = () => {
   const [color, setColor] = useState({
     hue: 120,
@@ -152,10 +165,10 @@ const AppLogo = () => {
   const [cropImage, setCropImage] = useState(null);
   const imageCrop = (value) => setCropImage((value));
   const stencilSize = {width: 480, height: 80};
-  
+  const [i18n] = useI18n();
   return (
     <div>
-      <p className="text-sm font-semibold text-center pb-6">App logo</p>
+      <p className="text-sm font-semibold text-center pb-6">{i18n.translate('SimiCart.Page.ManageApp.edit_app.app_settings.app_logo')}</p>
       <div className="h-0 pb-[65%] relative rounded-md border border-dashed border-[var(--p-color-border-primary)]">
         {selectedImage && (
           <>
@@ -167,7 +180,7 @@ const AppLogo = () => {
                 src={cropImage ? cropImage : URL.createObjectURL(selectedImage)}
               />
             </div>
-            <CropperImage selectedImage={URL.createObjectURL(selectedImage)} imageCrop={imageCrop} stencilSize={stencilSize}/>
+            <CropperImage selectedImage={selectedImage} imageCrop={imageCrop} stencilSize={stencilSize}/>
           </>
         )}
         <div className="absolute bottom-3 right-3">
@@ -205,11 +218,12 @@ const AppLogo = () => {
 const AppIcon = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [cropImage, setCropImage] = useState(null);
+  const [i18n] = useI18n();
   const imageCrop = (value) => setCropImage((value));
   const stencilSize = {width: 480, height: 480};
   return (
     <div>
-      <p className="text-sm font-semibold text-center pb-6">App logo</p>
+      <p className="text-sm font-semibold text-center pb-6">{i18n.translate('SimiCart.Page.ManageApp.edit_app.app_settings.app_icon')}</p>
       <div className="h-0 pb-[65%] relative rounded-md border border-dashed border-[var(--p-color-border-primary)]">
         {selectedImage && (
           <div className="w-[40%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -219,7 +233,7 @@ const AppIcon = () => {
               width={"250px"}
               src={URL.createObjectURL(selectedImage)}
             />
-            <CropperImage selectedImage={URL.createObjectURL(selectedImage)} imageCrop={imageCrop} stencilSize={stencilSize}/>
+            <CropperImage selectedImage={selectedImage} imageCrop={imageCrop} stencilSize={stencilSize}/>
           </div>
         )}
         <div className="absolute bottom-3 right-3">
@@ -257,11 +271,12 @@ const AppIcon = () => {
 const LoadingScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [cropImage, setCropImage] = useState(null);
+  const [i18n] = useI18n();
   const imageCrop = (value) => setCropImage((value));
   const stencilSize = {width: 480, height: 480};
   return (
     <div>
-      <p className="text-sm font-semibold text-center pb-6">App logo</p>
+      <p className="text-sm font-semibold text-center pb-6">{i18n.translate('SimiCart.Page.ManageApp.edit_app.app_settings.loading_screen')}</p>
       <div className="h-0 pb-[65%] relative rounded-md border border-dashed border-[var(--p-color-border-primary)]">
         {selectedImage && (
           <div className="w-[40%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -314,12 +329,61 @@ const CropperImage = props => {
   const onUpdate = () => {
     previewRef.current?.refresh()
   }
-  const Cropp = () => {
-    if (cropperRef.current) {
-      props.imageCrop(cropperRef.current.getCanvas()?.toDataURL());
+  
+  const Cropp = useCallback(() => {
+    // if (cropperRef.current) {
+    //   props.imageCrop(cropperRef.current.getCanvas()?.toDataURL());
+    // }
+    // setActive(false);
+    const hasExtension = (fileName) => {
+      const dotIndex = fileName.lastIndexOf('.');
+      return dotIndex > 0 && dotIndex < fileName.length - 1;
     }
-    setActive(false);
-  }
+    const canvas = cropperRef.current?.getCanvas();
+    if (canvas) {
+      const form = new FormData();
+      canvas.toBlob((blob) => {
+        if (blob) {
+          let blobFileName = props.selectedImage.name;
+          if (!hasExtension(blobFileName)) {
+            blobFileName += '.' + mimeToExt(props.selectedImage.type);
+          }
+          form.append('param_name', 'image');
+          form.append('image', blob, blobFileName);
+          
+          // const token = storage.getItem('x-simify-token');
+          const headers = new Headers({
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            'X-Simify-Token': "54vuy8j7socogm6dqz73gfuse8me5pdr"
+          });
+          const fetchOptions = {
+            method: 'POST',
+            body: form,
+            headers,
+          }
+          fetch('https://simpify.lucthanca.tk/simpify/app_image/upload', fetchOptions).then((response) => {
+            console.log('hello',response);
+            if (response.status !== 200) {
+              throw new Error('Server error. Please try again!');
+            }
+            const contentType = response.headers.get("content_type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+              return response.json();
+            }
+            throw new Error('Invalid response return. Please try again!');
+          }).then(data => {
+            console.log('data',data);
+            if (data.error) {
+              throw new Error(data.error);
+            }
+          }).catch(e => {
+            // console.error(e.message);
+            console.log('error');
+          });
+        }
+      }, props.selectedImage.type);
+    }
+  }, [props.selectedImage])
   return (
     <Modal
       large
@@ -331,9 +395,9 @@ const CropperImage = props => {
       }}
     >
       <Modal.Section>
-        <div className='grid grid-cols-1 sm:grid-cols-2 p-1 gap-5 mt-5 max-h-[65vh] sm:max-h-[70vh] overflow-y-scroll scroll'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 p-1 gap-5 mt-5 max-h-[65vh] sm:max-h-[70vh] overflow-y-auto scroll'>
           <FixedCropper
-            src={props.selectedImage}
+            src={URL.createObjectURL(props.selectedImage)}
             onChange={onUpdate}
             className={'cropper'}
             ref={cropperRef}
@@ -341,7 +405,7 @@ const CropperImage = props => {
             stencilProps={{
               previewClassName: 'image-editor__preview'
             }}
-            imageRestriction={ImageRestriction.stencil}
+            imageRestriction={ImageRestriction.none}
           />
           <CropperPreview
             className={"image-editor__preview"}

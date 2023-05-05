@@ -8,6 +8,8 @@ import TitlePage from '@simpify/components/titlePage';
 import CreateApp from '@simpify/components/ManageApp/popUpCreate';
 import ApplyTheme from '@simpify/components/ManageApp/popUpChooseApp';
 
+
+
 const ManageApp = props => {
   const [{ xSimiAccessKey }] = useAppContext();
   const [i18n] = useI18n();
@@ -24,6 +26,7 @@ const ManageApp = props => {
 };
 const ListApp = () => {
   const [i18n] = useI18n();
+  
   const data = [
     {id: '1', title: 'BAppss Commerce ', last_update: '21-04-1023',version_android:'v1.1.0',version_ios:'v1.1.0', ios_date: '21-04-1023', android_date: '21-04-1023', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/articles/img-9.png?v=1676456619&width=450'},
     {id: '2', title: 'Bss Shopify Mobile App', last_update: '21-04-1023', version_android:'v1.1.0',version_ios:'v1.1.0', ios_date: '21-04-1023', android_date: '21-04-1023', src:'https://cdn.shopify.com/s/files/1/0719/4732/1638/collections/img-11.png?v=1678789120&width=450'}
