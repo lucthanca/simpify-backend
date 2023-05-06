@@ -57,6 +57,62 @@ class Theme extends AbstractModel implements ThemeInterface
     /**
      * @inheritDoc
      */
+    public function getColors(): ?string
+    {
+        return $this->getData(self::COLORS);
+    }
+
+    /**
+     * Return colors in array
+     *
+     * @return void
+     */
+    public function getPairedColors(): array
+    {
+        $result = [];
+        $colors = $this->getColors();
+        if ($colors) {
+            // split colors by comma but ignore commas that have a left slash prefix
+            $colors = preg_split('/(?<!\\\),/', $colors);
+            foreach ($colors as $color) {
+                if (!$color) {
+                    continue;
+                }
+                $color = explode('=', $color);
+                if (empty($color) || empty($color[0])) {
+                    continue;
+                }
+                $labelPattern = '/([^\[\]]+)\[(.*)\]$/';
+                preg_match($labelPattern, $color[0], $matches);
+                if (!empty($matches) && !empty($matches[2]) && !empty($matches[1])) {
+                    $label = $matches[2];
+                    // remove slash prefix of commas in label
+                    $label = str_replace('\,', ',', $label);
+                    $key = $matches[1];
+                }
+
+                $colorValue = $color[1] ?? null;
+                $result[$key ?? $color[0]] = [
+                    'label' => $label ?? $color[0],
+                    'key' => $key ?? $color[0],
+                    'value' => $colorValue
+                ];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setColors(?string $colors): \SimiCart\SimpifyManagement\Api\Data\ThemeInterface
+    {
+        return $this->setData(self::COLORS, $colors);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getStatus(): int
     {
         return (int) $this->getData(self::STATUS);

@@ -81,6 +81,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $theme->setName($post['name']);
         // set theme status
         $theme->setStatus((int) $post['status']);
+        // set theme colors
+        $theme->setColors($post['colors']);
 
         try {
             $theme->setImage($this->saveThemeImage());
@@ -203,16 +205,14 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             }
         }
 
-
         // process images data for storage
         $images = [];
-        foreach ($value['images'] as $image) {
+        foreach ($value['images'] as $key => &$image) {
             if (empty($image['value_id'])) {
-                $image['value_id'] = base64_encode(time() . $image['file']);
+                $image['value_id'] = time() . '.' . $key;
             }
             $images[] = $image;
         }
-
         return $images;
     }
 

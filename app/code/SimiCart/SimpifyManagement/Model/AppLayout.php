@@ -10,7 +10,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use SimiCart\SimpifyManagement\Api\AppRepositoryInterface;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface;
 use SimiCart\SimpifyManagement\Api\Data\AppLayoutInterface as IAppLayout;
-use SimiCart\SimpifyManagement\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use SimiCart\SimpifyManagement\Api\Data\AppInterface as IApp;
 
 class AppLayout extends AbstractModel implements IAppLayout
@@ -36,7 +36,7 @@ class AppLayout extends AbstractModel implements IAppLayout
         Json $jsonSerializer,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        ResourceModel\AbstractResource $resource = null,
+        AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -93,7 +93,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getFont(): string
     {
-        return $this->getData(self::FONT);
+        return $this->getData(self::FONT) ?? "";
     }
 
     /**
@@ -117,7 +117,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getColors(): string
     {
-        return $this->getData(self::COLORS);
+        return $this->getData(self::COLORS) ?? "";
     }
 
     /**
@@ -126,7 +126,7 @@ class AppLayout extends AbstractModel implements IAppLayout
     public function getDecodedColors(): array
     {
         $raw = $this->getColors();
-        if ($raw) {
+        if (!empty($raw)) {
             return $this->jsonSerializer->unserialize($raw);
         }
 
@@ -136,10 +136,12 @@ class AppLayout extends AbstractModel implements IAppLayout
     /**
      * @inheritDoc
      */
-    public function setColors(?array $colors): IAppLayout
+    public function setColors($colors): IAppLayout
     {
-        $encoded = $this->jsonSerializer->serialize($colors);
-        return $this->setData(self::COLORS, $encoded);
+        if (is_array($colors)) {
+            $colors = $this->jsonSerializer->serialize($colors);
+        }
+        return $this->setData(self::COLORS, $colors);
     }
 
     /**
@@ -147,7 +149,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getMenu(): string
     {
-        return $this->getData(self::MENU);
+        return $this->getData(self::MENU) ?? "";
     }
 
     /**
@@ -166,7 +168,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getHomePage(): string
     {
-        return $this->getData(self::HOMEPAGE);
+        return $this->getData(self::HOMEPAGE) ?? "";
     }
 
     /**
@@ -182,7 +184,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getCollectionPage(): string
     {
-        return $this->getData(self::COLLECTION_PAGE);
+        return $this->getData(self::COLLECTION_PAGE) ?? "";
     }
 
     /**
@@ -198,7 +200,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getProductPage(): string
     {
-        return $this->getData(self::PRODUCT_PAGE);
+        return $this->getData(self::PRODUCT_PAGE) ?? "";
     }
 
     /**
@@ -214,7 +216,7 @@ class AppLayout extends AbstractModel implements IAppLayout
      */
     public function getLandingPage(): string
     {
-        return $this->getData(self::LANDING_PAGE);
+        return $this->getData(self::LANDING_PAGE) ?? "";
     }
 
     /**

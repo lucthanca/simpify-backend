@@ -140,7 +140,8 @@
             "image": true,
             "preview_images": true,
             "created_at": true,
-            "updated_at": true
+            "updated_at": true,
+            "colors": true
         },
         "constraint": {
             "PRIMARY": true
