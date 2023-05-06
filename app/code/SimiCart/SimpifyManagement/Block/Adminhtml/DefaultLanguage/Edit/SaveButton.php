@@ -45,7 +45,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
             return [];
         }
         return [
-            'label' => __('Save Text'),
+            'label' => __('Save'),
             'class' => 'save primary',
             'data_attribute' => [
                 'mage-init' => ['button' => ['event' => 'save']],

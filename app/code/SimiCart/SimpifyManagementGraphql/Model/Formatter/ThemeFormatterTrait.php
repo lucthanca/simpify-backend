@@ -23,6 +23,7 @@ trait ThemeFormatterTrait
             'is_active' => (bool) $i->getStatus(),
             'image' => $i->getImageUrl(),
             'preview_images' => $i->getPreviewImagesAsArray(),
+            'colors' => $i->getPairedColors(),
             'model' => $i,
         ];
     }

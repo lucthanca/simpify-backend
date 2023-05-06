@@ -52,6 +52,7 @@ type SimpifyTheme {
     preview_images: [ThemePreviewImage] @doc(description: "Theme preview images")
     image: String @doc(description: "Theme image url")
     is_active: Boolean @doc(description: "Theme is active or not")
+    colors: [PairedKeyValue] @doc(description: "Theme allowed/predefined color fields")
 }
 type ThemePreviewImage {
     url: String @doc(description: "Image url")
@@ -99,7 +100,7 @@ input SimpifyAppLayoutInput @doc(description: "App layout input. If you dont wan
     collection_page: String @doc(description: "Collection page layout data")
     product_page: String @doc(description: "Product page layout data")
     landing_page: String @doc(description: "Landing page layout data")
-    theme_id: ID @doc(description: "Applied Theme")
+    theme_uid: ID @doc(description: "Applied Theme UID")
 }
 
 input FileInput @doc(description: "Define file input. Currently, we only support base64 content") {
@@ -151,6 +152,7 @@ input ShopMoreInfoInput {
     how_you_know_us: [PairedKeyValueInput]
 }
 input PairedKeyValueInput {
+    key: String
     value: String
     label: String
 }
@@ -168,6 +170,7 @@ type ShopMoreInfo {
 }
 
 type PairedKeyValue {
+    key: String
     value: String
     label: String
 }

@@ -12,6 +12,22 @@ interface ThemeInterface
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const STATUS = 'status';
+    const COLORS = 'colors';
+
+    /**
+     * Get theme colors
+     *
+     * @return string|null
+     */
+    public function getColors(): ?string;
+
+    /**
+     * Set theme colors
+     *
+     * @param string|null $colors
+     * @return $this
+     */
+    public function setColors(?string $colors): self;
 
     // define all getter/setter methods for the fields above
 

@@ -49,7 +49,7 @@
     </dataSource>
     <!-- define columns with id, name, image and preview images -->
     <columns name="simpify_theme_listing_columns" sortOrder="10">
-        <column name="theme_id">
+        <column name="entity_id">
             <!-- define settings with label, sortable, filter, dataScope-->
             <settings>
                 <label translate="true">ID</label>

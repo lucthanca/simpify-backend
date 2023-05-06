@@ -49,6 +49,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Theme Name" />
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Theme Image" />
         <column xsi:type="text" name="preview_images" nullable="true" comment="Theme Preview Images" />
+        <column xsi:type="text" name="colors" nullable="true" comment="Theme color fields config" />
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Theme creation Time"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Latest update Time"/>
 

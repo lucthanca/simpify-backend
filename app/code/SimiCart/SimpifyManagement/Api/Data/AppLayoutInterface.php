@@ -84,10 +84,10 @@ interface AppLayoutInterface
     /**
      * Encode and set color
      *
-     * @param array $colors
+     * @param mixed $colors
      * @return $this
      */
-    public function setColors(?array $colors): self;
+    public function setColors($colors): self;
 
     /**
      * Get raw menu data
